@@ -122,7 +122,7 @@ int _currentTab = 0;
                         Icon(
                           Icons.arrow_forward_ios,
                           size: 10,
-                          weight: 20,
+                          weight: 30,
                           color: Colors.black
                         ),
                     ])
