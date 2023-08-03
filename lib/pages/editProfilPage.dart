@@ -36,13 +36,32 @@ class _editProfilPageState extends State<editProfilPage> {
                         fontWeight: FontWeight.w600)),
               ),
               Center(
-                  child: Container(
+                  child: Stack(
+                    children: [
+                      Container(
                       decoration: BoxDecoration(shape: BoxShape.circle),
                       margin: EdgeInsets.only(top: 20),
                       child: CircleAvatar(
                         radius: 64,
                         backgroundImage: AssetImage('images/profil.png'),
-                      ))),
+                      )),
+                      Transform.translate(
+                        offset: Offset(80, 110),
+                        child: Container(
+                        height: 30,
+                        width: 30,
+                        decoration: BoxDecoration(shape: BoxShape.circle, color: Color(0xFF025CCB)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(Icons.edit_square, color: Colors.white, size: 15,)
+                          ],
+                        ),
+                      ),)
+                    ],
+                  )
+                    ),
               SizedBox(
                 height: 20,
               ),

@@ -3,7 +3,7 @@ import 'package:app/pages/editProfilPage.dart';
 import 'package:app/pages/editPassword.dart';
 import 'package:app/pages/carsListPage.dart';
 import 'package:app/pages/carsFilterPage.dart';
-import 'package:app/pages/MainPage.dart';
+import 'package:app/pages/Dashboard.dart';
 import 'package:app/pages/PackPage.dart';
 import 'package:app/pages/loginPage.dart';
 
@@ -112,7 +112,7 @@ class Navbar extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              Main(),
+                              Dashboard(),
                       ));
                     },
           ),
@@ -121,7 +121,7 @@ class Navbar extends StatelessWidget {
               color: Colors.white,
           ),
           ListTile(
-                    leading: Icon(Icons.edit, color: Colors.white),
+                    leading: Icon(Icons.edit_square, color: Colors.white),
                     title: Transform.translate(
                               offset: Offset(-25, 0),
                               child:  Text('Editer profil',
@@ -240,7 +240,7 @@ class Navbar extends StatelessWidget {
               color: Colors.white,
           ),
           ListTile(
-                    leading: Icon(Icons.group, color: Colors.white),
+                    leading: Icon(Icons.groups, color: Colors.white),
                     title: Transform.translate(
                               offset: Offset(-25, 0),
                               child:  Text('Créer un compte vendeur',

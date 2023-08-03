@@ -11,6 +11,7 @@ import 'package:app/utils/Property.dart';
 import 'package:app/pages/carsListPage.dart';
 import 'package:app/pages/PackPage.dart';
 import 'package:app/pages/MainPage.dart';
+import 'package:app/pages/Dashboard.dart';
 import 'package:app/widgets/Carte.dart';
 
 void main() {

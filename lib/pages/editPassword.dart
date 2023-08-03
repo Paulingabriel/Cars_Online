@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:app/widgets/bottomNavigationBar.dart';
 
-
 class editPassword extends StatefulWidget {
   const editPassword({super.key});
 
@@ -10,12 +9,15 @@ class editPassword extends StatefulWidget {
 }
 
 class _editPasswordState extends State<editPassword> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(backgroundColor: Colors.white, elevation: 0, iconTheme: IconThemeData(color: Colors.black),),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.black),
+      ),
       body: SingleChildScrollView(
           child: Column(
         children: [
@@ -32,13 +34,37 @@ class _editPasswordState extends State<editPassword> {
                         fontWeight: FontWeight.w600)),
               ),
               Center(
-                  child: Container(
+                  child: Stack(
+                children: [
+                  Container(
                       decoration: BoxDecoration(shape: BoxShape.circle),
                       margin: EdgeInsets.only(top: 30),
                       child: CircleAvatar(
                         radius: 64,
                         backgroundImage: AssetImage('images/profil.png'),
-                      ))),
+                      )),
+                  Transform.translate(
+                    offset: Offset(85, 115),
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle, color: Color(0xFF025CCB)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.edit_square,
+                            color: Colors.white,
+                            size: 15,
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              )),
               SizedBox(
                 height: 20,
               ),
@@ -81,7 +107,10 @@ class _editPasswordState extends State<editPassword> {
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [ Color.fromARGB(255, 20, 67, 184),Color(0xFF025CCB)],
+                      colors: [
+                        Color.fromARGB(255, 20, 67, 184),
+                        Color(0xFF025CCB)
+                      ],
                     ),
                   ),
                   child: MaterialButton(
@@ -101,6 +130,6 @@ class _editPasswordState extends State<editPassword> {
       )),
       bottomNavigationBar: bottomNavigationBar(),
     );
-  ;
+    ;
   }
 }
