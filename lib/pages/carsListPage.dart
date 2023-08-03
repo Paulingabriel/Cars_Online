@@ -41,7 +41,7 @@ class _carsList extends State<carsList> {
       'La Mercedes GLA 450 AMG 4MATIC 2016 est un veritable bolide de rallye déguisé pour la route.Je n\'exagère pas:ce super petit utilitaire est alimenté par le moteur à 4 cylindres de serie le plus puissant au monde.exception faite des hybrides.',
       'Munich',
       'Allemagne',
-      '4000,000£',
+      '4000,000€',
       'Automatique',
     ),
     Property(
@@ -65,7 +65,7 @@ class _carsList extends State<carsList> {
       'La Toyota Tundra 4MATIC 2016 est un veritable bolide de rallye déguisé pour la route.Je n\'exagère pas:ce super petit utilitaire est alimenté par le moteur à 4 cylindres de serie le plus puissant au monde.exception faite des hybrides.',
       'Munich',
       'Allemagne',
-      '4200,000£',
+      '4200,000€',
       'Automatique',
     ),
     Property(
@@ -89,7 +89,7 @@ class _carsList extends State<carsList> {
       'La Mercedes GLA 450 AMG 4MATIC 2016 est un veritable bolide de rallye déguisé pour la route.Je n\'exagère pas:ce super petit utilitaire est alimenté par le moteur à 4 cylindres de serie le plus puissant au monde.exception faite des hybrides.',
       'Munich',
       'Allemagne',
-      '4000,000£',
+      '4000,000€',
       'Automatique',
     ),
     Property(
@@ -113,7 +113,7 @@ class _carsList extends State<carsList> {
       'La Mercedes MI 450 AMG 4MATIC 2016 est un veritable bolide de rallye déguisé pour la route.Je n\'exagère pas:ce super petit utilitaire est alimenté par le moteur à 4 cylindres de serie le plus puissant au monde.exception faite des hybrides.',
       'Berlin',
       'Allemagne',
-      '4000,000£',
+      '4000,000€',
       'Automatique',
     ),
     Property(
@@ -137,7 +137,7 @@ class _carsList extends State<carsList> {
       'La Mercedes GLA 450 AMG 4MATIC 2016 est un veritable bolide de rallye déguisé pour la route.Je n\'exagère pas:ce super petit utilitaire est alimenté par le moteur à 4 cylindres de serie le plus puissant au monde.exception faite des hybrides.',
       'Munich',
       'Allemagne',
-      '4000,000£',
+      '4000,000€',
       'Automatique',
     ),
     Property(
@@ -161,7 +161,7 @@ class _carsList extends State<carsList> {
       'La Mercedes GLA 450 AMG 4MATIC 2016 est un veritable bolide de rallye déguisé pour la route.Je n\'exagère pas:ce super petit utilitaire est alimenté par le moteur à 4 cylindres de serie le plus puissant au monde.exception faite des hybrides.',
       'Munich',
       'Allemagne',
-      '4000,000£',
+      '4000,000€',
       'Automatique',
     ),
   ];
@@ -190,11 +190,11 @@ class _carsList extends State<carsList> {
           children: [
             Container(
               child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
                       height: 50,
-                      width: 280,
+                      width: 265,
                       child: Card(
                         elevation: 3,
                       ),

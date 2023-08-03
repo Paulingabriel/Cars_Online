@@ -204,7 +204,7 @@ class PackPage extends StatelessWidget {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Container(
-                                                child: Text('0£',
+                                                child: Text('0€',
                                                     style: TextStyle(
                                                         fontSize: 20,
                                                         color: Colors.white,
@@ -405,7 +405,7 @@ class PackPage extends StatelessWidget {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Container(
-                                                child: Text('20£',
+                                                child: Text('20€',
                                                     style: TextStyle(
                                                         fontSize: 20,
                                                         color:
@@ -591,7 +591,7 @@ class PackPage extends StatelessWidget {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Container(
-                                                child: Text('50£',
+                                                child: Text('50€',
                                                     style: TextStyle(
                                                         fontSize: 20,
                                                         color: Colors.white,
