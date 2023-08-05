@@ -3,6 +3,7 @@ import 'package:app/models/carsModels.dart';
 import 'package:app/widgets/bottomNavigationBar.dart';
 import 'package:app/utils/Property.dart';
 import 'package:app/pages/carDescriptionPage.dart';
+import 'package:app/Modal/ModalFilter.dart';
 
 class carsFilter extends StatefulWidget {
   const carsFilter({super.key});
@@ -13,6 +14,20 @@ class carsFilter extends StatefulWidget {
 
 class _carsFilterState extends State<carsFilter> {
   PageController pageController = PageController(viewportFraction: 0.45);
+
+  void _openModalFilter(BuildContext ctx) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        context: ctx,
+        
+        builder: (_) {
+          return FractionallySizedBox(
+            heightFactor: 0.63,
+            child: ModalFilter(),
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,23 +83,28 @@ class _carsFilterState extends State<carsFilter> {
         padding: EdgeInsets.only(left: 15, right: 15),
         child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.only(top: 10, bottom: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text("Filtrez",
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: const Color(0xFF025CCB),
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600)),
-                  Icon(
-                    Icons.filter_alt_outlined,
-                    color: const Color(0xFF025CCB),
-                    size: 30,
-                  ),
-                ],
+            GestureDetector(
+              onTap: () {
+                return _openModalFilter(context);
+              },
+              child: Container(
+                padding: EdgeInsets.only(top: 10, bottom: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text("Filtrez",
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: const Color(0xFF025CCB),
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w600)),
+                    Icon(
+                      Icons.filter_alt_outlined,
+                      color: const Color(0xFF025CCB),
+                      size: 30,
+                    ),
+                  ],
+                ),
               ),
             ),
             ListView.builder(
@@ -162,7 +182,7 @@ Widget carCard(context, CarModel datas) {
                       image: DecorationImage(
                           fit: BoxFit.cover,
                           image: AssetImage(
-                            datas.car1.image,
+                            datas.car1.image[0],
                           )),
                     ),
                   ),
@@ -279,7 +299,7 @@ Widget carCard(context, CarModel datas) {
                       image: DecorationImage(
                           fit: BoxFit.cover,
                           image: AssetImage(
-                            datas.car2.image,
+                            datas.car2.image[0],
                           )),
                     ),
                   ),

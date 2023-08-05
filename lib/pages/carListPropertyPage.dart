@@ -37,7 +37,7 @@ class carListPropertyPage extends StatelessWidget {
                           Color(0xFF025CCB).withOpacity(1.0),
                           BlendMode.hardLight),
                       image: AssetImage(
-                        property.image,
+                        property.image[0],
                       ),
                       fit: BoxFit.cover,
                     )),
@@ -90,7 +90,7 @@ class carListPropertyPage extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.asset(
-                    property.image,
+                    property.image[0],
                     height: 180,
                     width: 400,
                     fit: BoxFit.cover,

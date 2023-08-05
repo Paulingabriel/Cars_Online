@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:indexed/indexed.dart';
 import 'package:app/widgets/Sidebar.dart';
 import 'package:app/widgets/bottomNavigationBar.dart';
+import 'package:app/pages/MainPage.dart';
+import 'package:app/pages/Dashboard.dart';
+import 'package:app/pages/carsListPage.dart';
 import 'package:app/utils/Property.dart';
 import 'package:app/widgets/Carte.dart';
+import 'package:app/pages/editProfilPage.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -13,104 +17,8 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  final List<Property> properties = [
-    Property(
-      '1',
-      'coupé',
-      'Essence',
-      'manuellle de 6 vitesses',
-      '2019',
-      '54000 kms',
-      'jaune',
-      'cuir noir',
-      '5000 cm3',
-      '8',
-      '450 hp/450 ch',
-      '36 cv fiscaux',
-      '4 places',
-      '2 portes',
-      'images/car7.jpg',
-      'Mercedes GL 450',
-      'Annee 2019',
-      'La Mercedes GLA 450 AMG 4MATIC 2016 est un veritable bolide de rallye déguisé pour la route.Je n\'exagère pas:ce super petit utilitaire est alimenté par le moteur à 4 cylindres de serie le plus puissant au monde.exception faite des hybrides.',
-      'Munich',
-      'Allemagne',
-      '4000,000€',
-      'Automatique',
-    ),
-    Property(
-      '2',
-      'coupé',
-      'Essence',
-      'manuellle de 6 vitesses',
-      '2017',
-      '54000 kms',
-      'jaune',
-      'cuir noir',
-      '5000 cm3',
-      '8',
-      '450 hp/450 ch',
-      '36 cv fiscaux',
-      '4 places',
-      '2 portes',
-      'images/car3.jpg',
-      'Toyota Tundra',
-      'Annee 2017',
-      'La Toyota Tundra 4MATIC 2016 est un veritable bolide de rallye déguisé pour la route.Je n\'exagère pas:ce super petit utilitaire est alimenté par le moteur à 4 cylindres de serie le plus puissant au monde.exception faite des hybrides.',
-      'Munich',
-      'Allemagne',
-      '4200,000€',
-      'Automatique',
-    ),
-    Property(
-      '3',
-      'coupé',
-      'Essence',
-      'manuellle de 6 vitesses',
-      '2019',
-      '54000 kms',
-      'jaune',
-      'cuir noir',
-      '5000 cm3',
-      '8',
-      '450 hp/450 ch',
-      '36 cv fiscaux',
-      '4 places',
-      '2 portes',
-      'images/car2.jpg',
-      'Mercedes GL 450',
-      'Annee 2019',
-      'La Mercedes GLA 450 AMG 4MATIC 2016 est un veritable bolide de rallye déguisé pour la route.Je n\'exagère pas:ce super petit utilitaire est alimenté par le moteur à 4 cylindres de serie le plus puissant au monde.exception faite des hybrides.',
-      'Munich',
-      'Allemagne',
-      '4000,000€',
-      'Automatique',
-    ),
-    Property(
-      '4',
-      'coupé',
-      'Essence',
-      'manuellle de 6 vitesses',
-      '2019',
-      '54000 kms',
-      'jaune',
-      'cuir noir',
-      '5000 cm3',
-      '8',
-      '450 hp/450 ch',
-      '36 cv fiscaux',
-      '4 places',
-      '2 portes',
-      'images/car4.jpg',
-      'Mercedes MI 450',
-      'Annee 2019',
-      'La Mercedes MI 450 AMG 4MATIC 2016 est un veritable bolide de rallye déguisé pour la route.Je n\'exagère pas:ce super petit utilitaire est alimenté par le moteur à 4 cylindres de serie le plus puissant au monde.exception faite des hybrides.',
-      'Berlin',
-      'Allemagne',
-      '4000,000€',
-      'Automatique',
-    )
-  ];
+  int _currentTab = 2;
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -492,7 +400,95 @@ class _DashboardState extends State<Dashboard> {
           ),
         ],
       )),
-      bottomNavigationBar: bottomNavigationBar(),
+      bottomNavigationBar: BottomAppBar(
+          notchMargin: 10,
+          child: Container(
+            height: 50,
+            decoration: BoxDecoration(
+              color: Color(0xFF025CCB),
+            ),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: [
+                      MaterialButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Main(),
+                              ));
+                          setState(() {
+                            _currentTab = 0;
+                          });
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.home,
+                                color: _currentTab == 0
+                                    ? Colors.white
+                                    : const Color.fromARGB(255, 129, 181, 223)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      MaterialButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => carsList(),
+                              ));
+                          setState(() {
+                            _currentTab = 1;
+                          });
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.directions_car,
+                                color: _currentTab == 1
+                                    ? Colors.white
+                                    : const Color.fromARGB(255, 129, 181, 223))
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      MaterialButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Dashboard(),
+                              ));
+
+                          setState(() {
+                            _currentTab = 2;
+                          });
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.person,
+                                color: _currentTab == 2
+                                    ? Colors.white
+                                    : const Color.fromARGB(255, 129, 181, 223)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                ]),
+          )),
+      
     );
   }
 }

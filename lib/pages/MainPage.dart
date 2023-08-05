@@ -4,6 +4,7 @@ import 'package:app/widgets/bottomNavigationBar.dart';
 import 'package:app/pages/MainPage.dart';
 import 'package:app/pages/carsListPage.dart';
 import 'package:app/pages/editProfilPage.dart';
+import 'package:app/pages/Dashboard.dart';
 import 'package:app/models/models.dart';
 import 'package:app/models/carsModels.dart';
 import 'package:indexed/indexed.dart';
@@ -182,7 +183,8 @@ class _Main extends State<Main> {
                                 itemBuilder: (context, position) {
                                   return CarouselView(position);
                                 },
-                              )),
+                              )
+                            ),
                         ],
                       )),
                 ))
@@ -319,7 +321,7 @@ class _Main extends State<Main> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => editProfilPage(),
+                                builder: (context) => Dashboard(),
                               ));
 
                           setState(() {
@@ -349,27 +351,30 @@ Widget CarouselView(int index) {
 }
 
 Widget carouselCard(DataModel data) {
-  return Container(
-    height: 80,
-    margin: EdgeInsets.only(right: 20),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(3),
-      // border: Border.all(width: 2.0),
-      image: DecorationImage(
-          colorFilter: new ColorFilter.mode(
-              Colors.black.withOpacity(0.5), BlendMode.hardLight),
-          fit: BoxFit.cover,
-          image: AssetImage(
-            data.imageName,
-          )),
-    ),
-    child: Center(
-      child: Text(data.title,
-          style: TextStyle(
-              fontSize: 10,
-              color: Colors.white,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w300)),
+  return Transform.translate(
+    offset: Offset(-75, 0),
+    child: Container(
+      height: 80,
+      margin: EdgeInsets.only(left: 10, right: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(3),
+        // border: Border.all(width: 2.0),
+        image: DecorationImage(
+            colorFilter: new ColorFilter.mode(
+                Colors.black.withOpacity(0.5), BlendMode.hardLight),
+            fit: BoxFit.cover,
+            image: AssetImage(
+              data.imageName,
+            )),
+      ),
+      child: Center(
+        child: Text(data.title,
+            style: TextStyle(
+                fontSize: 10,
+                color: Colors.white,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w300)),
+      ),
     ),
   );
 }
@@ -434,7 +439,7 @@ Widget carCard(context, CarModel datas) {
                       image: DecorationImage(
                           fit: BoxFit.cover,
                           image: AssetImage(
-                            datas.car1.image,
+                            datas.car1.image[0],
                           )),
                     ),
                   ),
@@ -551,7 +556,7 @@ Widget carCard(context, CarModel datas) {
                       image: DecorationImage(
                           fit: BoxFit.cover,
                           image: AssetImage(
-                            datas.car2.image,
+                            datas.car2.image[0],
                           )),
                     ),
                   ),

@@ -59,52 +59,52 @@ class _SidebarState extends State<Sidebar> {
                 ),
               ),
               Container(
-                 padding: EdgeInsets.only(bottom: 15),
+                padding: EdgeInsets.only(bottom: 15),
                 child: ListTile(
-                leading: Icon(Icons.directions_car, color: Colors.white),
-                title: Transform.translate(
-                  offset: Offset(-25, 0),
-                  child: Text('Ajouter un véhicule',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                          fontFamily: 'Poppins')),
+                  leading: Icon(Icons.directions_car, color: Colors.white),
+                  title: Transform.translate(
+                    offset: Offset(-25, 0),
+                    child: Text('Ajouter un véhicule',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                            fontFamily: 'Poppins')),
+                  ),
+                  onTap: () {},
                 ),
-                onTap: () {},
               ),
-              ),
-             Container(
-              padding: EdgeInsets.only(bottom: 15),
-              child:  ListTile(
-                leading: Icon(Icons.category, color: Colors.white),
-                title: Transform.translate(
-                  offset: Offset(-25, 0),
-                  child: Text('Liste des catégories',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                          fontFamily: 'Poppins')),
-                ),
-                onTap: () {},
-              ),
-             ),
               Container(
                 padding: EdgeInsets.only(bottom: 15),
                 child: ListTile(
-                leading: Icon(Icons.category, color: Colors.white),
-                title: Transform.translate(
-                  offset: Offset(-25, 0),
-                  child: Text('Ajouter une catégorie',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                          fontFamily: 'Poppins')),
+                  leading: Icon(Icons.category, color: Colors.white),
+                  title: Transform.translate(
+                    offset: Offset(-25, 0),
+                    child: Text('Liste des catégories',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                            fontFamily: 'Poppins')),
+                  ),
+                  onTap: () {},
                 ),
-                onTap: () {},
               ),
+              Container(
+                padding: EdgeInsets.only(bottom: 15),
+                child: ListTile(
+                  leading: Icon(Icons.category, color: Colors.white),
+                  title: Transform.translate(
+                    offset: Offset(-25, 0),
+                    child: Text('Ajouter une catégorie',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                            fontFamily: 'Poppins')),
+                  ),
+                  onTap: () {},
+                ),
               )
               // UserAccountsDrawerHeader(
               //   accountName: Text(

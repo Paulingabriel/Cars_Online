@@ -50,7 +50,7 @@ class Carte extends StatelessWidget {
                   child: ClipRRect(
                   borderRadius: BorderRadius.circular(5),
                   child: Image.asset(
-                    property.image,
+                    property.image[0],
                     height: 60,
                     width: 60,
                     fit: BoxFit.cover,
@@ -143,7 +143,7 @@ class Carte extends StatelessWidget {
                                       width: 3,
                                     ),
                                     Icon(
-                                      Icons.star_border_outlined,
+                                      Icons.star_border,
                                       color: Colors.black,
                                       size: 15,
                                     ),

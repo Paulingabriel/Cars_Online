@@ -4,6 +4,7 @@ import 'package:app/widgets/formLabel.dart';
 import 'package:app/widgets/textSpan.dart';
 import 'package:app/widgets/formInput.dart';
 import 'package:app/widgets/bgBlue.dart';
+import 'package:app/pages/loginPage.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class registerPage extends StatefulWidget {
@@ -146,7 +147,35 @@ class _registerPageState extends State<registerPage> {
             ],
           ),
         SizedBox(height: 30,),
-        textSpan(text: "vous avez déjà un compte ? ", span: 'Se Connecter'),
+        Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("vous avez déjà un compte ? ",
+                  style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w500),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => loginPage(),
+                          ));
+                    },
+                    child: Text(
+                      'Se Connecter',
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: Color(0xFF025CCB),
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w500),
+                    ),
+                  )
+                ],
+              ),
         SizedBox(height: 20,),
         ],
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:app/pages/editProfilPage.dart';
 import 'package:app/pages/editPassword.dart';
 import 'package:app/pages/carsListPage.dart';
+import 'package:app/pages/MainPage.dart';
 import 'package:app/pages/carsFilterPage.dart';
 import 'package:app/pages/Dashboard.dart';
 import 'package:app/pages/PackPage.dart';
@@ -112,7 +113,7 @@ class Navbar extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              Dashboard(),
+                              Main(),
                       ));
                     },
           ),
