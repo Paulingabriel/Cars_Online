@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:app/widgets/bottomNavigationBar.dart';
 import 'package:app/widgets/Carte.dart';
 import 'package:app/utils/Property.dart';
 import 'package:app/widgets/Navbar.dart';
 import 'package:app/pages/MainPage.dart';
-import 'package:app/pages/carsListPage.dart';
 import 'package:app/pages/Dashboard.dart';
-import 'package:app/pages/editProfilPage.dart';
 
 class carsList extends StatefulWidget {
   const carsList({super.key});

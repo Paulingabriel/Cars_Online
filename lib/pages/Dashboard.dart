@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:indexed/indexed.dart';
 import 'package:app/widgets/Sidebar.dart';
-import 'package:app/widgets/bottomNavigationBar.dart';
 import 'package:app/pages/MainPage.dart';
-import 'package:app/pages/Dashboard.dart';
 import 'package:app/pages/carsListPage.dart';
 import 'package:app/utils/Property.dart';
 import 'package:app/widgets/Carte.dart';
-import 'package:app/pages/editProfilPage.dart';
+import 'package:app/pages/Notifications.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -34,7 +32,13 @@ class _DashboardState extends State<Dashboard> {
                 actions: [
                   IconButton(
                     icon: Icon(Icons.notifications_none),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Notifications(),
+                          ));
+                    },
                   ),
                 ],
                 flexibleSpace: Container(

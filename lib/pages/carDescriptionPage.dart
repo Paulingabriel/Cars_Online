@@ -1,12 +1,7 @@
-import 'package:app/pages/carListPropertyPage.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/carProperty.dart';
-import 'package:app/pages/carListPropertyPage.dart';
-import 'package:app/pages/carDescriptionPage.dart';
+import 'package:app/pages/Notifications.dart';
 import 'package:app/widgets/bottomNavigationBar.dart';
-import 'package:app/utils/Property.dart';
-import 'package:get/get.dart';
-import 'package:app/models/carsModels.dart';
 import 'package:app/utils/Property.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 
@@ -91,7 +86,13 @@ class _carDescriptionPage extends State<carDescriptionPage>
                   ),
                   IconButton(
                     icon: Icon(Icons.notifications_none),
-                    onPressed: () {},
+                    onPressed: () {
+                       Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Notifications(),
+                          ));
+                    },
                   ),
                 ],
                 flexibleSpace: Container(

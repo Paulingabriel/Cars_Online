@@ -130,6 +130,5 @@ class _editPasswordState extends State<editPassword> {
       )),
       bottomNavigationBar: bottomNavigationBar(),
     );
-    ;
   }
 }

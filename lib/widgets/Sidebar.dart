@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:app/pages/carsFilterPage.dart';
+import 'package:app/pages/carsForm.dart';
 
 class Sidebar extends StatefulWidget {
   const Sidebar({super.key});
@@ -71,7 +72,13 @@ class _SidebarState extends State<Sidebar> {
                             color: Colors.white,
                             fontFamily: 'Poppins')),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                     Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => carsForm(),
+                        ));
+                  },
                 ),
               ),
               Container(
@@ -133,6 +140,5 @@ class _SidebarState extends State<Sidebar> {
             ],
           )),
     );
-    ;
   }
 }

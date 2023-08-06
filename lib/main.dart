@@ -1,18 +1,6 @@
+import 'package:app/pages/loadingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:app/pages/loadingPage.dart';
-import 'package:app/pages/homePage.dart';
-import 'package:app/pages/loginPage.dart';
-import 'package:app/pages/registerPage.dart';
-import 'package:app/pages/editProfilPage.dart';
-import 'package:app/pages/editPassword.dart';
-import 'package:app/pages/carDescriptionPage.dart';
-import 'package:app/pages/carListPropertyPage.dart';
-import 'package:app/utils/Property.dart';
-import 'package:app/pages/carsListPage.dart';
-import 'package:app/pages/PackPage.dart';
-import 'package:app/pages/MainPage.dart';
-import 'package:app/pages/Dashboard.dart';
-import 'package:app/widgets/Carte.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Main(),
+      home: loadingPage(),
       // home: carDescriptionPage(property: Property(
       //   '1',
       //   'coupé',

@@ -5,7 +5,7 @@ class formLabel extends StatelessWidget {
   final String text;
   double size;
   formLabel({super.key,
-            this.size = 12,
+            required this.size,
             required this.text,
             });
 

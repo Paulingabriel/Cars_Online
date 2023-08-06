@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:indexed/indexed.dart';
 import 'package:app/widgets/formLabel.dart';
-import 'package:app/widgets/textSpan.dart';
 import 'package:app/widgets/formInput.dart';
 import 'package:app/widgets/bgBlue.dart';
 import 'package:app/pages/MainPage.dart';
@@ -58,7 +57,7 @@ class _loginPageState extends State<loginPage> {
                               SizedBox(
                                 height: 30,
                               ),
-                              formLabel(text: 'Username'),
+                              formLabel(text: 'Username', size:12),
                               SizedBox(
                                 height: 15,
                               ),
@@ -66,7 +65,7 @@ class _loginPageState extends State<loginPage> {
                               SizedBox(
                                 height: 15,
                               ),
-                              formLabel(text: 'Mot de passe'),
+                              formLabel(text: 'Mot de passe', size: 12),
                               SizedBox(
                                 height: 15,
                               ),

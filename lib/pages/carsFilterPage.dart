@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:app/models/carsModels.dart';
 import 'package:app/widgets/bottomNavigationBar.dart';
-import 'package:app/utils/Property.dart';
 import 'package:app/pages/carDescriptionPage.dart';
 import 'package:app/Modal/ModalFilter.dart';
 

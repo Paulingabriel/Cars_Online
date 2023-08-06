@@ -13,7 +13,7 @@ class _ModalFilterState extends State<ModalFilter> {
   String? option;
   final listCar = ['Voiture de sport', 'Bus', 'picknick'];
 
-  final listCountry = ['Allemangne', 'Cameroun', 'Espagne'];
+  final listCountry = ['Allemagne', 'Cameroun', 'Espagne'];
   @override
   Widget build(BuildContext context) {
     return Transform.translate(

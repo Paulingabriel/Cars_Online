@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:app/pages/MainPage.dart';
 import 'package:app/pages/Dashboard.dart';
 import 'package:app/pages/carsListPage.dart';
-import 'package:app/pages/editProfilPage.dart';
 
 class bottomNavigationBar extends StatefulWidget {
   const bottomNavigationBar({super.key});

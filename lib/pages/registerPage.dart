@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:indexed/indexed.dart';
 import 'package:app/widgets/formLabel.dart';
-import 'package:app/widgets/textSpan.dart';
 import 'package:app/widgets/formInput.dart';
 import 'package:app/widgets/bgBlue.dart';
 import 'package:app/pages/loginPage.dart';
@@ -53,19 +52,19 @@ class _registerPageState extends State<registerPage> {
                     const Text('Register',
                     style: TextStyle(fontSize: 20, color: Color(0xFF025CCB), fontWeight: FontWeight.w600, fontFamily: 'Poppins')),
                     SizedBox(height: 20,),
-                    formLabel(text: 'Nom'),
+                    formLabel(text: 'Nom', size:12),
                     SizedBox(height: 15,),
                     formInput(icon: Icons.person),
                     SizedBox(height: 15,),
-                    formLabel(text: 'Prenom'),
+                    formLabel(text: 'Prenom', size:12),
                     SizedBox(height: 15,),
                     formInput(icon: Icons.person),
                     SizedBox(height: 15,),
-                    formLabel(text: 'Adresse email'),
+                    formLabel(text: 'Adresse email', size:12),
                     SizedBox(height: 15,),
                     formInput(icon: Icons.email),
                     SizedBox(height: 15,),
-                    formLabel(text: 'Numero de téléphone'),
+                    formLabel(text: 'Numero de téléphone', size:12),
                     SizedBox(height: 15,),
                     Container(
                       height: 48,
@@ -112,11 +111,11 @@ class _registerPageState extends State<registerPage> {
                         ],
                       )),
                     SizedBox(height: 15,),
-                    formLabel(text: 'Mot de passe'),
+                    formLabel(text: 'Mot de passe', size:12),
                     SizedBox(height: 15,),
                     formInput(icon: Icons.visibility_off),
                     SizedBox(height: 15,),
-                    formLabel(text: 'Confirmation mot de passe'),
+                    formLabel(text: 'Confirmation mot de passe', size:12),
                     SizedBox(height: 15,),
                     formInput(icon: Icons.visibility_off),
                     SizedBox(height: 25,),
@@ -180,6 +179,6 @@ class _registerPageState extends State<registerPage> {
         ],
       ),
     
-      ));;
+      ));
   }
 }

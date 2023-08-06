@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:app/widgets/bottomNavigationBar.dart';
 import 'package:app/utils/Property.dart';
+import 'package:app/pages/Notifications.dart';
 
 class carListPropertyPage extends StatelessWidget {
 
@@ -27,7 +28,13 @@ class carListPropertyPage extends StatelessWidget {
                   ),
                   IconButton(
                     icon: Icon(Icons.notifications_none),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Notifications(),
+                          ));
+                    },
                   ),
                 ],
                 flexibleSpace: Container(
@@ -223,6 +230,5 @@ class carListPropertyPage extends StatelessWidget {
           ),
           bottomNavigationBar: bottomNavigationBar(),
         ));
-    ;
   }
 }

@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:app/widgets/Navbar.dart';
-import 'package:app/widgets/bottomNavigationBar.dart';
-import 'package:app/pages/MainPage.dart';
 import 'package:app/pages/carsListPage.dart';
-import 'package:app/pages/editProfilPage.dart';
 import 'package:app/pages/Dashboard.dart';
+import 'package:app/pages/Notifications.dart';
 import 'package:app/models/models.dart';
 import 'package:app/models/carsModels.dart';
 import 'package:indexed/indexed.dart';
-import 'package:app/utils/Property.dart';
 import 'package:app/pages/carDescriptionPage.dart';
 
 class Main extends StatefulWidget {
@@ -29,14 +26,20 @@ class _Main extends State<Main> {
           preferredSize: Size.fromHeight(260),
           child: Indexer(children: [
             Indexed(
-              index: 0,
+              index: 1,
               child: AppBar(
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
                 actions: [
                   IconButton(
-                    icon: Icon(Icons.notifications_none),
-                    onPressed: () {},
+                    icon: const Icon(Icons.notifications_none),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Notifications(),
+                          ));
+                    },
                   ),
                 ],
                 flexibleSpace: Container(
@@ -76,7 +79,7 @@ class _Main extends State<Main> {
               ),
             ),
             Indexed(
-                index: 2,
+                index: 4,
                 child: Container(
                   padding: EdgeInsets.only(left: 15, right: 15),
                   margin: EdgeInsets.only(top: 140),
@@ -104,11 +107,11 @@ class _Main extends State<Main> {
                       ]),
                 )),
             Indexed(
-              index: 1,
+              index: 2,
               child: Stack(
                 children: [
                   Transform.translate(
-                    offset: const Offset(145.0, -20.0),
+                    offset: const Offset(145.0, 75.0),
                     child: Container(
                       height: 350,
                       width: 350,
@@ -119,7 +122,7 @@ class _Main extends State<Main> {
                     ),
                   ),
                   Transform.translate(
-                    offset: const Offset(95.0, 80.0),
+                    offset: const Offset(95.0, 110.0),
                     child: Container(
                       height: 230,
                       width: 230,
@@ -211,7 +214,8 @@ class _Main extends State<Main> {
                       fit: BoxFit.cover,
                       image: AssetImage(
                         'images/banner.png',
-                      )),
+                      ),
+                    ),
                 ),
               ),
               Row(

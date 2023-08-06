@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:app/pages/editProfilPage.dart';
 import 'package:app/pages/editPassword.dart';
-import 'package:app/pages/carsListPage.dart';
 import 'package:app/pages/MainPage.dart';
 import 'package:app/pages/carsFilterPage.dart';
-import 'package:app/pages/Dashboard.dart';
 import 'package:app/pages/PackPage.dart';
 import 'package:app/pages/loginPage.dart';
 
