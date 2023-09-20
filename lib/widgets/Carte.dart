@@ -2,9 +2,12 @@ import 'package:app/pages/carDescriptionPage.dart';
 import 'package:flutter/material.dart';
 import 'package:app/utils/Property.dart';
 
+import '../models/user.dart';
+
 class Carte extends StatelessWidget {
   final Property property;
-  const Carte({super.key, required this.property});
+  final User user;
+  const Carte({super.key, required this.property, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +17,10 @@ class Carte extends StatelessWidget {
             context,
             PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) =>
-                  carDescriptionPage(property: property),
+                  carDescriptionPage(
+                property: property,
+                user: user,
+              ),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {
                 // var begin = Offset(0.0, 1.0);
@@ -40,23 +46,23 @@ class Carte extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                padding:
-                    EdgeInsets.only(left: 8, right: 14, top: 12, bottom: 12),
-                decoration: BoxDecoration(
-                    // border: Border.all(color: Colors.black, width: 1.0)
+                  padding:
+                      EdgeInsets.only(left: 8, right: 14, top: 12, bottom: 12),
+                  decoration: BoxDecoration(
+                      // border: Border.all(color: Colors.black, width: 1.0)
+                      ),
+                  child: Hero(
+                    tag: "Modèle " + property.id,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Image.asset(
+                        property.image[0],
+                        height: 60,
+                        width: 60,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                child: Hero(
-                  tag: "Modèle " + property.id,
-                  child: ClipRRect(
-                  borderRadius: BorderRadius.circular(5),
-                  child: Image.asset(
-                    property.image[0],
-                    height: 60,
-                    width: 60,
-                    fit: BoxFit.cover,
-                  ),
-                ),)
-              ),
+                  )),
               Expanded(
                   child: Container(
                       height: 84,

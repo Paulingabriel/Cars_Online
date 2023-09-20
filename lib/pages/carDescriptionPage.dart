@@ -5,6 +5,8 @@ import 'package:app/widgets/bottomNavigationBar.dart';
 import 'package:app/utils/Property.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 
+import '../models/user.dart';
+
 // class MyTabs extends GetxController with GetSingleTickerProviderStateMixin {
 //   late TabController controller;
 
@@ -33,7 +35,8 @@ import 'package:dots_indicator/dots_indicator.dart';
 
 class carDescriptionPage extends StatefulWidget {
   final Property property;
-  const carDescriptionPage({super.key, required this.property});
+  final User user;
+  const carDescriptionPage({super.key, required this.property, required this.user});
 
   @override
   State<carDescriptionPage> createState() => _carDescriptionPage();
@@ -87,10 +90,10 @@ class _carDescriptionPage extends State<carDescriptionPage>
                   IconButton(
                     icon: Icon(Icons.notifications_none),
                     onPressed: () {
-                       Navigator.push(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Notifications(),
+                            builder: (context) => Notifications(user: widget.user),
                           ));
                     },
                   ),
@@ -150,8 +153,7 @@ class _carDescriptionPage extends State<carDescriptionPage>
               ),
               preferredSize: Size.fromHeight(150)),
           backgroundColor: Colors.white,
-          body: TabBarView(
-            controller: _controller, children: [
+          body: TabBarView(controller: _controller, children: [
             SingleChildScrollView(
               child: Column(
                 // controller: _tabs.controller,
@@ -159,9 +161,8 @@ class _carDescriptionPage extends State<carDescriptionPage>
                   Container(
                     height: 180,
                     width: double.infinity,
-                    margin: EdgeInsets.only(
-                        top: 20, bottom: 0),
-                    child: PageView.builder(              
+                    margin: EdgeInsets.only(top: 20, bottom: 0),
+                    child: PageView.builder(
                       controller: pageController,
                       itemCount: widget.property.image.length,
                       physics: ClampingScrollPhysics(),
@@ -173,18 +174,18 @@ class _carDescriptionPage extends State<carDescriptionPage>
                   Transform.translate(
                     offset: Offset(0, -25.0),
                     child: new DotsIndicator(
-                    dotsCount: widget.property.image.length,
-                    position: _currPageValue.round(),
-                    decorator: DotsDecorator(
-                      color: Colors.white,
-                      activeColor: Color(0xFF025CCB),
-                      size: const Size.square(9.0),
-                      activeSize: const Size(18.0, 9.0),
-                      activeShape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0)),
+                      dotsCount: widget.property.image.length,
+                      position: _currPageValue.round(),
+                      decorator: DotsDecorator(
+                        color: Colors.white,
+                        activeColor: Color(0xFF025CCB),
+                        size: const Size.square(9.0),
+                        activeSize: const Size(18.0, 9.0),
+                        activeShape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                      ),
                     ),
                   ),
-                    ),
                   Container(
                     margin: EdgeInsets.only(
                         left: 10, right: 10, top: 0, bottom: 15),
@@ -530,24 +531,23 @@ class _carDescriptionPage extends State<carDescriptionPage>
               ),
             ),
           ]),
-          bottomNavigationBar: bottomNavigationBar(),
+          bottomNavigationBar: bottomNavigationBar(user: widget.user),
         ));
   }
 }
 
 Widget carouselCard(String data) {
   return Container(
-      height: 180,
-      margin: EdgeInsets.only(left: 10, right: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        // border: Border.all(width: 2.0),
-        image: DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage(
-              data,
-            )),
-        
-      ),
-    );
+    height: 180,
+    margin: EdgeInsets.only(left: 10, right: 10),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+      // border: Border.all(width: 2.0),
+      image: DecorationImage(
+          fit: BoxFit.cover,
+          image: AssetImage(
+            data,
+          )),
+    ),
+  );
 }

@@ -7,9 +7,15 @@ import 'package:app/models/models.dart';
 import 'package:app/models/carsModels.dart';
 import 'package:indexed/indexed.dart';
 import 'package:app/pages/carDescriptionPage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/user.dart';
+import '../services/user_service.dart';
 
 class Main extends StatefulWidget {
-  const Main({super.key});
+  final User user;
+  const Main({super.key, required this.user});
 
   @override
   State<Main> createState() => _Main();
@@ -18,10 +24,12 @@ class Main extends StatefulWidget {
 class _Main extends State<Main> {
   PageController pageController = PageController(viewportFraction: 0.45);
   int _currentTab = 0;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Navbar(),
+      drawer: Navbar(user: widget.user),
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(260),
           child: Indexer(children: [
@@ -37,7 +45,7 @@ class _Main extends State<Main> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const Notifications(),
+                            builder: (context) => Notifications(user: widget.user),
                           ));
                     },
                   ),
@@ -186,8 +194,7 @@ class _Main extends State<Main> {
                                 itemBuilder: (context, position) {
                                   return CarouselView(position);
                                 },
-                              )
-                            ),
+                              )),
                         ],
                       )),
                 ))
@@ -211,11 +218,11 @@ class _Main extends State<Main> {
                   ],
                   // border: Border.all(width: 2.0),
                   image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage(
-                        'images/banner.png',
-                      ),
+                    fit: BoxFit.cover,
+                    image: AssetImage(
+                      'images/banner.png',
                     ),
+                  ),
                 ),
               ),
               Row(
@@ -252,7 +259,7 @@ class _Main extends State<Main> {
                   shrinkWrap: true,
                   itemCount: datasList.length,
                   itemBuilder: (context, index) {
-                    return CarView(context, index);
+                    return CarView(context, index, widget.user);
                   }),
             ],
           ),
@@ -275,7 +282,7 @@ class _Main extends State<Main> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Main(),
+                                builder: (context) => Main(user: widget.user),
                               ));
                           setState(() {
                             _currentTab = 0;
@@ -300,7 +307,7 @@ class _Main extends State<Main> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => carsList(),
+                                builder: (context) => carsList(user: widget.user),
                               ));
                           setState(() {
                             _currentTab = 1;
@@ -325,7 +332,7 @@ class _Main extends State<Main> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Dashboard(),
+                                builder: (context) => Dashboard(user: widget.user),
                               ));
 
                           setState(() {
@@ -383,11 +390,11 @@ Widget carouselCard(DataModel data) {
   );
 }
 
-Widget CarView(context, int index) {
-  return carCard(context, datasList[index]);
+Widget CarView(context, int index, User user) {
+  return carCard(context, datasList[index], user);
 }
 
-Widget carCard(context, CarModel datas) {
+Widget carCard(context, CarModel datas, User user) {
   return Row(
     children: [
       Expanded(
@@ -404,7 +411,7 @@ Widget carCard(context, CarModel datas) {
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
-                        carDescriptionPage(property: datas.car1),
+                        carDescriptionPage(property: datas.car1, user: user),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) {
                       animation = CurvedAnimation(
@@ -522,7 +529,7 @@ Widget carCard(context, CarModel datas) {
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
-                        carDescriptionPage(property: datas.car2),
+                        carDescriptionPage(property: datas.car2, user: user),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) {
                       animation = CurvedAnimation(

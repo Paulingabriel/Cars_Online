@@ -3,14 +3,24 @@ import 'package:app/widgets/bottomNavigationBar.dart';
 import 'package:app/widgets/Mail.dart';
 import 'package:app/utils/Property.dart';
 
+import '../models/user.dart';
+
 class Notifications extends StatefulWidget {
-  const Notifications({super.key});
+
+  final User user;
+  
+  const Notifications({super.key, required this.user});
 
   @override
   State<Notifications> createState() => _NotificationsState();
 }
 
+class fianal {
+}
+
 class _NotificationsState extends State<Notifications> {
+  // get user => null;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,19 +69,20 @@ class _NotificationsState extends State<Notifications> {
                         onDismissed: (direction) {
                           setState(() {
                             properties.removeAt(index);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Notification supprimée'))
-                            );
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text('Notification supprimée')));
                           });
                         },
-                        background: Container(color: Color(0xFF025CCB),),
-                        child: Mail(property: prop));
+                        background: Container(
+                          color: Color(0xFF025CCB),
+                        ),
+                        child: Mail(property: prop, user: widget.user));
                   }),
             ),
           ],
         ),
       ),
-      bottomNavigationBar: bottomNavigationBar(),
+      bottomNavigationBar: bottomNavigationBar(user: widget.user),
     );
   }
 }

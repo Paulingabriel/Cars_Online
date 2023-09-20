@@ -2,9 +2,12 @@ import 'package:app/pages/carDescriptionPage.dart';
 import 'package:flutter/material.dart';
 import 'package:app/utils/Property.dart';
 
+import '../models/user.dart';
+
 class Mail extends StatelessWidget {
   final Property property;
-  const Mail({super.key, required this.property});
+  final User user;
+  const Mail({super.key, required this.property, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +17,7 @@ class Mail extends StatelessWidget {
             context,
             PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) =>
-                  carDescriptionPage(property: property),
+                  carDescriptionPage(property: property, user: user),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {
                 // var begin = Offset(0.0, 1.0);
@@ -76,7 +79,7 @@ class Mail extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  Text('Nouveau post : '+ property.name,
+                                  Text('Nouveau post : ' + property.name,
                                       style: TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w500,
@@ -104,16 +107,15 @@ class Mail extends StatelessWidget {
                                 ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
-                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SizedBox(
-                                    width: 28,
-                                    height: 16,
-                                    ),                              
+                                  width: 28,
+                                  height: 16,
+                                ),
                                 Container(
                                   child: Row(children: [
-                                    Text(
-                                        'il y a 1 heure',
+                                    Text('il y a 1 heure',
                                         style: TextStyle(
                                             fontSize: 11,
                                             fontWeight: FontWeight.w500,

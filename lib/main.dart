@@ -1,4 +1,5 @@
 import 'package:app/pages/loadingPage.dart';
+import 'package:app/pages/loginPage.dart';
 import 'package:flutter/material.dart';
 import 'package:app/pages/loadingPage.dart';
 
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: loadingPage(),
+      home: loginPage(),
       // home: carDescriptionPage(property: Property(
       //   '1',
       //   'coupé',

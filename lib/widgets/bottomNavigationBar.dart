@@ -3,19 +3,21 @@ import 'package:app/pages/MainPage.dart';
 import 'package:app/pages/Dashboard.dart';
 import 'package:app/pages/carsListPage.dart';
 
+import '../models/user.dart';
+
 class bottomNavigationBar extends StatefulWidget {
-  const bottomNavigationBar({super.key});
+  final User user;
+  const bottomNavigationBar({super.key, required this.user});
 
   @override
   State<bottomNavigationBar> createState() => _bottomNavigationBarState();
 }
 
 class _bottomNavigationBarState extends State<bottomNavigationBar> {
-  
   @override
   Widget build(BuildContext context) {
     int _currentTab = 3;
-    
+
     return BottomAppBar(
         notchMargin: 10,
         child: Container(
@@ -33,7 +35,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Main(),
+                              builder: (context) => Main(user: widget.user),
                             ));
                         setState(() {
                           _currentTab = 0;
@@ -58,7 +60,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => carsList(),
+                              builder: (context) => carsList(user: widget.user),
                             ));
                         setState(() {
                           _currentTab = 1;
@@ -83,7 +85,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Dashboard(),
+                              builder: (context) => Dashboard(user: widget.user),
                             ));
 
                         setState(() {

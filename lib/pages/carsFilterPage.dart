@@ -4,8 +4,11 @@ import 'package:app/widgets/bottomNavigationBar.dart';
 import 'package:app/pages/carDescriptionPage.dart';
 import 'package:app/Modal/ModalFilter.dart';
 
+import '../models/user.dart';
+
 class carsFilter extends StatefulWidget {
-  const carsFilter({super.key});
+  final User user;
+  const carsFilter({super.key, required this.user});
 
   @override
   State<carsFilter> createState() => _carsFilterState();
@@ -19,7 +22,6 @@ class _carsFilterState extends State<carsFilter> {
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
         context: ctx,
-        
         builder: (_) {
           return FractionallySizedBox(
             heightFactor: 0.63,
@@ -111,21 +113,21 @@ class _carsFilterState extends State<carsFilter> {
                 shrinkWrap: true,
                 itemCount: datasList.length,
                 itemBuilder: (context, index) {
-                  return CarView(context, index);
+                  return CarView(context, index, widget.user);
                 }),
           ],
         ),
       ),
-      bottomNavigationBar: bottomNavigationBar(),
+      bottomNavigationBar: bottomNavigationBar(user: widget.user),
     );
   }
 }
 
-Widget CarView(context, int index) {
-  return carCard(context, datasList[index]);
+Widget CarView(context, int index, User user) {
+  return carCard(context, datasList[index], user);
 }
 
-Widget carCard(context, CarModel datas) {
+Widget carCard(context, CarModel datas, User user) {
   return Row(
     children: [
       Expanded(
@@ -142,7 +144,7 @@ Widget carCard(context, CarModel datas) {
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
-                        carDescriptionPage(property: datas.car1),
+                        carDescriptionPage(property: datas.car1, user: user),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) {
                       animation = CurvedAnimation(
@@ -260,7 +262,7 @@ Widget carCard(context, CarModel datas) {
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
-                        carDescriptionPage(property: datas.car2),
+                        carDescriptionPage(property: datas.car2, user: user),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) {
                       animation = CurvedAnimation(

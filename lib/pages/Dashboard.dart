@@ -7,8 +7,11 @@ import 'package:app/utils/Property.dart';
 import 'package:app/widgets/Carte.dart';
 import 'package:app/pages/Notifications.dart';
 
+import '../models/user.dart';
+
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+  final User user;
+  const Dashboard({super.key, required this.user});
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -16,11 +19,11 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   int _currentTab = 2;
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Sidebar(),
+      drawer: Sidebar(user: widget.user),
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(220),
           child: Indexer(children: [
@@ -36,7 +39,7 @@ class _DashboardState extends State<Dashboard> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Notifications(),
+                            builder: (context) => Notifications(user: widget.user),
                           ));
                     },
                   ),
@@ -399,7 +402,7 @@ class _DashboardState extends State<Dashboard> {
                 shrinkWrap: true,
                 itemCount: properties.length,
                 itemBuilder: (context, index) {
-                  return Carte(property: properties[index]);
+                  return Carte(property: properties[index], user: widget.user);
                 }),
           ),
         ],
@@ -421,7 +424,7 @@ class _DashboardState extends State<Dashboard> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Main(),
+                                builder: (context) => Main(user: widget.user),
                               ));
                           setState(() {
                             _currentTab = 0;
@@ -446,7 +449,7 @@ class _DashboardState extends State<Dashboard> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => carsList(),
+                                builder: (context) => carsList(user: widget.user),
                               ));
                           setState(() {
                             _currentTab = 1;
@@ -471,7 +474,7 @@ class _DashboardState extends State<Dashboard> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Dashboard(),
+                                builder: (context) => Dashboard(user: widget.user),
                               ));
 
                           setState(() {
@@ -492,7 +495,6 @@ class _DashboardState extends State<Dashboard> {
                   )
                 ]),
           )),
-      
     );
   }
 }
