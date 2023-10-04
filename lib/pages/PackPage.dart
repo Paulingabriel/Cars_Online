@@ -4,10 +4,7 @@ import 'package:app/widgets/bottomNavigationBar.dart';
 import '../models/user.dart';
 
 class PackPage extends StatelessWidget {
-<<<<<<< HEAD
 
-=======
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
   final User user;
   const PackPage({super.key, required this.user});
 

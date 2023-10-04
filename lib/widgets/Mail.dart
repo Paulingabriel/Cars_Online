@@ -8,11 +8,7 @@ import '../models/user.dart';
 import '../models/user.dart';
 
 class Mail extends StatelessWidget {
-<<<<<<< HEAD
   final ListCars property;
-=======
-  final Property property;
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
   final User user;
   const Mail({super.key, required this.property, required this.user});
 
@@ -86,11 +82,7 @@ class Mail extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-<<<<<<< HEAD
                                   Text('Nouveau post : '+ property.nom!,
-=======
-                                  Text('Nouveau post : ' + property.name,
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                                       style: TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w500,

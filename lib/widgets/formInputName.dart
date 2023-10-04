@@ -2,18 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:indexed/indexed.dart';
 
 class formInputName extends StatefulWidget {
-<<<<<<< HEAD
+
   final IconData? icon;
   TextEditingController txtName;
 
   formInputName({super.key, this.icon, required this.txtName});
-=======
-  final IconData icon;
-  TextEditingController txtName;
-
-  formInputName({super.key, required this.icon, required this.txtName});
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
-
   @override
   State<formInputName> createState() => _formInputNameState();
 }
@@ -44,7 +37,6 @@ class _formInputNameState extends State<formInputName> {
         child:  TextFormField(
         controller: widget.txtName,
         keyboardType: TextInputType.name,
-<<<<<<< HEAD
         validator: (val) {
               if (val!.length < 3 && val.isNotEmpty) {
                 return 'Au moins 3 charactères requis.';
@@ -57,11 +49,6 @@ class _formInputNameState extends State<formInputName> {
         // validator: (val) => val!.isEmpty
         //     ? 'champ requis.'
         //     : null,
-=======
-        validator: (val) => val!.length < 3
-            ? 'Au moins 3 charactères requis.'
-            : null,
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(left: 20),
             suffixIcon: Icon(widget.icon, color: Colors.black),

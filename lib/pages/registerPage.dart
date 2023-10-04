@@ -52,17 +52,11 @@ class _registerPageState extends State<registerPage> {
   // Save and redirect to home
   void _saveAndRedirectToHome(User user) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-<<<<<<< HEAD
     await pref.setString('token', user.token ?? '');
     await pref.setInt('id', user.id ?? 0);
     await pref.setString('name', user.name ?? '');
     await pref.setString('pseudo', user.pseudo ?? '');
     await pref.setString('email', user.email ?? '');
-=======
-    await pref.setString('accessToken', user.token ?? '');
-    await pref.setString('userId', user.id ?? '');
-    String token = await getToken();
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => PackPage(user: user)),
         (route) => false);

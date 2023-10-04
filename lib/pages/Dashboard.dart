@@ -15,10 +15,7 @@ import 'package:app/pages/Notifications.dart';
 import '../models/user.dart';
 
 class Dashboard extends StatefulWidget {
-<<<<<<< HEAD
 
-=======
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
   final User user;
   const Dashboard({super.key, required this.user});
 
@@ -29,7 +26,6 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   int _currentTab = 2;
 
-<<<<<<< HEAD
    List<dynamic?> _carsList = [];
 
   int userId = 0;
@@ -65,8 +61,6 @@ class _DashboardState extends State<Dashboard> {
   }
 
 
-=======
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -449,11 +443,7 @@ class _DashboardState extends State<Dashboard> {
                 shrinkWrap: true,
                 itemCount: _carsList.length,
                 itemBuilder: (context, index) {
-<<<<<<< HEAD
                   return Carte(property: _carsList[index], user: widget.user);
-=======
-                  return Carte(property: properties[index], user: widget.user);
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                 }),
           ),
         ],
@@ -500,12 +490,8 @@ class _DashboardState extends State<Dashboard> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-<<<<<<< HEAD
                                 builder: (context) =>
                                     carsList(user: widget.user),
-=======
-                                builder: (context) => carsList(user: widget.user),
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                               ));
                           setState(() {
                             _currentTab = 1;

@@ -23,7 +23,6 @@ class carsList extends StatefulWidget {
 class _carsList extends State<carsList> {
   int _currentTab = 1;
 
-<<<<<<< HEAD
   bool _loading = false;
 
   List<dynamic?> _carList = [];
@@ -60,8 +59,7 @@ class _carsList extends State<carsList> {
     super.initState();
   }
 
-=======
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,9 +105,8 @@ class _carsList extends State<carsList> {
                     ),
                   ]),
             ),
-<<<<<<< HEAD
             _loading
-                ? 
+                ?
                 Container(
                     height: 210,
                     child: Center(
@@ -127,18 +124,6 @@ class _carsList extends State<carsList> {
                               property: _carList[index], user: widget.user);
                         }),
                   ),
-=======
-            Container(
-              padding: EdgeInsets.only(top: 10, left: 8, right: 8),
-              child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: properties.length,
-                  itemBuilder: (context, index) {
-                    return Carte(property: properties[index], user: widget.user);
-                  }),
-            ),
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
           ],
         ),
       ),
@@ -184,12 +169,8 @@ class _carsList extends State<carsList> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-<<<<<<< HEAD
                                 builder: (context) =>
                                     carsList(user: widget.user),
-=======
-                                builder: (context) => carsList(user: widget.user),
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                               ));
                           setState(() {
                             _currentTab = 1;
@@ -214,12 +195,8 @@ class _carsList extends State<carsList> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-<<<<<<< HEAD
                                 builder: (context) =>
                                     Dashboard(user: widget.user),
-=======
-                                builder: (context) => Dashboard(user: widget.user),
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                               ));
 
                           setState(() {

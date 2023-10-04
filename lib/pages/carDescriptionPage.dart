@@ -35,16 +35,12 @@ import '../models/user.dart';
 // }
 
 class carDescriptionPage extends StatefulWidget {
-<<<<<<< HEAD
+
   final ListCars property;
   final User user;
   const carDescriptionPage(
       {super.key, required this.property, required this.user});
-=======
-  final Property property;
-  final User user;
-  const carDescriptionPage({super.key, required this.property, required this.user});
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
+
 
   @override
   State<carDescriptionPage> createState() => _carDescriptionPage();
@@ -102,12 +98,9 @@ class _carDescriptionPage extends State<carDescriptionPage>
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-<<<<<<< HEAD
                             builder: (context) =>
                                 Notifications(user: widget.user),
-=======
-                            builder: (context) => Notifications(user: widget.user),
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
+
                           ));
                     },
                   ),
@@ -187,11 +180,7 @@ class _carDescriptionPage extends State<carDescriptionPage>
                   Transform.translate(
                     offset: Offset(0, -25.0),
                     child: new DotsIndicator(
-<<<<<<< HEAD
                       dotsCount: widget.property.images!.length,
-=======
-                      dotsCount: widget.property.image.length,
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                       position: _currPageValue.round(),
                       decorator: DotsDecorator(
                         color: Colors.white,
@@ -584,13 +573,8 @@ Widget carouselCard(String data) {
       // border: Border.all(width: 2.0),
       image: DecorationImage(
           fit: BoxFit.cover,
-<<<<<<< HEAD
           image: NetworkImage(
             data.replaceAll('"', '').replaceAll('\\', ''),
-=======
-          image: AssetImage(
-            data,
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
           )),
     ),
   );

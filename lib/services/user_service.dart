@@ -1,12 +1,8 @@
 import 'dart:convert';
 import 'dart:async';
-<<<<<<< HEAD
 import 'dart:io';
 import 'package:app/models/api_response.dart';
 import 'package:app/models/car.dart';
-=======
-import 'package:app/models/api_response.dart';
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
 import 'package:app/models/user.dart';
 import 'package:app/constant.dart';
 import 'package:http/http.dart' as http;
@@ -21,21 +17,11 @@ Future<ApiResponse> login(String email, String password) async {
     final response = await http.post(Uri.parse(loginURL),
         headers: {'Accept': 'Application/json'},
         body: {'email': email, 'password': password});
-<<<<<<< HEAD
-
     print(jsonDecode(response.body));
 
     switch (response.statusCode) {
       case 200:
         print(response.statusCode);
-=======
-    var resp = jsonDecode(response.body);
-   print(resp['meta']['code']);
-
-    switch (response.statusCode) {
-      case 200:
-    print(response.statusCode);
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
         apiResponse.data = User.fromJson(jsonDecode(response.body));
         break;
       case 422:
@@ -60,41 +46,26 @@ Future<ApiResponse> login(String email, String password) async {
 //register
 
 Future<ApiResponse> register(String name, String pseudo, String tel,
-<<<<<<< HEAD
   String email, String password) async {
-=======
-    String email, String password) async {
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
   ApiResponse apiResponse = ApiResponse();
 
   try {
     final response = await http.post(Uri.parse(registerURL), headers: {
       'Accept': 'Application/json'
     }, body: {
-<<<<<<< HEAD
       'name': name,
       'pseudo': pseudo,
       'tel': tel,
-=======
-      'lastName': name,
-      'firstName': pseudo,
-      'phone': tel,
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
       'email': email,
       'password': password,
       'password_confirmation': password,
     });
 
-<<<<<<< HEAD
     print(jsonDecode(response.body));
     print(response.statusCode);
 
     switch (response.statusCode) {
       case 200:
-=======
-    switch (response.statusCode) {
-      case 201:
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
         apiResponse.data = User.fromJson(jsonDecode(response.body));
         break;
       case 422:
@@ -127,11 +98,10 @@ Future<ApiResponse> getUserDetail() async {
       'Accept': 'Application/json',
       'Authorization': 'Bearer $token'
     });
-<<<<<<< HEAD
+
 
     print(jsonDecode(response.body));
-=======
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
+
     switch (response.statusCode) {
       case 200:
         apiResponse.data = User.fromJson(jsonDecode(response.body));
@@ -158,31 +128,22 @@ Future<ApiResponse> getUserDetail() async {
 // get token
 Future<String> getToken() async {
   SharedPreferences pref = await SharedPreferences.getInstance();
-<<<<<<< HEAD
   return pref.getString('token') ?? '';
-=======
-  return pref.getString('accessToken') ?? '';
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
+
 }
 
 // get user id
 
-<<<<<<< HEAD
 Future<int> getUserId() async {
   SharedPreferences pref = await SharedPreferences.getInstance();
   return pref.getInt('id') ?? 0;
-=======
-Future<String> getUserId() async {
-  SharedPreferences pref = await SharedPreferences.getInstance();
-  return pref.getString('userId') ?? '';
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
+
 }
 
 // logout
 
 Future<bool> logout() async {
   SharedPreferences pref = await SharedPreferences.getInstance();
-<<<<<<< HEAD
   return await pref.remove('token');
 }
 
@@ -190,7 +151,4 @@ Future<bool> logout() async {
 String? getStringImage(File? file) {
   if (file == null) return null;
   return base64Encode(file.readAsBytesSync());
-=======
-  return await pref.remove('accessToken');
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
 }

@@ -6,27 +6,10 @@ import 'package:app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:indexed/indexed.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-<<<<<<< HEAD
-
 import '../models/user.dart';
 
 class homePage extends StatefulWidget {
   homePage({super.key});
-
-  @override
-  State<homePage> createState() => _homePageState();
-}
-
-class _homePageState extends State<homePage> {
- 
-
-=======
-
-import '../models/user.dart';
-
-class homePage extends StatefulWidget {
-  const homePage({super.key});
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
 
   @override
   State<homePage> createState() => _homePageState();

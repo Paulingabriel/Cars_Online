@@ -333,10 +333,7 @@ class _carsFormState extends State<carsForm> {
                             onTap: () {
                               pickFile_image1();
                             },
-<<<<<<< HEAD
                             child: isLoading_1
-=======
-                            child: isLoading
                                 ? Container(
                                     height: 100,
                                     width: 100,
@@ -360,49 +357,6 @@ class _carsFormState extends State<carsForm> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          Icon(
-                                            Icons.photo_outlined,
-                                            size: 60,
-                                          ),
-                                          if (pickedfile != null)
-                                            SizedBox(
-                                              height: 100,
-                                              width: 100,
-                                              child: Image.file(fileToDisplay!),
-                                            ),
-                                        ]),
-                                  ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              pickFile();
-                            },
-                            child: isLoading
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
-                                ? Container(
-                                    height: 100,
-                                    width: 100,
-                                    padding: EdgeInsets.all(40),
-                                    child: CircularProgressIndicator(),
-                                  )
-                                : Container(
-                                    width: 100,
-                                    height: 100,
-                                    decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color:
-                                                  Colors.grey.withOpacity(0.5),
-                                              blurRadius: 5.0,
-                                              offset: Offset(0, 5)),
-                                        ],
-                                        borderRadius: BorderRadius.circular(3),
-                                        color: Colors.white),
-                                    child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-<<<<<<< HEAD
                                           if (pickedfile != null &&
                                               fileToDisplay_image1 != null)
                                             SizedBox(
@@ -415,17 +369,7 @@ class _carsFormState extends State<carsForm> {
                                             Icon(
                                               Icons.photo_outlined,
                                               size: 60,
-=======
-                                          Icon(
-                                            Icons.photo_outlined,
-                                            size: 60,
-                                          ),
-                                          if (pickedfile != null)
-                                            SizedBox(
-                                              height: 100,
-                                              width: 100,
-                                              child: Image.file(fileToDisplay!),
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
+
                                             ),
                                         ]),
                                   ),
@@ -458,7 +402,6 @@ class _carsFormState extends State<carsForm> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-<<<<<<< HEAD
                                           if (pickedfile != null &&
                                               fileToDisplay_image2 != null)
                                             SizedBox(
@@ -471,22 +414,10 @@ class _carsFormState extends State<carsForm> {
                                             Icon(
                                               Icons.photo_outlined,
                                               size: 60,
-=======
-                                          Icon(
-                                            Icons.photo_outlined,
-                                            size: 60,
-                                          ),
-                                          if (pickedfile != null)
-                                            SizedBox(
-                                              height: 100,
-                                              width: 100,
-                                              child: Image.file(fileToDisplay!),
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                                             ),
                                         ]),
                                   ),
                           ),
-<<<<<<< HEAD
                           GestureDetector(
                             onTap: () {
                               pickFile_image3();
@@ -531,8 +462,6 @@ class _carsFormState extends State<carsForm> {
                                         ]),
                                   ),
                           ),
-=======
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                         ],
                       ),
                     ),
@@ -999,11 +928,7 @@ class _carsFormState extends State<carsForm> {
             ]),
           ),
         ]),
-<<<<<<< HEAD
       )),
-=======
-      ),
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
       bottomNavigationBar: bottomNavigationBar(user: widget.user),
     );
   }

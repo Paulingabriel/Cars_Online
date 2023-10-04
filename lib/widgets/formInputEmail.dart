@@ -37,7 +37,6 @@ class _formInputEmailState extends State<formInputEmail> {
       child: TextFormField(
             keyboardType: TextInputType.emailAddress,
             controller: widget.txtEmail,
-<<<<<<< HEAD
              validator: (val) {
               if (val!.length < 3) {
                 return 'Au moins 3 charactères requis.';
@@ -48,9 +47,7 @@ class _formInputEmailState extends State<formInputEmail> {
               }
             },
             // validator: (val) => (val!.isEmpty || !val.contains('@')) ? 'Adresse email invalide.' : null,
-=======
-            validator: (val) => (val!.isEmpty || !val.contains('@')) ? 'Adresse email invalide requis.' : null,
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
+
             decoration: InputDecoration(
                 contentPadding: EdgeInsets.only(left: 20),
                 suffixIcon: Icon(widget.icon, color: Colors.black),

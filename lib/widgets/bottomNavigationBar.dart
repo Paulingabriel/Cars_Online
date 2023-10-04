@@ -6,12 +6,8 @@ import 'package:app/pages/carsListPage.dart';
 import '../models/user.dart';
 
 class bottomNavigationBar extends StatefulWidget {
-<<<<<<< HEAD
 
   final  User user;
-=======
-  final User user;
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
   const bottomNavigationBar({super.key, required this.user});
 
   @override
@@ -19,11 +15,7 @@ class bottomNavigationBar extends StatefulWidget {
 }
 
 class _bottomNavigationBarState extends State<bottomNavigationBar> {
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
   @override
   Widget build(BuildContext context) {
     int _currentTab = 3;

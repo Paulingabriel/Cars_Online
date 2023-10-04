@@ -58,11 +58,7 @@ class _SidebarState extends State<Sidebar> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-<<<<<<< HEAD
                           builder: (context) => Cars(user: widget.user),
-=======
-                          builder: (context) => carsFilter(user: widget.user),
->>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                         ));
                   },
                 ),
