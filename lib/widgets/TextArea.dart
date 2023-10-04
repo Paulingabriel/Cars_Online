@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:app/widgets/formLabel.dart';
 
 class TextArea extends StatelessWidget {
-  const TextArea({super.key});
+
+  TextEditingController txtDesc;
+
+  TextArea({super.key, required this.txtDesc});
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +35,10 @@ class TextArea extends StatelessWidget {
       child: TextFormField(
         minLines: 8,
         maxLines: 8,
+        controller: txtDesc,
         keyboardType: TextInputType.multiline,
         decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(left: 20),
+            contentPadding: EdgeInsets.all(20),
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(

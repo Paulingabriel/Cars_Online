@@ -1,3 +1,8 @@
+import 'package:app/constant.dart';
+import 'package:app/models/api_response.dart';
+import 'package:app/pages/loginPage.dart';
+import 'package:app/services/car_service.dart';
+import 'package:app/utils/ListCars.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/Navbar.dart';
 import 'package:app/pages/carsListPage.dart';
@@ -7,9 +12,15 @@ import 'package:app/models/models.dart';
 import 'package:app/models/carsModels.dart';
 import 'package:indexed/indexed.dart';
 import 'package:app/pages/carDescriptionPage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/user.dart';
+import '../services/user_service.dart';
 
 class Main extends StatefulWidget {
-  const Main({super.key});
+  final User user;
+  const Main({super.key, required this.user});
 
   @override
   State<Main> createState() => _Main();
@@ -18,10 +29,46 @@ class Main extends StatefulWidget {
 class _Main extends State<Main> {
   PageController pageController = PageController(viewportFraction: 0.45);
   int _currentTab = 0;
+  bool _loading = true;
+
+  List<dynamic?> _carsList = [];
+
+  int userId = 0;
+
+  Future<void> retrieveCars() async {
+    print('bonjour');
+    userId = await getUserId();
+    ApiResponse response = await getCars();
+    print(response.error);
+
+    if (response.error == null) {
+      setState(() {
+        _carsList = response.data as List<dynamic>;
+        _loading = _loading ? !_loading : _loading;
+      });
+    } else if (response.error == unauthorized) {
+      logout().then((value) => {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => loginPage()),
+                (route) => false)
+          });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('${response.error}'),
+      ));
+    }
+  }
+
+  @override
+  void initState() {
+    retrieveCars();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Navbar(),
+      drawer: Navbar(user: widget.user),
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(260),
           child: Indexer(children: [
@@ -37,7 +84,8 @@ class _Main extends State<Main> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const Notifications(),
+                            builder: (context) =>
+                                Notifications(user: widget.user),
                           ));
                     },
                   ),
@@ -175,19 +223,22 @@ class _Main extends State<Main> {
                               )
                             ],
                           ),
-                          Container(
-                              height: 100,
-                              padding: EdgeInsets.only(top: 10, bottom: 15),
-                              // decoration: BoxDecoration(border: Border.all(width: 1.0)),
-                              child: PageView.builder(
-                                controller: pageController,
-                                itemCount: dataList.length,
-                                physics: ClampingScrollPhysics(),
-                                itemBuilder: (context, position) {
-                                  return CarouselView(position);
-                                },
-                              )
-                            ),
+                          _loading
+                              ? Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Container(
+                                  height: 100,
+                                  padding: EdgeInsets.only(top: 10, bottom: 15),
+                                  // decoration: BoxDecoration(border: Border.all(width: 1.0)),
+                                  child: PageView.builder(
+                                    controller: pageController,
+                                    itemCount: dataList.length,
+                                    physics: ClampingScrollPhysics(),
+                                    itemBuilder: (context, position) {
+                                      return CarouselView(position);
+                                    },
+                                  )),
                         ],
                       )),
                 ))
@@ -211,11 +262,11 @@ class _Main extends State<Main> {
                   ],
                   // border: Border.all(width: 2.0),
                   image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage(
-                        'images/banner.png',
-                      ),
+                    fit: BoxFit.cover,
+                    image: AssetImage(
+                      'images/banner.png',
                     ),
+                  ),
                 ),
               ),
               Row(
@@ -247,13 +298,29 @@ class _Main extends State<Main> {
                 ],
               ),
               SizedBox(height: 10),
-              ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: datasList.length,
-                  itemBuilder: (context, index) {
-                    return CarView(context, index);
-                  }),
+              _loading
+                  ? 
+                  Container(
+                    height: 210,
+                      child: Center(
+                        child:  CircularProgressIndicator(),
+                      ),
+                    )
+                  : GridView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: _carsList.length,
+                      gridDelegate:
+                          new SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        // childAspectRatio: 1,
+                        childAspectRatio: 0.7,
+                        mainAxisSpacing: 10.0,
+                        crossAxisSpacing: 10.0,
+                      ),
+                      itemBuilder: (context, index) {
+                        return CarView(context, index, widget.user);
+                      })
             ],
           ),
         ),
@@ -275,7 +342,7 @@ class _Main extends State<Main> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Main(),
+                                builder: (context) => Main(user: widget.user),
                               ));
                           setState(() {
                             _currentTab = 0;
@@ -300,7 +367,8 @@ class _Main extends State<Main> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => carsList(),
+                                builder: (context) =>
+                                    carsList(user: widget.user),
                               ));
                           setState(() {
                             _currentTab = 1;
@@ -325,7 +393,8 @@ class _Main extends State<Main> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Dashboard(),
+                                builder: (context) =>
+                                    Dashboard(user: widget.user),
                               ));
 
                           setState(() {
@@ -348,293 +417,167 @@ class _Main extends State<Main> {
           )),
     );
   }
-}
 
-Widget CarouselView(int index) {
-  return carouselCard(dataList[index]);
-}
+  Widget CarouselView(int index) {
+    return carouselCard(dataList[index]);
+  }
 
-Widget carouselCard(DataModel data) {
-  return Transform.translate(
-    offset: Offset(-75, 0),
-    child: Container(
-      height: 80,
-      margin: EdgeInsets.only(left: 10, right: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(3),
-        // border: Border.all(width: 2.0),
-        image: DecorationImage(
-            colorFilter: new ColorFilter.mode(
-                Colors.black.withOpacity(0.5), BlendMode.hardLight),
-            fit: BoxFit.cover,
-            image: AssetImage(
-              data.imageName,
-            )),
-      ),
-      child: Center(
-        child: Text(data.title,
-            style: TextStyle(
-                fontSize: 10,
-                color: Colors.white,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w300)),
-      ),
-    ),
-  );
-}
-
-Widget CarView(context, int index) {
-  return carCard(context, datasList[index]);
-}
-
-Widget carCard(context, CarModel datas) {
-  return Row(
-    children: [
-      Expanded(
-          child: Container(
-        height: 210,
-        margin: EdgeInsets.only(bottom: 15),
+  Widget carouselCard(DataModel data) {
+    return Transform.translate(
+      offset: Offset(-75, 0),
+      child: Container(
+        height: 80,
+        margin: EdgeInsets.only(left: 10, right: 10),
         decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(3),
+          // border: Border.all(width: 2.0),
+          image: DecorationImage(
+              colorFilter: new ColorFilter.mode(
+                  Colors.black.withOpacity(0.5), BlendMode.hardLight),
+              fit: BoxFit.cover,
+              image: AssetImage(
+                data.imageName,
+              )),
+        ),
+        child: Center(
+          child: Text(data.title,
+              style: TextStyle(
+                  fontSize: 10,
+                  color: Colors.white,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w300)),
+        ),
+      ),
+    );
+  }
+
+  Widget CarView(context, int index, User user) {
+    return carCard(context, _carsList[index], user);
+  }
+
+  Widget carCard(context, ListCars data, User user) {
+    return Container(
+      height: 210,
+      margin: EdgeInsets.only(bottom: 15),
+      // decoration: BoxDecoration(
+      //   border: Border.all(width: 1.0),
+      // ),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    carDescriptionPage(property: data, user: user),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  animation =
+                      CurvedAnimation(curve: Curves.ease, parent: animation);
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                },
+              ));
+        },
+        child: Container(
+          width: 160,
+          // margin: EdgeInsets.only(right: 10),
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  blurRadius: 5.0,
+                  offset: Offset(0, 5)),
+            ],
+            borderRadius: BorderRadius.circular(8),
+            color: Colors.white,
             // border: Border.all(width: 1.0),
-            ),
-        child: Row(children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        carDescriptionPage(property: datas.car1),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      animation = CurvedAnimation(
-                          curve: Curves.ease, parent: animation);
-                      return FadeTransition(
-                        opacity: animation,
-                        child: child,
-                      );
-                    },
-                  ));
-            },
-            child: Container(
-              width: 160,
-              margin: EdgeInsets.only(right: 10),
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      blurRadius: 5.0,
-                      offset: Offset(0, 5)),
-                ],
-                borderRadius: BorderRadius.circular(8),
-                color: Colors.white,
-                // border: Border.all(width: 1.0),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    width: 160,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(8),
-                          topRight: Radius.circular(8)),
-                      // border: Border.all(width: 2.0),
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage(
-                            datas.car1.image[0],
-                          )),
-                    ),
-                  ),
-                  Container(
-                      margin: EdgeInsets.only(left: 7.5, right: 7.5, top: 10),
-                      height: 80,
-                      width: 145,
-                      decoration: BoxDecoration(
-                          // border: Border.all(width: 1.0),
-                          ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(datas.car1.name,
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.black,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w700)),
-                          Text(datas.car1.year,
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.black,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w500)),
-                          Text(datas.car1.carb,
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.black,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w500)),
-                          Text(datas.car1.price,
-                              style: TextStyle(
-                                  fontSize: 11,
-                                  color: Color(0xFF025CCB),
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w700)),
-                        ],
-                      )),
-                  Container(
-                    padding: EdgeInsets.only(right: 10),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Icon(
-                            Icons.star,
-                            color: Colors.black,
-                            size: 15,
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
-                          Icon(
-                            Icons.star,
-                            color: Colors.black,
-                            size: 15,
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
-                          Icon(
-                            Icons.star_border_outlined,
-                            color: Colors.black,
-                            size: 15,
-                          ),
-                        ]),
-                  )
-                ],
-              ),
-            ),
           ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        carDescriptionPage(property: datas.car2),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      animation = CurvedAnimation(
-                          curve: Curves.ease, parent: animation);
-                      return FadeTransition(
-                        opacity: animation,
-                        child: child,
-                      );
-                    },
-                  ));
-            },
-            child: Container(
-              width: 160,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      blurRadius: 5.0,
-                      offset: Offset(0, 5)),
-                ],
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                // border: Border.all(width: 1.0),
+          child: Column(
+            children: [
+              Container(
+                width: 160,
+                height: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      topRight: Radius.circular(8)),
+                  // border: Border.all(width: 2.0),
+                  image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(data.images![0]
+                          .replaceAll('"', '')
+                          .replaceAll('\\', ''))),
+                ),
               ),
-              child: Column(
-                children: [
-                  Container(
-                    width: 160,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(8),
-                          topRight: Radius.circular(8)),
-                      // border: Border.all(width: 2.0),
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage(
-                            datas.car2.image[0],
-                          )),
-                    ),
+              Container(
+                  margin: EdgeInsets.only(left: 7.5, right: 7.5, top: 10),
+                  height: 80,
+                  width: 145,
+                  decoration: BoxDecoration(
+                      // border: Border.all(width: 1.0),
+                      ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(data.nom!,
+                          style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.black,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w700)),
+                      Text('Année ' + data.annee!,
+                          style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.black,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500)),
+                      Text(data.type!,
+                          style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.black,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500)),
+                      Text(data.prix!.toString(),
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: Color(0xFF025CCB),
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w700)),
+                    ],
+                  )),
+              Container(
+                padding: EdgeInsets.only(right: 10),
+                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  Icon(
+                    Icons.star,
+                    color: Colors.black,
+                    size: 15,
                   ),
-                  Container(
-                      margin: EdgeInsets.only(left: 7.5, right: 7.5, top: 10),
-                      height: 80,
-                      width: 145,
-                      decoration: BoxDecoration(
-                          // border: Border.all(width: 1.0),
-                          ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(datas.car2.name,
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.black,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w700)),
-                          Text(datas.car2.year,
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.black,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w500)),
-                          Text(datas.car2.carb,
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.black,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w500)),
-                          Text(datas.car2.price,
-                              style: TextStyle(
-                                  fontSize: 11,
-                                  color: Color(0xFF025CCB),
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w700)),
-                        ],
-                      )),
-                  Container(
-                    padding: EdgeInsets.only(right: 10),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Icon(
-                            Icons.star,
-                            color: Colors.black,
-                            size: 15,
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
-                          Icon(
-                            Icons.star,
-                            color: Colors.black,
-                            size: 15,
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
-                          Icon(
-                            Icons.star_border_outlined,
-                            color: Colors.black,
-                            size: 15,
-                          ),
-                        ]),
-                  )
-                ],
-              ),
-            ),
-          )
-        ]),
-      )),
-    ],
-  );
+                  SizedBox(
+                    width: 3,
+                  ),
+                  Icon(
+                    Icons.star,
+                    color: Colors.black,
+                    size: 15,
+                  ),
+                  SizedBox(
+                    width: 3,
+                  ),
+                  Icon(
+                    Icons.star_border_outlined,
+                    color: Colors.black,
+                    size: 15,
+                  ),
+                ]),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

@@ -5,7 +5,10 @@ import 'package:app/widgets/Input.dart';
 
 class Group extends StatelessWidget {
   String label;
-  Group({super.key, required this.label});
+
+  TextEditingController txtNumber;
+
+  Group({super.key, required this.label, required this.txtNumber});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +24,7 @@ class Group extends StatelessWidget {
         SizedBox(
           height: 15,
         ),
-        Input(),
+        Input(txtNumber: txtNumber),
       ]),
     );
   }

@@ -1,9 +1,13 @@
+import 'package:app/pages/DashboardCars.dart';
 import 'package:flutter/material.dart';
 import 'package:app/pages/carsFilterPage.dart';
 import 'package:app/pages/carsForm.dart';
 
+import '../models/user.dart';
+
 class Sidebar extends StatefulWidget {
-  const Sidebar({super.key});
+  final User user;
+  const Sidebar({super.key, required this.user});
 
   @override
   State<Sidebar> createState() => _SidebarState();
@@ -54,7 +58,7 @@ class _SidebarState extends State<Sidebar> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => carsFilter(),
+                          builder: (context) => Cars(user: widget.user),
                         ));
                   },
                 ),
@@ -76,7 +80,7 @@ class _SidebarState extends State<Sidebar> {
                      Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => carsForm(),
+                          builder: (context) => carsForm(user: widget.user),
                         ));
                   },
                 ),

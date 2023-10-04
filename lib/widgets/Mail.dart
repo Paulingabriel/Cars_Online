@@ -1,10 +1,14 @@
 import 'package:app/pages/carDescriptionPage.dart';
+import 'package:app/utils/ListCars.dart';
 import 'package:flutter/material.dart';
-import 'package:app/utils/Property.dart';
+// import 'package:app/utils/Property.dart';
+
+import '../models/user.dart';
 
 class Mail extends StatelessWidget {
-  final Property property;
-  const Mail({super.key, required this.property});
+  final ListCars property;
+  final User user;
+  const Mail({super.key, required this.property, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +18,7 @@ class Mail extends StatelessWidget {
             context,
             PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) =>
-                  carDescriptionPage(property: property),
+                  carDescriptionPage(property: property, user: user),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {
                 // var begin = Offset(0.0, 1.0);
@@ -46,11 +50,11 @@ class Mail extends StatelessWidget {
                       // border: Border.all(color: Colors.black, width: 1.0)
                       ),
                   child: Hero(
-                    tag: "Modèle " + property.id,
+                    tag: "Modèle " + property.carId.toString(),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(5),
                       child: Image.asset(
-                        property.image[0],
+                        property.images![0],
                         height: 60,
                         width: 60,
                         fit: BoxFit.cover,
@@ -76,7 +80,7 @@ class Mail extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  Text('Nouveau post : '+ property.name,
+                                  Text('Nouveau post : '+ property.nom!,
                                       style: TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w500,
@@ -84,9 +88,9 @@ class Mail extends StatelessWidget {
                                           color: Colors.black)),
                                   Text(
                                       'Année:' +
-                                          property.year +
+                                          property.annee! +
                                           '/' +
-                                          property.carb,
+                                          property.type!,
                                       style: TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w500,

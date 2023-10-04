@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:app/pages/homePage.dart';
 
+import '../models/user.dart';
+
 class loadingPage extends StatefulWidget {
+
   const loadingPage({super.key});
 
   @override
@@ -19,10 +22,10 @@ class _loadingPage extends State<loadingPage> {
   void goToHome() async {
     await Future.delayed(const Duration(seconds: 10), () {
       Navigator.pushAndRemoveUntil(
-        context, 
-        MaterialPageRoute(builder: (context) => const homePage()), 
+        context,
+        MaterialPageRoute(builder: (context) => homePage()),
         (Route<dynamic> route) => false,
-        );
+      );
     });
   }
 

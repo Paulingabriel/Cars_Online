@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:indexed/indexed.dart';
 
-class Input extends StatefulWidget {
+class formInputName extends StatefulWidget {
   final IconData? icon;
-  TextEditingController txtNumber;
+  TextEditingController txtName;
 
-  Input({super.key, this.icon, required this.txtNumber});
+  formInputName({super.key, this.icon, required this.txtName});
 
   @override
-  State<Input> createState() => _InputState();
+  State<formInputName> createState() => _formInputNameState();
 }
 
-class _InputState extends State<Input> {
+class _formInputNameState extends State<formInputName> {
   @override
   Widget build(BuildContext context) {
     return Indexer(
@@ -35,10 +35,12 @@ class _InputState extends State<Input> {
         Indexed(
         index: 3,
         child:  TextFormField(
-        controller: widget.txtNumber,
-        keyboardType: TextInputType.number,
+        controller: widget.txtName,
+        keyboardType: TextInputType.name,
         validator: (val) {
-              if (val!.isEmpty) {
+              if (val!.length < 3 && val.isNotEmpty) {
+                return 'Au moins 3 charactères requis.';
+              } else if (val.isEmpty) {
                 return 'champ requis.';
               } else {
                 return null;

@@ -5,7 +5,19 @@ import 'package:app/widgets/Select.dart';
 class Double extends StatelessWidget {
   String label1;
   String label2;
-  Double({super.key, required this.label1, required this.label2});
+  String value1;
+  String value2;
+  List<String> list1;
+  List<String> list2;
+  Double({
+    super.key,
+    required this.label1,
+    required this.label2,
+    required this.list1,
+    required this.list2,
+    required this.value1,
+    required this.value2
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +34,7 @@ class Double extends StatelessWidget {
               SizedBox(
                 height: 15,
               ),
-              Select()
+              Select(list: list1, option: value1)
             ]),
           ),
           Container(
@@ -33,7 +45,7 @@ class Double extends StatelessWidget {
               SizedBox(
                 height: 15,
               ),
-              Select()
+              Select(list: list2, option: value2)
             ]),
           )
         ],

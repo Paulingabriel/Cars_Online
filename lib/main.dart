@@ -1,9 +1,11 @@
+import 'package:app/models/user.dart';
+import 'package:app/pages/DashboardCars.dart';
 import 'package:app/pages/loadingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:app/pages/loadingPage.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() { 
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -15,6 +17,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: loadingPage(),
+      // home: Cars(user: User()),
+
+
+
+
       // home: carDescriptionPage(property: Property(
       //   '1',
       //   'coupé',
@@ -42,4 +49,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

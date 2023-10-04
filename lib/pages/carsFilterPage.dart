@@ -1,11 +1,21 @@
+import 'package:app/constant.dart';
+import 'package:app/models/api_response.dart';
+import 'package:app/pages/loginPage.dart';
+import 'package:app/services/car_service.dart';
+import 'package:app/services/user_service.dart';
+import 'package:app/utils/ListCars.dart';
 import 'package:flutter/material.dart';
 import 'package:app/models/carsModels.dart';
 import 'package:app/widgets/bottomNavigationBar.dart';
 import 'package:app/pages/carDescriptionPage.dart';
 import 'package:app/Modal/ModalFilter.dart';
 
+import '../models/user.dart';
+
 class carsFilter extends StatefulWidget {
-  const carsFilter({super.key});
+
+  final User user;
+  const carsFilter({super.key, required this.user});
 
   @override
   State<carsFilter> createState() => _carsFilterState();
@@ -14,12 +24,17 @@ class carsFilter extends StatefulWidget {
 class _carsFilterState extends State<carsFilter> {
   PageController pageController = PageController(viewportFraction: 0.45);
 
+  List<dynamic?> _carsList = [];
+
+  bool _loading = false;
+
+  int userId = 0;
+
   void _openModalFilter(BuildContext ctx) {
     showModalBottomSheet(
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
         context: ctx,
-        
         builder: (_) {
           return FractionallySizedBox(
             heightFactor: 0.63,
@@ -27,6 +42,38 @@ class _carsFilterState extends State<carsFilter> {
           );
         });
   }
+
+
+  Future<void> retrieveCars() async {
+    print('bonjour');
+    userId = await getUserId();
+    ApiResponse response = await getCars();
+    print(response.error);
+
+    if (response.error == null) {
+      setState(() {
+        _carsList = response.data as List<dynamic>;
+        _loading = _loading ? !_loading : _loading;
+      });
+    } else if (response.error == unauthorized) {
+      logout().then((value) => {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => loginPage()),
+                (route) => false)
+          });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('${response.error}'),
+      ));
+    }
+  }
+
+  @override
+  void initState() {
+    retrieveCars();
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -106,30 +153,41 @@ class _carsFilterState extends State<carsFilter> {
                 ),
               ),
             ),
-            ListView.builder(
+             _loading
+                ? Container(
+                    height: 210,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                :
+            GridView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: datasList.length,
+                itemCount: _carsList.length,
+                 gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                    // childAspectRatio: 1,
+                  childAspectRatio: 0.7,
+                  mainAxisSpacing: 10.0,
+                  crossAxisSpacing: 10.0,
+                  ),
                 itemBuilder: (context, index) {
-                  return CarView(context, index);
+                  return CarView(context, index, widget.user);
                 }),
           ],
         ),
       ),
-      bottomNavigationBar: bottomNavigationBar(),
+      bottomNavigationBar: bottomNavigationBar(user: widget.user),
     );
   }
-}
 
-Widget CarView(context, int index) {
-  return carCard(context, datasList[index]);
-}
+  Widget CarView(context, int index, User user) {
+    return carCard(context, _carsList[index], user);
+  }
 
-Widget carCard(context, CarModel datas) {
-  return Row(
-    children: [
-      Expanded(
-          child: Container(
+  Widget carCard(context, ListCars data, User user) {
+  return Container(
         height: 210,
         margin: EdgeInsets.only(bottom: 15),
         decoration: BoxDecoration(
@@ -142,7 +200,7 @@ Widget carCard(context, CarModel datas) {
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
-                        carDescriptionPage(property: datas.car1),
+                        carDescriptionPage(property: data, user: user),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) {
                       animation = CurvedAnimation(
@@ -156,7 +214,7 @@ Widget carCard(context, CarModel datas) {
             },
             child: Container(
               width: 160,
-              margin: EdgeInsets.only(right: 10),
+              // margin: EdgeInsets.only(right: 10),
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
@@ -177,11 +235,11 @@ Widget carCard(context, CarModel datas) {
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(8),
                           topRight: Radius.circular(8)),
-                      // border: Border.all(width: 2.0),
+                      // border: Border.all(width: 2.0), 
                       image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: AssetImage(
-                            datas.car1.image[0],
+                          image: NetworkImage(
+                            data.images![0] .replaceAll('"', '').replaceAll('\\', ''),
                           )),
                     ),
                   ),
@@ -196,25 +254,25 @@ Widget carCard(context, CarModel datas) {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(datas.car1.name,
+                          Text(data.nom!,
                               style: TextStyle(
                                   fontSize: 10,
                                   color: Colors.black,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w700)),
-                          Text(datas.car1.year,
+                          Text("Année " + data.annee!,
                               style: TextStyle(
                                   fontSize: 10,
                                   color: Colors.black,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w500)),
-                          Text(datas.car1.carb,
+                          Text(data.type!,
                               style: TextStyle(
                                   fontSize: 10,
                                   color: Colors.black,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w500)),
-                          Text(datas.car1.price,
+                          Text(data.prix.toString(),
                               style: TextStyle(
                                   fontSize: 11,
                                   color: Color(0xFF025CCB),
@@ -254,125 +312,12 @@ Widget carCard(context, CarModel datas) {
               ),
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        carDescriptionPage(property: datas.car2),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      animation = CurvedAnimation(
-                          curve: Curves.ease, parent: animation);
-                      return FadeTransition(
-                        opacity: animation,
-                        child: child,
-                      );
-                    },
-                  ));
-            },
-            child: Container(
-              width: 160,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      blurRadius: 5.0,
-                      offset: Offset(0, 5)),
-                ],
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                // border: Border.all(width: 1.0),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    width: 160,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(8),
-                          topRight: Radius.circular(8)),
-                      // border: Border.all(width: 2.0),
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage(
-                            datas.car2.image[0],
-                          )),
-                    ),
-                  ),
-                  Container(
-                      margin: EdgeInsets.only(left: 7.5, right: 7.5, top: 10),
-                      height: 80,
-                      width: 145,
-                      decoration: BoxDecoration(
-                          // border: Border.all(width: 1.0),
-                          ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(datas.car2.name,
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.black,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w700)),
-                          Text(datas.car2.year,
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.black,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w500)),
-                          Text(datas.car2.carb,
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.black,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w500)),
-                          Text(datas.car2.price,
-                              style: TextStyle(
-                                  fontSize: 11,
-                                  color: Color(0xFF025CCB),
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w700)),
-                        ],
-                      )),
-                  Container(
-                    padding: EdgeInsets.only(right: 10),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Icon(
-                            Icons.star,
-                            color: Colors.black,
-                            size: 15,
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
-                          Icon(
-                            Icons.star,
-                            color: Colors.black,
-                            size: 15,
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
-                          Icon(
-                            Icons.star_border_outlined,
-                            color: Colors.black,
-                            size: 15,
-                          ),
-                        ]),
-                  )
-                ],
-              ),
-            ),
-          )
+          
         ]),
-      )),
-    ],
-  );
+      );
 }
+
+}
+
+
+

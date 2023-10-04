@@ -6,6 +6,7 @@ import 'package:app/pages/carsListPage.dart';
 import 'package:app/pages/loginPage.dart';
 import 'package:app/services/user_service.dart';
 import 'package:app/services/car_service.dart';
+import 'package:app/utils/ListCars.dart';
 import 'package:app/widgets/selectInt.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/formLabel.dart';
@@ -17,19 +18,21 @@ import 'package:app/widgets/InputGroup.dart';
 import 'package:app/widgets/TextArea.dart';
 import 'package:app/widgets/bottomNavigationBar.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:get/get.dart';
 import '../models/user.dart';
 import 'package:app/widgets/post_frame_callback.dart';
 // import 'package:app/widgets/post_frame_callback_stateless.dart';
 
-class carsForm extends StatefulWidget {
+class carsUpdate extends StatefulWidget {
   final User user;
-  const carsForm({super.key, required this.user});
+  final ListCars property;
+  const carsUpdate({super.key, required this.property, required this.user});
 
   @override
-  State<carsForm> createState() => _carsFormState();
+  State<carsUpdate> createState() => _carsUpdateState();
 }
 
-class _carsFormState extends State<carsForm> {
+class _carsUpdateState extends State<carsUpdate> {
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
   bool _autovalidate = false;
   TextEditingController txtNom = TextEditingController(),
@@ -64,11 +67,7 @@ class _carsFormState extends State<carsForm> {
     'MANUELLE 4 VITESSES',
     'MANUELLE 3 VITESSES'
   ];
-  List<String> listType = [
-    'Essence',
-    'Gasoil',
-    'Kerozen'
-  ];
+  List<String> listType = ['Essence', 'Gasoil', 'Kerozen'];
   String? _marque;
   String? _portes;
   String? _places;
@@ -91,6 +90,29 @@ class _carsFormState extends State<carsForm> {
 
   @override
   void initState() {
+    if (widget.property != null) {
+      txtNom.text = widget.property!.nom ?? '';
+      txtDesc.text = widget.property!.desc ?? '';
+      category = widget.property!.categoryId ?? null;
+      _boite = widget.property!.boite ?? '';
+      _year = widget.property!.annee ?? '';
+      _type = widget.property!.type ?? '';
+      _portes = widget.property!.portiere ?? '';
+      _places = widget.property!.place ?? '';
+      _marque = widget.property!.marque ?? '';
+      txtNumberFisc.text = widget.property.pfisc.toString()?? '';
+      txtNumberDin.text = widget.property.pdin.toString()?? '';
+      txtNumberPrix.text = widget.property.prix.toString()?? '';
+      txtNumberCyl.text = widget.property.cyl.toString()?? '';
+      txtNumberKm.text = widget.property.km.toString()?? '';
+      txtNumberCylindrees.text = widget.property.cylindrees.toString()?? '';
+      txtSellerie.text = widget.property.sellerie.toString()?? '';
+      txtCouleur.text = widget.property.couleur.toString()?? '';
+      txtVille.text = widget.property.ville.toString()?? '';
+      txtPays.text = widget.property.pays.toString()?? '';
+
+    }
+
     super.initState();
 
     Future<void> _showDialog(BuildContext context) async {
@@ -190,7 +212,7 @@ class _carsFormState extends State<carsForm> {
     } catch (e) {}
   }
 
-  void _createCar() async {
+  void _editCar() async {
     print(images);
     for (var i = 0; i < images.length; i++) {
       // _images[i] = images[i] == null ? null : getStringImage(images[i]);
@@ -203,7 +225,8 @@ class _carsFormState extends State<carsForm> {
     print(_portes);
     print(_places);
 
-    ApiResponse response = await createCar(
+    ApiResponse response = await editCar(
+        widget.property.carId as int,
         txtNom.text,
         _images,
         category,
@@ -222,10 +245,11 @@ class _carsFormState extends State<carsForm> {
         txtNumberKm.text != '' ? int.parse(txtNumberKm.text) : null,
         txtSellerie.text,
         txtCouleur.text,
-        txtNumberCylindrees.text != '' ? int.parse(txtNumberCylindrees.text) : null,
+        txtNumberCylindrees.text != ''
+            ? int.parse(txtNumberCylindrees.text)
+            : null,
         txtVille.text,
-        txtPays.text
-        );
+        txtPays.text);
     print(response);
 
     if (response.error == null) {
@@ -364,10 +388,22 @@ class _carsFormState extends State<carsForm> {
                                                   fileToDisplay_image1!),
                                             )
                                           else
-                                            Icon(
-                                              Icons.photo_outlined,
-                                              size: 60,
-                                            ),
+                                            SizedBox(
+                                              height: 100,
+                                              width: 100,
+                                              child: Image.network(
+                                                widget.property.images![0]
+                                                    .replaceAll('"', '')
+                                                    .replaceAll('\\', ''),
+                                                height: 60,
+                                                width: 60,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            )
+                                          // Icon(
+                                          //   Icons.photo_outlined,
+                                          //   size: 60,
+                                          // ),
                                         ]),
                                   ),
                           ),
@@ -408,10 +444,18 @@ class _carsFormState extends State<carsForm> {
                                                   fileToDisplay_image2!),
                                             )
                                           else
-                                            Icon(
-                                              Icons.photo_outlined,
-                                              size: 60,
-                                            ),
+                                            SizedBox(
+                                              height: 100,
+                                              width: 100,
+                                              child: Image.network(
+                                                widget.property.images![1]
+                                                    .replaceAll('"', '')
+                                                    .replaceAll('\\', ''),
+                                                height: 60,
+                                                width: 60,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            )
                                         ]),
                                   ),
                           ),
@@ -452,10 +496,18 @@ class _carsFormState extends State<carsForm> {
                                                   fileToDisplay_image3!),
                                             )
                                           else
-                                            Icon(
-                                              Icons.photo_outlined,
-                                              size: 60,
-                                            ),
+                                            SizedBox(
+                                              height: 100,
+                                              width: 100,
+                                              child: Image.network(
+                                                widget.property.images![2]
+                                                    .replaceAll('"', '')
+                                                    .replaceAll('\\', ''),
+                                                height: 60,
+                                                width: 60,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            )
                                         ]),
                                   ),
                           ),
@@ -824,7 +876,7 @@ class _carsFormState extends State<carsForm> {
                     SizedBox(
                       height: 15,
                     ),
-                     formInputName(txtName: txtVille),
+                    formInputName(txtName: txtVille),
                     SizedBox(
                       height: 20,
                     ),
@@ -876,7 +928,7 @@ class _carsFormState extends State<carsForm> {
                                             //   const SnackBar(content: Text('Succès!!!')),
                                             // );
                                           }
-                                          _createCar();
+                                          _editCar();
 
                                           _onBackButtonPressed(context);
                                         },
@@ -962,7 +1014,7 @@ class _carsFormState extends State<carsForm> {
         builder: (BuildContext context) {
           return AlertDialog(
               title: const Text("Cars"),
-              content: const Text('Voiture enregistrée avec succès!!!'),
+              content: const Text('Voiture modifiée avec succès!!!'),
               actions: <Widget>[
                 TextButton(
                     onPressed: () {

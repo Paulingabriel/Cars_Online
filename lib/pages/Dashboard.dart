@@ -1,14 +1,23 @@
+import 'package:app/constant.dart';
+import 'package:app/models/api_response.dart';
+import 'package:app/pages/loginPage.dart';
+import 'package:app/services/car_service.dart';
+import 'package:app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:indexed/indexed.dart';
 import 'package:app/widgets/Sidebar.dart';
 import 'package:app/pages/MainPage.dart';
 import 'package:app/pages/carsListPage.dart';
-import 'package:app/utils/Property.dart';
+// import 'package:app/utils/Property.dart';
 import 'package:app/widgets/Carte.dart';
 import 'package:app/pages/Notifications.dart';
 
+import '../models/user.dart';
+
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+
+  final User user;
+  const Dashboard({super.key, required this.user});
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -16,11 +25,46 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   int _currentTab = 2;
-  
+
+   List<dynamic?> _carsList = [];
+
+  int userId = 0;
+
+
+  Future<void> retrieveCars() async {
+    print('bonjour');
+    userId = await getUserId();
+    ApiResponse response = await getCars();
+    print(response.error);
+
+    if (response.error == null) {
+      setState(() {
+        _carsList = response.data as List<dynamic>;
+      });
+    } else if (response.error == unauthorized) {
+      logout().then((value) => {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => loginPage()),
+                (route) => false)
+          });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('${response.error}'),
+      ));
+    }
+  }
+
+  @override
+  void initState() {
+    retrieveCars();
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Sidebar(),
+      drawer: Sidebar(user: widget.user),
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(220),
           child: Indexer(children: [
@@ -36,7 +80,7 @@ class _DashboardState extends State<Dashboard> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Notifications(),
+                            builder: (context) => Notifications(user: widget.user),
                           ));
                     },
                   ),
@@ -112,13 +156,13 @@ class _DashboardState extends State<Dashboard> {
                                         AssetImage('images/profil.png'),
                                   )),
                               SizedBox(height: 15),
-                              Text("Hello, Louis Meranda",
+                              Text("Hello, " + widget.user.pseudo.toString() + ' ' + widget.user.name.toString(),
                                   style: TextStyle(
                                       fontSize: 14,
                                       color: const Color(0xFF025CCB),
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w600)),
-                              Text("+49 180 1 654321",
+                              Text(widget.user.tel.toString(),
                                   style: TextStyle(
                                       fontSize: 14,
                                       color: Colors.black,
@@ -397,9 +441,9 @@ class _DashboardState extends State<Dashboard> {
             child: ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: properties.length,
+                itemCount: _carsList.length,
                 itemBuilder: (context, index) {
-                  return Carte(property: properties[index]);
+                  return Carte(property: _carsList[index], user: widget.user);
                 }),
           ),
         ],
@@ -421,7 +465,7 @@ class _DashboardState extends State<Dashboard> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Main(),
+                                builder: (context) => Main(user: widget.user),
                               ));
                           setState(() {
                             _currentTab = 0;
@@ -446,7 +490,8 @@ class _DashboardState extends State<Dashboard> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => carsList(),
+                                builder: (context) =>
+                                    carsList(user: widget.user),
                               ));
                           setState(() {
                             _currentTab = 1;
@@ -471,7 +516,7 @@ class _DashboardState extends State<Dashboard> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Dashboard(),
+                                builder: (context) => Dashboard(user: widget.user),
                               ));
 
                           setState(() {
@@ -492,7 +537,6 @@ class _DashboardState extends State<Dashboard> {
                   )
                 ]),
           )),
-      
     );
   }
 }

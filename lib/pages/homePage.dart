@@ -1,23 +1,39 @@
+import 'package:app/constant.dart';
+import 'package:app/models/api_response.dart';
 import 'package:app/pages/loginPage.dart';
+import 'package:app/pages/MainPage.dart';
+import 'package:app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:indexed/indexed.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
-class homePage extends StatelessWidget {
-  const homePage({super.key});
+import '../models/user.dart';
+
+class homePage extends StatefulWidget {
+  homePage({super.key});
+
+  @override
+  State<homePage> createState() => _homePageState();
+}
+
+class _homePageState extends State<homePage> {
+ 
+
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xFF025CCB), Color(0xFF022C94)],
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFF025CCB), Color(0xFF022C94)],
+          ),
         ),
-      ),
-      child: Scaffold(
+        child: Scaffold(
           backgroundColor: Colors.transparent,
-          body: Column(
+          body: SingleChildScrollView(
+              child: Column(
             children: [
               Container(
                 margin: EdgeInsets.only(
@@ -131,7 +147,7 @@ class homePage extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => loginPage(),
+                                builder: (context) => Main(user: User()),
                               ));
                         },
                         icon: Text('Continuer',
@@ -146,6 +162,6 @@ class homePage extends StatelessWidget {
               ),
             ],
           )),
-    );
+        ));
   }
 }

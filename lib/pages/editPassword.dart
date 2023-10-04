@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:app/widgets/bottomNavigationBar.dart';
 
+import '../models/user.dart';
+
 class editPassword extends StatefulWidget {
-  const editPassword({super.key});
+
+  final User user;
+  const editPassword({super.key, required this.user});
 
   @override
   State<editPassword> createState() => _editPasswordState();
@@ -128,7 +132,7 @@ class _editPasswordState extends State<editPassword> {
           )
         ],
       )),
-      bottomNavigationBar: bottomNavigationBar(),
+      bottomNavigationBar: bottomNavigationBar(user: widget.user),
     );
   }
 }

@@ -1,9 +1,12 @@
+import 'package:app/utils/ListCars.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/carProperty.dart';
 import 'package:app/pages/Notifications.dart';
 import 'package:app/widgets/bottomNavigationBar.dart';
-import 'package:app/utils/Property.dart';
+// import 'package:app/utils/Property.dart';
 import 'package:dots_indicator/dots_indicator.dart';
+
+import '../models/user.dart';
 
 // class MyTabs extends GetxController with GetSingleTickerProviderStateMixin {
 //   late TabController controller;
@@ -32,8 +35,10 @@ import 'package:dots_indicator/dots_indicator.dart';
 // }
 
 class carDescriptionPage extends StatefulWidget {
-  final Property property;
-  const carDescriptionPage({super.key, required this.property});
+  final ListCars property;
+  final User user;
+  const carDescriptionPage(
+      {super.key, required this.property, required this.user});
 
   @override
   State<carDescriptionPage> createState() => _carDescriptionPage();
@@ -56,6 +61,7 @@ class _carDescriptionPage extends State<carDescriptionPage>
         },
       );
     });
+    print(widget.property.images!);
   }
 
   @override
@@ -87,10 +93,11 @@ class _carDescriptionPage extends State<carDescriptionPage>
                   IconButton(
                     icon: Icon(Icons.notifications_none),
                     onPressed: () {
-                       Navigator.push(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Notifications(),
+                            builder: (context) =>
+                                Notifications(user: widget.user),
                           ));
                     },
                   ),
@@ -98,14 +105,13 @@ class _carDescriptionPage extends State<carDescriptionPage>
                 flexibleSpace: Container(
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                      colorFilter: new ColorFilter.mode(
-                          Color(0xFF025CCB).withOpacity(1.0),
-                          BlendMode.hardLight),
-                      image: AssetImage(
-                        widget.property.image[0],
-                      ),
-                      fit: BoxFit.cover,
-                    )),
+                            fit: BoxFit.cover,
+                            colorFilter: new ColorFilter.mode(
+                                Color(0xFF025CCB).withOpacity(1.0),
+                                BlendMode.hardLight),
+                            image: NetworkImage(widget.property.images![0]
+                                .replaceAll('"', '')
+                                .replaceAll('\\', '')))),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -114,7 +120,7 @@ class _carDescriptionPage extends State<carDescriptionPage>
                           ),
                           Container(
                             padding: EdgeInsets.only(left: 30, bottom: 5),
-                            child: Text(widget.property.name,
+                            child: Text(widget.property.nom!,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w600,
@@ -123,7 +129,7 @@ class _carDescriptionPage extends State<carDescriptionPage>
                           ),
                           Container(
                             padding: EdgeInsets.only(left: 30),
-                            child: Text(widget.property.year,
+                            child: Text('Année' + widget.property.annee!,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w400,
@@ -150,8 +156,7 @@ class _carDescriptionPage extends State<carDescriptionPage>
               ),
               preferredSize: Size.fromHeight(150)),
           backgroundColor: Colors.white,
-          body: TabBarView(
-            controller: _controller, children: [
+          body: TabBarView(controller: _controller, children: [
             SingleChildScrollView(
               child: Column(
                 // controller: _tabs.controller,
@@ -159,32 +164,31 @@ class _carDescriptionPage extends State<carDescriptionPage>
                   Container(
                     height: 180,
                     width: double.infinity,
-                    margin: EdgeInsets.only(
-                        top: 20, bottom: 0),
-                    child: PageView.builder(              
+                    margin: EdgeInsets.only(top: 20, bottom: 0),
+                    child: PageView.builder(
                       controller: pageController,
-                      itemCount: widget.property.image.length,
+                      itemCount: widget.property.images!.length,
                       physics: ClampingScrollPhysics(),
                       itemBuilder: (context, position) {
-                        return carouselCard(widget.property.image[position]);
+                        return carouselCard(widget.property.images![position]);
                       },
                     ),
                   ),
                   Transform.translate(
                     offset: Offset(0, -25.0),
                     child: new DotsIndicator(
-                    dotsCount: widget.property.image.length,
-                    position: _currPageValue.round(),
-                    decorator: DotsDecorator(
-                      color: Colors.white,
-                      activeColor: Color(0xFF025CCB),
-                      size: const Size.square(9.0),
-                      activeSize: const Size(18.0, 9.0),
-                      activeShape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0)),
+                      dotsCount: widget.property.images!.length,
+                      position: _currPageValue.round(),
+                      decorator: DotsDecorator(
+                        color: Colors.white,
+                        activeColor: Color(0xFF025CCB),
+                        size: const Size.square(9.0),
+                        activeSize: const Size(18.0, 9.0),
+                        activeShape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                      ),
                     ),
                   ),
-                    ),
                   Container(
                     margin: EdgeInsets.only(
                         left: 10, right: 10, top: 0, bottom: 15),
@@ -194,7 +198,7 @@ class _carDescriptionPage extends State<carDescriptionPage>
                         color:
                             Color.fromARGB(255, 211, 217, 224).withOpacity(1.0),
                         borderRadius: BorderRadius.circular(5)),
-                    child: Text(widget.property.description,
+                    child: Text(widget.property.desc!,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
@@ -211,9 +215,9 @@ class _carDescriptionPage extends State<carDescriptionPage>
                             children: [
                               carProperty(
                                   icon: Icons.location_on,
-                                  text: widget.property.town +
+                                  text: widget.property.ville! +
                                       ',' +
-                                      widget.property.country,
+                                      widget.property.pays!,
                                   price: ''),
                               SizedBox(
                                 height: 20,
@@ -221,7 +225,7 @@ class _carDescriptionPage extends State<carDescriptionPage>
                               carProperty(
                                   icon: Icons.monetization_on_outlined,
                                   text: 'Prix:',
-                                  price: widget.property.price),
+                                  price: widget.property.prix.toString()),
                             ],
                           ),
                           Column(
@@ -229,14 +233,14 @@ class _carDescriptionPage extends State<carDescriptionPage>
                             children: [
                               carProperty(
                                   icon: Icons.directions_car,
-                                  text: widget.property.type,
+                                  text: widget.property.boite!,
                                   price: ''),
                               SizedBox(
                                 height: 20,
                               ),
                               carProperty(
                                   icon: Icons.local_gas_station_sharp,
-                                  text: widget.property.carb,
+                                  text: widget.property.type!,
                                   price: ''),
                             ],
                           )
@@ -289,17 +293,17 @@ class _carDescriptionPage extends State<carDescriptionPage>
                     margin: EdgeInsets.only(top: 20, bottom: 0),
                     child: PageView.builder(
                       controller: pageController,
-                      itemCount: widget.property.image.length,
+                      itemCount: widget.property.images!.length,
                       physics: ClampingScrollPhysics(),
                       itemBuilder: (context, position) {
-                        return carouselCard(widget.property.image[position]);
+                        return carouselCard(widget.property.images![position]);
                       },
                     ),
                   ),
                   Transform.translate(
                     offset: Offset(0, -25.0),
                     child: new DotsIndicator(
-                      dotsCount: widget.property.image.length,
+                      dotsCount: widget.property.images!.length,
                       position: _currPageValue.round(),
                       decorator: DotsDecorator(
                         color: Colors.white,
@@ -322,7 +326,7 @@ class _carDescriptionPage extends State<carDescriptionPage>
                               Icon(Icons.directions_car, color: Colors.black),
                           title: Text(
                               'CATEGORIE : ' +
-                                  widget.property.cat.toUpperCase(),
+                                  widget.property.category!.toUpperCase(),
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.black,
@@ -337,7 +341,7 @@ class _carDescriptionPage extends State<carDescriptionPage>
                               Icon(Icons.directions_car, color: Colors.black),
                           title: Text(
                               'CARBURANT : ' +
-                                  widget.property.carb.toUpperCase(),
+                                  widget.property.type!.toUpperCase(),
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.black,
@@ -351,7 +355,20 @@ class _carDescriptionPage extends State<carDescriptionPage>
                           leading:
                               Icon(Icons.directions_car, color: Colors.black),
                           title: Text(
-                              'BOITE : ' + widget.property.boit.toUpperCase(),
+                              'BOITE : ' + widget.property.boite!.toUpperCase(),
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w500)),
+                        ),
+                      ),
+                      Card(
+                        elevation: 5,
+                        child: ListTile(
+                          leading:
+                              Icon(Icons.directions_car, color: Colors.black),
+                          title: Text('MILLESIME : ' + widget.property.annee!,
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.black,
@@ -366,7 +383,8 @@ class _carDescriptionPage extends State<carDescriptionPage>
                               Icon(Icons.directions_car, color: Colors.black),
                           title: Text(
                               'KILOMETRAGE : ' +
-                                  widget.property.Km.toUpperCase(),
+                                  widget.property.km.toString() +
+                                  'KMS',
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.black,
@@ -380,7 +398,8 @@ class _carDescriptionPage extends State<carDescriptionPage>
                           leading:
                               Icon(Icons.directions_car, color: Colors.black),
                           title: Text(
-                              'COULEUR : ' + widget.property.col.toUpperCase(),
+                              'COULEUR : ' +
+                                  widget.property.couleur!.toUpperCase(),
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.black,
@@ -395,7 +414,7 @@ class _carDescriptionPage extends State<carDescriptionPage>
                               Icon(Icons.directions_car, color: Colors.black),
                           title: Text(
                               'INTERIEUR : ' +
-                                  widget.property.intr.toUpperCase(),
+                                  widget.property.sellerie!.toUpperCase(),
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.black,
@@ -410,7 +429,8 @@ class _carDescriptionPage extends State<carDescriptionPage>
                               Icon(Icons.directions_car, color: Colors.black),
                           title: Text(
                               'CYLINDREE : ' +
-                                  widget.property.cyl.toUpperCase(),
+                                  widget.property.cylindrees.toString() +
+                                  'CM3',
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.black,
@@ -425,7 +445,7 @@ class _carDescriptionPage extends State<carDescriptionPage>
                               Icon(Icons.directions_car, color: Colors.black),
                           title: Text(
                               'NB DE CYLINDRES : ' +
-                                  widget.property.nb.toUpperCase(),
+                                  widget.property.cyl.toString(),
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.black,
@@ -440,7 +460,8 @@ class _carDescriptionPage extends State<carDescriptionPage>
                               Icon(Icons.directions_car, color: Colors.black),
                           title: Text(
                               'PUISSANCE DIN : ' +
-                                  widget.property.puid.toUpperCase(),
+                                  widget.property.pdin!.toString() +
+                                  'HP/456CH',
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.black,
@@ -455,7 +476,8 @@ class _carDescriptionPage extends State<carDescriptionPage>
                               Icon(Icons.directions_car, color: Colors.black),
                           title: Text(
                               'PUISSANCE FISCALE : ' +
-                                  widget.property.puif.toUpperCase(),
+                                  widget.property.pfisc.toString() +
+                                  'CV FISCAUX',
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.black,
@@ -469,7 +491,9 @@ class _carDescriptionPage extends State<carDescriptionPage>
                           leading:
                               Icon(Icons.directions_car, color: Colors.black),
                           title: Text(
-                              'PLACES : ' + widget.property.plc.toUpperCase(),
+                              'PLACES : ' +
+                                  widget.property.place.toString() +
+                                  'PLACES',
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.black,
@@ -483,7 +507,9 @@ class _carDescriptionPage extends State<carDescriptionPage>
                           leading:
                               Icon(Icons.directions_car, color: Colors.black),
                           title: Text(
-                              'PORTES : ' + widget.property.por.toUpperCase(),
+                              'PORTES : ' +
+                                  widget.property.portiere!.toString() +
+                                  'PORTES',
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.black,
@@ -530,24 +556,23 @@ class _carDescriptionPage extends State<carDescriptionPage>
               ),
             ),
           ]),
-          bottomNavigationBar: bottomNavigationBar(),
+          bottomNavigationBar: bottomNavigationBar(user: widget.user),
         ));
   }
 }
 
 Widget carouselCard(String data) {
   return Container(
-      height: 180,
-      margin: EdgeInsets.only(left: 10, right: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        // border: Border.all(width: 2.0),
-        image: DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage(
-              data,
-            )),
-        
-      ),
-    );
+    height: 180,
+    margin: EdgeInsets.only(left: 10, right: 10),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+      // border: Border.all(width: 2.0),
+      image: DecorationImage(
+          fit: BoxFit.cover,
+          image: NetworkImage(
+            data.replaceAll('"', '').replaceAll('\\', ''),
+          )),
+    ),
+  );
 }

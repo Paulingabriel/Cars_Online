@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 
-class Select extends StatefulWidget {
+class SelectInt extends StatefulWidget {
   List<String> list;
-  String? option;
+  var option;
+  SelectInt({super.key, required this.list, required this.option});
 
-  Select({super.key, required this.list, required this.option});
-
-   @override
-  State<Select> createState() => _Select();
+  @override
+  State<SelectInt> createState() => _SelectInt();
 }
 
+class _SelectInt extends State<SelectInt> {
+  int i = 0;
+  // @override
+  // void initState() {
+  //   super.initState();
 
-class _Select extends State<Select> {
+  //   widget.option = i;
+
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -28,29 +34,28 @@ class _Select extends State<Select> {
         ],
         borderRadius: BorderRadius.circular(30),
       ),
-      child: DropdownButton<String>(
+      child: DropdownButton<int>(
           value: widget.option,
           isExpanded: true,
           iconEnabledColor: Colors.black,
           iconSize: 25,
           icon: Icon(Icons.keyboard_arrow_down_rounded),
           padding: EdgeInsets.symmetric(vertical: 0),
-          items: widget.list.map(buildMenuItem).toList(),
+          items: widget.list.asMap().entries.map(buildMenuItem).toList(),
           onChanged: (value) {
             setState(() {
-                    widget.option = value;
-                  });
-            // print(option);
-            // print(this.widget.option);
+              this.widget.option = value;
+              print(widget.option);
+            });
           }),
     );
   }
 
-  DropdownMenuItem<String> buildMenuItem(String Option) {
+  DropdownMenuItem<int> buildMenuItem(e) {
     return DropdownMenuItem(
-        value: Option,
+        value: e.key + 1,
         child: Text(
-          Option,
+          e.value,
           style: TextStyle(
               fontSize: 12,
               color: Colors.black,
