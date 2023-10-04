@@ -5,9 +5,16 @@ import 'package:flutter/material.dart';
 
 import '../models/user.dart';
 
+import '../models/user.dart';
+
 class Carte extends StatelessWidget {
+<<<<<<< HEAD
   final User user;
   final ListCars property;
+=======
+  final Property property;
+  final User user;
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
   const Carte({super.key, required this.property, required this.user});
 
   @override
@@ -18,7 +25,14 @@ class Carte extends StatelessWidget {
             context,
             PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) =>
+<<<<<<< HEAD
                   carDescriptionPage(property: property, user: user),
+=======
+                  carDescriptionPage(
+                property: property,
+                user: user,
+              ),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {
                 // var begin = Offset(0.0, 1.0);
@@ -50,11 +64,19 @@ class Carte extends StatelessWidget {
                       // border: Border.all(color: Colors.black, width: 1.0)
                       ),
                   child: Hero(
+<<<<<<< HEAD
                     tag: "Modèle " + property.carId.toString(),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(5),
                       child: Image.network(
                         property.images![0].replaceAll('"', '').replaceAll('\\', ''),
+=======
+                    tag: "Modèle " + property.id,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Image.asset(
+                        property.image[0],
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                         height: 60,
                         width: 60,
                         fit: BoxFit.cover,

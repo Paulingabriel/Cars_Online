@@ -10,6 +10,7 @@ import 'package:app/widgets/bottomNavigationBar.dart';
 import 'package:app/pages/Notifications.dart';
 
 import '../models/user.dart';
+<<<<<<< HEAD
 
 class carListPropertyPage extends StatefulWidget {
   
@@ -57,6 +58,13 @@ class _carListPropertyPageState extends State<carListPropertyPage> {
     super.initState();
   }
 
+=======
+
+class carListPropertyPage extends StatelessWidget {
+  final Property property;
+  final User user;
+  const carListPropertyPage({super.key, required this.property, required this.user});
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +90,11 @@ class _carListPropertyPageState extends State<carListPropertyPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
+<<<<<<< HEAD
                             builder: (context) => Notifications(user: widget.user),
+=======
+                            builder: (context) => Notifications(user: user),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                           ));
                     },
                   ),
@@ -147,7 +159,11 @@ class _carListPropertyPageState extends State<carListPropertyPage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.asset(
+<<<<<<< HEAD
                       widget.property.images![0],
+=======
+                      property.image[0],
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                       height: 180,
                       width: 400,
                       fit: BoxFit.cover,
@@ -163,7 +179,11 @@ class _carListPropertyPageState extends State<carListPropertyPage> {
                       child: ListTile(
                         leading:
                             Icon(Icons.directions_car, color: Colors.black),
+<<<<<<< HEAD
                         title: Text('CATEGORIE : ' + widget.property.category!.toUpperCase(),
+=======
+                        title: Text('CATEGORIE : ' + property.cat.toUpperCase(),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                             style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.black,
@@ -177,7 +197,11 @@ class _carListPropertyPageState extends State<carListPropertyPage> {
                         leading:
                             Icon(Icons.directions_car, color: Colors.black),
                         title: Text(
+<<<<<<< HEAD
                             'CARBURANT : ' + widget.property.type!.toUpperCase(),
+=======
+                            'CARBURANT : ' + property.carb.toUpperCase(),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                             style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.black,
@@ -190,7 +214,11 @@ class _carListPropertyPageState extends State<carListPropertyPage> {
                       child: ListTile(
                         leading:
                             Icon(Icons.directions_car, color: Colors.black),
+<<<<<<< HEAD
                         title: Text('BOITE : ' + widget.property.boite!.toUpperCase(),
+=======
+                        title: Text('BOITE : ' + property.boit.toUpperCase(),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                             style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.black,
@@ -203,7 +231,12 @@ class _carListPropertyPageState extends State<carListPropertyPage> {
                       child: ListTile(
                         leading:
                             Icon(Icons.directions_car, color: Colors.black),
+<<<<<<< HEAD
                         title: Text('ANNEE : ' + widget.property.annee!.toUpperCase(),
+=======
+                        title: Text(
+                            'KILOMETRAGE : ' + property.Km.toUpperCase(),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                             style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.black,
@@ -216,8 +249,12 @@ class _carListPropertyPageState extends State<carListPropertyPage> {
                       child: ListTile(
                         leading:
                             Icon(Icons.directions_car, color: Colors.black),
+<<<<<<< HEAD
                         title: Text(
                             'KILOMETRAGE : ' + widget.property.km!.toString() + 'KMS',
+=======
+                        title: Text('COULEUR : ' + property.col.toUpperCase(),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                             style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.black,
@@ -230,7 +267,12 @@ class _carListPropertyPageState extends State<carListPropertyPage> {
                       child: ListTile(
                         leading:
                             Icon(Icons.directions_car, color: Colors.black),
+<<<<<<< HEAD
                         title: Text('COULEUR : ' + widget.property.couleur!.toUpperCase(),
+=======
+                        title: Text(
+                            'INTERIEUR : ' + property.intr.toUpperCase(),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                             style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.black,
@@ -243,8 +285,12 @@ class _carListPropertyPageState extends State<carListPropertyPage> {
                       child: ListTile(
                         leading:
                             Icon(Icons.directions_car, color: Colors.black),
+<<<<<<< HEAD
                         title: Text(
                             'INTERIEUR : ' + widget.property.sellerie!.toUpperCase(),
+=======
+                        title: Text('CYLINDREE : ' + property.cyl.toUpperCase(),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                             style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.black,
@@ -257,7 +303,12 @@ class _carListPropertyPageState extends State<carListPropertyPage> {
                       child: ListTile(
                         leading:
                             Icon(Icons.directions_car, color: Colors.black),
+<<<<<<< HEAD
                         title: Text('CYLINDREE : ' + widget.property.cylindrees!.toString(),
+=======
+                        title: Text(
+                            'NB DE CYLINDRES : ' + property.nb.toUpperCase(),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                             style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.black,
@@ -271,7 +322,11 @@ class _carListPropertyPageState extends State<carListPropertyPage> {
                         leading:
                             Icon(Icons.directions_car, color: Colors.black),
                         title: Text(
+<<<<<<< HEAD
                             'NB DE CYLINDRES : ' + widget.property.cyl!.toString(),
+=======
+                            'PUISSANCE DIN : ' + property.puid.toUpperCase(),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                             style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.black,
@@ -285,7 +340,12 @@ class _carListPropertyPageState extends State<carListPropertyPage> {
                         leading:
                             Icon(Icons.directions_car, color: Colors.black),
                         title: Text(
+<<<<<<< HEAD
                             'PUISSANCE DIN : ' + widget.property.pdin!.toString() + 'HP/456 CH*',
+=======
+                            'PUISSANCE FISCALE : ' +
+                                property.puif.toUpperCase(),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                             style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.black,
@@ -298,9 +358,13 @@ class _carListPropertyPageState extends State<carListPropertyPage> {
                       child: ListTile(
                         leading:
                             Icon(Icons.directions_car, color: Colors.black),
+<<<<<<< HEAD
                         title: Text(
                             'PUISSANCE FISCALE : ' +
                                 widget.property.pfisc!.toString() + 'CV FISCAUX',
+=======
+                        title: Text('PLACES : ' + property.plc.toUpperCase(),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                             style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.black,
@@ -313,7 +377,11 @@ class _carListPropertyPageState extends State<carListPropertyPage> {
                       child: ListTile(
                         leading:
                             Icon(Icons.directions_car, color: Colors.black),
+<<<<<<< HEAD
                         title: Text('PLACES : ' + widget.property.place!.toUpperCase() + 'PLACES',
+=======
+                        title: Text('PORTES : ' + property.por.toUpperCase(),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                             style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.black,
@@ -321,6 +389,7 @@ class _carListPropertyPageState extends State<carListPropertyPage> {
                                 fontWeight: FontWeight.w500)),
                       ),
                     ),
+<<<<<<< HEAD
                     Card(
                       elevation: 5,
                       child: ListTile(
@@ -334,6 +403,8 @@ class _carListPropertyPageState extends State<carListPropertyPage> {
                                 fontWeight: FontWeight.w500)),
                       ),
                     ),
+=======
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                   ],
                 ),
                 Center(
@@ -372,7 +443,11 @@ class _carListPropertyPageState extends State<carListPropertyPage> {
               ],
             ),
           ),
+<<<<<<< HEAD
           bottomNavigationBar: bottomNavigationBar(user: widget.user),
+=======
+          bottomNavigationBar: bottomNavigationBar(user: user),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
         ));
   }
 }

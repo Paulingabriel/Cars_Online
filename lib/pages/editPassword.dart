@@ -4,7 +4,10 @@ import 'package:app/widgets/bottomNavigationBar.dart';
 import '../models/user.dart';
 
 class editPassword extends StatefulWidget {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
   final User user;
   const editPassword({super.key, required this.user});
 

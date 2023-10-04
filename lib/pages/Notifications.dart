@@ -10,15 +10,27 @@ import 'package:app/widgets/Mail.dart';
 
 import '../models/user.dart';
 
+import '../models/user.dart';
+
 class Notifications extends StatefulWidget {
+<<<<<<< HEAD
   final User user;
+=======
+
+  final User user;
+  
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
   const Notifications({super.key, required this.user});
 
   @override
   State<Notifications> createState() => _NotificationsState();
 }
 
+class fianal {
+}
+
 class _NotificationsState extends State<Notifications> {
+<<<<<<< HEAD
 
 
   List<dynamic?> _carsList = [];
@@ -56,6 +68,10 @@ class _NotificationsState extends State<Notifications> {
   }
 
   
+=======
+  // get user => null;
+
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,7 +119,11 @@ class _NotificationsState extends State<Notifications> {
                         key: Key(prop.id),
                         onDismissed: (direction) {
                           setState(() {
+<<<<<<< HEAD
                             _carsList.removeAt(index);
+=======
+                            properties.removeAt(index);
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text('Notification supprimée')));
                           });

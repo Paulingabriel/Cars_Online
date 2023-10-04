@@ -10,6 +10,7 @@ import 'package:app/pages/loginPage.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import '../models/user.dart';
 import '../services/user_service.dart';
+<<<<<<< HEAD
 
 class Navbar extends StatefulWidget {
   final User user;
@@ -49,6 +50,46 @@ class _Navbar extends State<Navbar> {
       }
     }
   }
+=======
+
+class Navbar extends StatefulWidget {
+  final User user;
+  const Navbar({super.key, required this.user});
+
+  @override
+  State<Navbar> createState() => _Navbar();
+}
+
+class _Navbar extends State<Navbar> {
+
+   void _loadUserInfo() async {
+    String token = await getToken();
+    if (token == '') {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => loginPage()),
+          (route) => false);
+    } else {
+      print(token);
+      ApiResponse response = await getUserDetail();
+      final user = response.data;
+      print(response);
+      if (response.error == null) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => PackPage(user: user as User)),
+            (route) => false);
+      } else if (response.error == unauthorized) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => PackPage(user: user as User)),
+            (route) => false);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('${response.error}'),
+        ));
+      }
+    }
+  }
+
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
 
   @override
   Widget build(BuildContext context) {
@@ -108,21 +149,42 @@ class _Navbar extends State<Navbar> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
+<<<<<<< HEAD
                                     (widget.user.name!=null ? widget.user.name.toString() : '' +
                                         ' ' +
                                        (widget.user.pseudo!=null ? widget.user.pseudo.toString() : '')),
+=======
+                                    (widget.user.name != null
+                                        ? widget.user.name.toString()
+                                        : '' +
+                                            ' ' +
+                                            (widget.user.pseudo != null
+                                                ? widget.user.pseudo.toString()
+                                                : '')),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
                                         color: const Color(0xFF025CCB),
                                         fontFamily: 'Poppins')),
+<<<<<<< HEAD
                                 Text(widget.user.email!=null ? widget.user.email.toString() : '',
+=======
+                                Text(
+                                    widget.user.email != null
+                                        ? widget.user.email.toString()
+                                        : '',
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                                     style: TextStyle(
                                       fontSize: 10,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black,
                                       fontFamily: 'Poppins',
+<<<<<<< HEAD
                                     ))
+=======
+                                    )),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                               ],
                             ),
                           ),
@@ -148,7 +210,11 @@ class _Navbar extends State<Navbar> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
+<<<<<<< HEAD
                         builder: (context) => Main(user: widget.user),
+=======
+                        builder: (context) => Main(user: widget.user,),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                       ));
                 },
               ),

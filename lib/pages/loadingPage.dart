@@ -6,7 +6,12 @@ import '../models/user.dart';
 
 class loadingPage extends StatefulWidget {
 
+<<<<<<< HEAD
   const loadingPage({super.key});
+=======
+  final User user;
+  const loadingPage({super.key, required this.user});
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
 
   @override
   State<loadingPage> createState() => _loadingPage();
@@ -23,7 +28,11 @@ class _loadingPage extends State<loadingPage> {
     await Future.delayed(const Duration(seconds: 10), () {
       Navigator.pushAndRemoveUntil(
         context,
+<<<<<<< HEAD
         MaterialPageRoute(builder: (context) => homePage()),
+=======
+        MaterialPageRoute(builder: (context) => const homePage()),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
         (Route<dynamic> route) => false,
       );
     });

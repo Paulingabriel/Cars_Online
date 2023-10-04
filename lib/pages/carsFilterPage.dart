@@ -13,7 +13,10 @@ import 'package:app/Modal/ModalFilter.dart';
 import '../models/user.dart';
 
 class carsFilter extends StatefulWidget {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
   final User user;
   const carsFilter({super.key, required this.user});
 
@@ -182,12 +185,24 @@ class _carsFilterState extends State<carsFilter> {
     );
   }
 
+<<<<<<< HEAD
   Widget CarView(context, int index, User user) {
     return carCard(context, _carsList[index], user);
   }
 
   Widget carCard(context, ListCars data, User user) {
   return Container(
+=======
+Widget CarView(context, int index, User user) {
+  return carCard(context, datasList[index], user);
+}
+
+Widget carCard(context, CarModel datas, User user) {
+  return Row(
+    children: [
+      Expanded(
+          child: Container(
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
         height: 210,
         margin: EdgeInsets.only(bottom: 15),
         decoration: BoxDecoration(
@@ -200,7 +215,11 @@ class _carsFilterState extends State<carsFilter> {
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
+<<<<<<< HEAD
                         carDescriptionPage(property: data, user: user),
+=======
+                        carDescriptionPage(property: datas.car1, user: user),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) {
                       animation = CurvedAnimation(
@@ -312,7 +331,127 @@ class _carsFilterState extends State<carsFilter> {
               ),
             ),
           ),
+<<<<<<< HEAD
           
+=======
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        carDescriptionPage(property: datas.car2, user: user),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      animation = CurvedAnimation(
+                          curve: Curves.ease, parent: animation);
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                  ));
+            },
+            child: Container(
+              width: 160,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      blurRadius: 5.0,
+                      offset: Offset(0, 5)),
+                ],
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                // border: Border.all(width: 1.0),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    width: 160,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          topRight: Radius.circular(8)),
+                      // border: Border.all(width: 2.0),
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: AssetImage(
+                            datas.car2.image[0],
+                          )),
+                    ),
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(left: 7.5, right: 7.5, top: 10),
+                      height: 80,
+                      width: 145,
+                      decoration: BoxDecoration(
+                          // border: Border.all(width: 1.0),
+                          ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(datas.car2.name,
+                              style: TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.black,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w700)),
+                          Text(datas.car2.year,
+                              style: TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.black,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w500)),
+                          Text(datas.car2.carb,
+                              style: TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.black,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w500)),
+                          Text(datas.car2.price,
+                              style: TextStyle(
+                                  fontSize: 11,
+                                  color: Color(0xFF025CCB),
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w700)),
+                        ],
+                      )),
+                  Container(
+                    padding: EdgeInsets.only(right: 10),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Icon(
+                            Icons.star,
+                            color: Colors.black,
+                            size: 15,
+                          ),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Icon(
+                            Icons.star,
+                            color: Colors.black,
+                            size: 15,
+                          ),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Icon(
+                            Icons.star_border_outlined,
+                            color: Colors.black,
+                            size: 15,
+                          ),
+                        ]),
+                  )
+                ],
+              ),
+            ),
+          )
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
         ]),
       );
 }

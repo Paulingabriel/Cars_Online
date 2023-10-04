@@ -58,7 +58,11 @@ class _SidebarState extends State<Sidebar> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
+<<<<<<< HEAD
                           builder: (context) => Cars(user: widget.user),
+=======
+                          builder: (context) => carsFilter(user: widget.user),
+>>>>>>> 435b8701060f6dc80e22ae2a1ac6bc65d44a3b88
                         ));
                   },
                 ),
@@ -77,7 +81,7 @@ class _SidebarState extends State<Sidebar> {
                             fontFamily: 'Poppins')),
                   ),
                   onTap: () {
-                     Navigator.push(
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => carsForm(user: widget.user),
