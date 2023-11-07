@@ -13,7 +13,7 @@ import '../models/user.dart';
 import '../models/user.dart';
 
 class Notifications extends StatefulWidget {
-  final User user;
+  final User? user;
 
   const Notifications({super.key, required this.user});
 

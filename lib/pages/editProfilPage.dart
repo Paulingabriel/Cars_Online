@@ -1,10 +1,13 @@
 import 'dart:io';
 
 import 'package:app/constant.dart';
+import 'package:app/models/api_response.dart';
+import 'package:app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:app/widgets/bottomNavigationBar.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user.dart';
 
@@ -25,16 +28,49 @@ class _editProfilPageState extends State<editProfilPage> {
       txtTel = TextEditingController(),
       txtEmail = TextEditingController();
   String? _fileName;
+  String? image = '';
   FilePickerResult? result;
   PlatformFile? pickedfile;
   File? fileToDisplay;
 
+  void initState() {
+    super.initState();
 
+    //alert modal
+    Future<void> _showDialog(BuildContext context) async {
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: const Text('Dialog content'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Accept'),
+              ),
+            ],
+          ),
+        );
+      });
+    }
+  }
 
-  //function to edit use
-
-  void _editCar() async {
-    // print(widget.user.name);
+  //display alert Modal
+  Future<bool?> _onBackButtonPressed(BuildContext context) async {
+    bool? exitApp = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: const Text("Cars"),
+              content: const Text('Profil modifié avec succès!!!'),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                    child: const Text('ok'))
+              ]);
+        });
   }
 
   //importer l'image depuis les fichiers du telephone
@@ -57,6 +93,66 @@ class _editProfilPageState extends State<editProfilPage> {
     } catch (e) {
       print(e);
     }
+  }
+
+  //function to edit use
+  void _editProfil() async {
+    //encode file to base64 and get String image.
+    if (fileToDisplay == null) {
+      String? image = widget.user.image;
+
+      print([
+        txtName.text,
+        txtPseudo.text,
+        txtTel.text,
+        txtEmail.text,
+        image,
+      ]);
+
+      ApiResponse response = await editProfil(
+          image, txtName.text, txtPseudo.text, txtTel.text, txtEmail.text);
+
+      if (response.error == null) {
+        // Navigator.of(context).pop();
+        _onBackButtonPressed(context);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('${response.error}'),
+        ));
+      }
+    } else {
+      String? image = getStringImage(fileToDisplay);
+
+      print([
+        txtName.text,
+        txtPseudo.text,
+        txtTel.text,
+        txtEmail.text,
+        image,
+      ]);
+      ApiResponse response = await editProfil(
+          image, txtName.text, txtPseudo.text, txtTel.text, txtEmail.text);
+
+      if (response.error == null) {
+        // Navigator.of(context).pop();
+        _onBackButtonPressed(context);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('${response.error}'),
+        ));
+      }
+    }
+  }
+
+  // Save image in flutter application
+  void _saveAndRedirectToHome(User user) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString('token', user.token ?? '');
+    await pref.setInt('id', user.id ?? 0);
+    await pref.setString('name', user.name ?? '');
+    await pref.setString('pseudo', user.pseudo ?? '');
+    await pref.setString('email', user.email ?? '');
+    await pref.setString('image', user.image ?? '');
   }
 
   @override
@@ -103,11 +199,17 @@ class _editProfilPageState extends State<editProfilPage> {
                                     decoration:
                                         BoxDecoration(shape: BoxShape.circle),
                                     margin: EdgeInsets.only(top: 20),
-                                    child: CircleAvatar(
-                                      radius: 64,
-                                      backgroundImage:
-                                          AssetImage('images/profil.png'),
-                                    ))
+                                    child: widget.user.image == null
+                                        ? CircleAvatar(
+                                            radius: 64,
+                                            backgroundImage:
+                                                AssetImage('images/profil.png'),
+                                          )
+                                        : CircleAvatar(
+                                            radius: 64,
+                                            backgroundImage: NetworkImage(
+                                                widget.user.image as String),
+                                          ))
                                 : Container(
                                     decoration:
                                         BoxDecoration(shape: BoxShape.circle),
@@ -222,6 +324,7 @@ class _editProfilPageState extends State<editProfilPage> {
                       IntlPhoneField(
                         keyboardType: TextInputType.phone,
                         controller: txtTel,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         decoration: InputDecoration(
                             labelText: 'Numero',
                             hintStyle: TextStyle(fontFamily: 'Poppins')),
@@ -250,7 +353,7 @@ class _editProfilPageState extends State<editProfilPage> {
                           ),
                           child: MaterialButton(
                             onPressed: () {
-                              _editCar();
+                              _editProfil();
                             },
                             child: Text("Enregistrer",
                                 style: TextStyle(

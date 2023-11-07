@@ -8,7 +8,7 @@ import '../models/user.dart';
 import '../models/user.dart';
 
 class Carte extends StatelessWidget {
-  final User user;
+  final User? user;
   final ListCars property;
   const Carte({super.key, required this.property, required this.user});
 

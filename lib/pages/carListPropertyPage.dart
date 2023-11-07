@@ -13,7 +13,7 @@ import '../models/user.dart';
 
 class carListPropertyPage extends StatefulWidget {
 
-  final User user;
+  final User? user;
   final ListCars property;
   carListPropertyPage({super.key, required this.property, required this.user});
 

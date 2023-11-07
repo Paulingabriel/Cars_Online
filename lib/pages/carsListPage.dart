@@ -13,7 +13,7 @@ import 'package:app/pages/Dashboard.dart';
 import '../models/user.dart';
 
 class carsList extends StatefulWidget {
-  final User user;
+  final User? user;
   const carsList({super.key, required this.user});
 
   @override

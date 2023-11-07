@@ -36,9 +36,9 @@ Future<ApiResponse> createCar(
   String? pays,
 ) async {
   ApiResponse apiResponse = ApiResponse();
-
+  int id = await getUserId();
   // print(images[0]);
-  print(couleur);
+  // print(id);
 
   try {
     String token = await getToken();
@@ -49,6 +49,7 @@ Future<ApiResponse> createCar(
         },
         body: images != []
             ? {
+                'id': id.toString(),
                 'nom': nom,
                 'images': jsonEncode({'images': images}),
                 'category_id': categoryId.toString(),
@@ -71,6 +72,7 @@ Future<ApiResponse> createCar(
                 'pays': pays.toString()
               }
             : {
+                'id': id.toString(),
                 'nom': nom,
                 'category_id': categoryId,
                 'type': type,
@@ -93,10 +95,11 @@ Future<ApiResponse> createCar(
               });
     print('bonjour');
     print(response.statusCode);
+    print(response);
 
     switch (response.statusCode) {
       case 200:
-        print(response.body);
+        print("erreur");
         apiResponse.data = Car.fromJson(jsonDecode(response.body));
         break;
       case 422:
@@ -144,6 +147,7 @@ Future<ApiResponse> editCar(
   String? pays,
 ) async {
   ApiResponse apiResponse = ApiResponse();
+  int id = await getUserId();
 
   try {
     String token = await getToken();
@@ -154,6 +158,7 @@ Future<ApiResponse> editCar(
         },
         body: images != []
             ? {
+                'id': id.toString(),
                 'nom': nom,
                 'images': jsonEncode({'images': images}),
                 'category_id': categoryId.toString(),
@@ -176,6 +181,7 @@ Future<ApiResponse> editCar(
                 'pays': pays.toString()
               }
             : {
+                'id': id.toString(),
                 'nom': nom,
                 'category_id': categoryId,
                 'type': type,

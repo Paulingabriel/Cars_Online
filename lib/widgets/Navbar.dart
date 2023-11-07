@@ -12,7 +12,7 @@ import '../models/user.dart';
 import '../services/user_service.dart';
 
 class Navbar extends StatefulWidget {
-  final User user;
+  final User? user;
   const Navbar({super.key, required this.user});
 
   @override
@@ -20,7 +20,6 @@ class Navbar extends StatefulWidget {
 }
 
 class _Navbar extends State<Navbar> {
-
   void _loadUserInfo() async {
     String token = await getToken();
     if (token == '') {
@@ -44,12 +43,36 @@ class _Navbar extends State<Navbar> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('${response.error}'),
-          )
-        );
+        ));
       }
     }
   }
 
+  void _loadUser() async {
+    String token = await getToken();
+    if (token == '') {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => loginPage()),
+          (route) => false);
+    } else {
+      print(token);
+      ApiResponse response = await getUserDetail();
+      final user = response.data;
+      print(response);
+      if (response.error == null) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) => editProfilPage(user: user as User)),
+            (route) => false);
+      } else if (response.error == unauthorized) {
+        Navigator.of(context).pop();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('${response.error}'),
+        ));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +112,7 @@ class _Navbar extends State<Navbar> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          widget.user!.image == null ?
                           Container(
                               height: 90,
                               width: 90,
@@ -101,7 +125,22 @@ class _Navbar extends State<Navbar> {
                                 radius: 64,
                                 backgroundImage:
                                     AssetImage('images/profil.png'),
-                              )),
+                              ))
+                          :
+                          Container(
+                              height: 90,
+                              width: 90,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                    color: Color(0xFF025CCB), width: 1.0),
+                              ),
+                              child: CircleAvatar(
+                                radius: 64,
+                                backgroundImage:
+                                    NetworkImage(widget.user!.image as String),
+                              ))
+                            ,
                           SizedBox(width: 20),
                           Container(
                             child: Column(
@@ -109,22 +148,28 @@ class _Navbar extends State<Navbar> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                    (widget.user.name!=null ? widget.user.name.toString() : '' +
-                                        ' ' +
-                                       (widget.user.pseudo!=null ? widget.user.pseudo.toString() : '')),
+                                    (widget.user != null
+                                        ? widget.user!.name.toString()
+                                        : '' +
+                                            ' ' +
+                                            (widget.user != null
+                                                ? widget.user!.pseudo.toString()
+                                                : '')),
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
                                         color: const Color(0xFF025CCB),
                                         fontFamily: 'Poppins')),
-                                Text(widget.user.email!=null ? widget.user.email.toString() : '',
+                                Text(
+                                    widget.user != null
+                                        ? widget.user!.email.toString()
+                                        : '',
                                     style: TextStyle(
                                       fontSize: 10,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black,
                                       fontFamily: 'Poppins',
                                     ))
-
                               ],
                             ),
                           ),
@@ -151,7 +196,6 @@ class _Navbar extends State<Navbar> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => Main(user: widget.user),
-
                       ));
                 },
               ),
@@ -171,11 +215,7 @@ class _Navbar extends State<Navbar> {
                           fontFamily: 'Poppins')),
                 ),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => editProfilPage(user: widget.user),
-                      ));
+                  _loadUser();
                 },
               ),
               Container(
@@ -197,7 +237,7 @@ class _Navbar extends State<Navbar> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => editPassword(user: widget.user),
+                        builder: (context) => editPassword(user: widget.user!),
                       ));
                 },
               ),
@@ -237,7 +277,7 @@ class _Navbar extends State<Navbar> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => carsFilter(user: widget.user),
+                        builder: (context) => carsFilter(user: widget.user!),
                       ));
                 },
               ),

@@ -10,7 +10,7 @@ import 'package:app/pages/carsListPage.dart';
 import '../models/user.dart';
 
 class bottomNavigationBar extends StatefulWidget {
-  final User user;
+  final User? user;
   const bottomNavigationBar({super.key, required this.user});
 
   @override

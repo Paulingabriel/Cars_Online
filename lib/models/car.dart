@@ -24,30 +24,30 @@ class Car {
   String? ville;
   String? pays;
 
-  Car(
-      {this.carId,
-      this.nom,
-      // this.images,
-      this.categoryId,
-      // this.user,
-      this.type,
-      this.annee,
-      this.marque,
-      this.pfisc,
-      this.pdin,
-      this.desc,
-      this.cyl,
-      this.prix,
-      this.portiere,
-      this.place,
-      this.boite,
-      this.km,
-      this.sellerie,
-      this.couleur,
-      this.cylindrees,
-      this.ville,
-      this.pays,
-      });
+  Car({
+    this.carId,
+    this.nom,
+    // this.images,
+    this.categoryId,
+    // this.user,
+    this.type,
+    this.annee,
+    this.marque,
+    this.pfisc,
+    this.pdin,
+    this.desc,
+    this.cyl,
+    this.prix,
+    this.portiere,
+    this.place,
+    this.boite,
+    this.km,
+    this.sellerie,
+    this.couleur,
+    this.cylindrees,
+    this.ville,
+    this.pays,
+  });
 
   //map json to Car model
 
@@ -55,7 +55,7 @@ class Car {
     return Car(
         carId: json['cars']['id'],
         nom: json['cars']['nom'],
-        // images: 
+        // images:
         // json['cars']['images'].split(',') == [null, null , null] ? [] :
         // json['cars']['images'].split(','),
 
@@ -83,8 +83,8 @@ class Car {
         sellerie: json['cars']['sellerie'],
         couleur: json['cars']['couleur'],
         cylindrees: int.parse(json['cars']['cylindrees']),
-        ville: json['cars']['ville'],
-        pays: json['cars']['pays']
+        ville: json['cars']['ville'].toString(),
+        pays: json['cars']['pays'].toString()
         );
   }
 }

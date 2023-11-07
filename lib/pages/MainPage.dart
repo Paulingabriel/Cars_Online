@@ -19,7 +19,7 @@ import '../models/user.dart';
 import '../services/user_service.dart';
 
 class Main extends StatefulWidget {
-  final User user;
+  final User? user;
   const Main({super.key, required this.user});
 
   @override
@@ -68,9 +68,9 @@ class _Main extends State<Main> {
   void _loadUserInfo() async {
     String token = await getToken();
     if (token == '') {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => loginPage()),
-          (route) => false);
+      // Navigator.of(context).pushAndRemoveUntil(
+      //     MaterialPageRoute(builder: (context) => loginPage()),
+      //     (route) => false);
     } else {
       print(token);
       ApiResponse response = await getUserDetail();
@@ -115,7 +115,7 @@ class _Main extends State<Main> {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                Notifications(user: widget.user),
+                                Notifications(user: widget.user!),
                           ));
                     },
                   ),
@@ -397,7 +397,7 @@ class _Main extends State<Main> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    carsList(user: widget.user),
+                                    carsList(user: widget.user!),
                               ));
                           setState(() {
                             _currentTab = 1;
@@ -475,11 +475,11 @@ class _Main extends State<Main> {
     );
   }
 
-  Widget CarView(context, int index, User user) {
+  Widget CarView(context, int index, User? user) {
     return carCard(context, _carsList[index], user);
   }
 
-  Widget carCard(context, ListCars data, User user) {
+  Widget carCard(context, ListCars data, User? user) {
     return Container(
       height: 210,
       margin: EdgeInsets.only(bottom: 15),

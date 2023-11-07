@@ -9,7 +9,7 @@ import '../models/user.dart';
 
 class Mail extends StatelessWidget {
   final ListCars property;
-  final User user;
+  final User? user;
   const Mail({super.key, required this.property, required this.user});
 
   @override

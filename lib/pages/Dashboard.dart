@@ -145,6 +145,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           child: Column(
                             children: [
+                              widget.user.image == null ?
                               Container(
                                   height: 80,
                                   width: 80,
@@ -154,7 +155,19 @@ class _DashboardState extends State<Dashboard> {
                                     radius: 64,
                                     backgroundImage:
                                         AssetImage('images/profil.png'),
-                                  )),
+                                  ))
+                                :
+                                Container(
+                                  height: 80,
+                                  width: 80,
+                                  decoration:
+                                      BoxDecoration(shape: BoxShape.circle),
+                                  child: CircleAvatar(
+                                    radius: 64,
+                                    backgroundImage:
+                                        NetworkImage(widget.user.image as String),
+                                  ))
+                                ,
                               SizedBox(height: 15),
                               Text("Hello, " + widget.user.pseudo.toString() + ' ' + widget.user.name.toString(),
                                   style: TextStyle(

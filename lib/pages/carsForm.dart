@@ -7,6 +7,7 @@ import 'package:app/pages/loginPage.dart';
 import 'package:app/services/user_service.dart';
 import 'package:app/services/car_service.dart';
 import 'package:app/widgets/selectInt.dart';
+import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/formLabel.dart';
 import 'package:app/widgets/Select.dart';
@@ -48,8 +49,6 @@ class _carsFormState extends State<carsForm> {
       txtNumberKm = TextEditingController(),
       txtSellerie = TextEditingController(),
       txtCouleur = TextEditingController(),
-      txtVille = TextEditingController(),
-      txtPays = TextEditingController(),
       txtNumberCylindrees = TextEditingController();
 
   List<String> listMarque = [
@@ -79,6 +78,8 @@ class _carsFormState extends State<carsForm> {
   String? _type;
   String? _boite;
   int? category;
+  String? _txtVille = '';
+  String? _txtPays = '';
   bool loading = false;
   FilePickerResult? result;
   String? _fileName;
@@ -124,6 +125,24 @@ class _carsFormState extends State<carsForm> {
     // _year = listYear[0];
     // _type = listType[0];
     images = [fileToDisplay_image1, fileToDisplay_image2, fileToDisplay_image3];
+  }
+
+  //display alert Modal
+  Future<bool?> _onBackButtonPressed(BuildContext context) async {
+    bool? exitApp = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: const Text("Cars"),
+              content: const Text('Voiture enregistrée avec succès!!!'),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                    child: const Text('ok'))
+              ]);
+        });
   }
 
   // void onChange() {
@@ -243,6 +262,8 @@ class _carsFormState extends State<carsForm> {
     print(_marque);
     print(_portes);
     print(_places);
+    print(_txtPays);
+    print(_txtVille);
 
     ApiResponse response = await createCar(
         txtNom.text,
@@ -266,11 +287,13 @@ class _carsFormState extends State<carsForm> {
         txtNumberCylindrees.text != ''
             ? int.parse(txtNumberCylindrees.text)
             : null,
-        txtVille.text,
-        txtPays.text);
+        _txtVille,
+        _txtPays);
     print(response);
 
     if (response.error == null) {
+      //display alert modal
+      _onBackButtonPressed(context);
       // Navigator.of(context).pushAndRemoveUntil(
       //     MaterialPageRoute(builder: (context) => carsForm(user: widget.user)),
       //     (route) => false);
@@ -892,19 +915,32 @@ class _carsFormState extends State<carsForm> {
                     SizedBox(
                       height: 20,
                     ),
-                    formLabel(text: 'Ville', size: 12),
+                    CSCPicker(
+                      onCountryChanged: (country) {
+                         List<String> pays = country.split("    ");
+                          print(pays.length);
+                          print(pays[0]);
+                          // print(pays[1]);
+                        setState(() {
+                          _txtPays = pays[1];
+                        });
+                      },
+                      onStateChanged: (state) {
+                        print(state);
+                      },
+                      onCityChanged: (city) {
+                        setState(() {
+                          _txtVille = city;
+                        });
+                        print(city);
+                      },
+                      countryDropdownLabel: "*Pays",
+                      stateDropdownLabel: "*Etat",
+                      cityDropdownLabel: "*Ville",
+                    ),
                     SizedBox(
                       height: 15,
                     ),
-                    formInputName(txtName: txtVille),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    formLabel(text: 'Pays', size: 12),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    formInputName(txtName: txtPays),
                     TextArea(txtDesc: txtDesc),
                     SizedBox(
                       height: 40,
@@ -949,8 +985,6 @@ class _carsFormState extends State<carsForm> {
                                             // );
                                           }
                                           _createCar();
-
-                                          _onBackButtonPressed(context);
                                         },
                                         child: Text("Enregistrer",
                                             style: TextStyle(
@@ -1026,22 +1060,5 @@ class _carsFormState extends State<carsForm> {
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w500),
         ));
-  }
-
-  Future<bool?> _onBackButtonPressed(BuildContext context) async {
-    bool? exitApp = await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              title: const Text("Cars"),
-              content: const Text('Voiture enregistrée avec succès!!!'),
-              actions: <Widget>[
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                    },
-                    child: const Text('ok'))
-              ]);
-        });
   }
 }

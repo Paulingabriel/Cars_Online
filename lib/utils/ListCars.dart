@@ -88,8 +88,8 @@ class ListCars {
         sellerie: json['sellerie'],
         couleur: json['couleur'],
         cylindrees: json['cylindrees'],
-        ville: json['ville'],
-        pays: json['pays']
+        ville: json['ville'].toString(),
+        pays: json['pays'].toString()
         );
   }
 }

@@ -47,7 +47,7 @@ Future<ApiResponse> login(String email, String password) async {
 //register
 
 Future<ApiResponse> register(String name, String pseudo, String tel,
-  String email, String password) async {
+    String email, String password) async {
   ApiResponse apiResponse = ApiResponse();
 
   try {
@@ -88,6 +88,50 @@ Future<ApiResponse> register(String name, String pseudo, String tel,
   return apiResponse;
 }
 
+//edit profil of user
+Future<ApiResponse> editProfil(
+    String? image, String name, String pseudo, String tel, String email) async {
+  ApiResponse apiResponse = ApiResponse();
+
+  try {
+    String token = await getToken();
+    final response = await http.put(Uri.parse(userURL), headers: {
+      'Accept': 'Application/json',
+      'Authorization': 'Bearer $token'
+    }, body: {
+      'image': image,
+      'name': name,
+      'pseudo': pseudo,
+      'tel': tel,
+      'email': email,
+    });
+
+    print(jsonDecode(response.body));
+    print(response.statusCode);
+
+    switch (response.statusCode) {
+      case 200:
+        apiResponse.data = User.fromJson(jsonDecode(response.body));
+        break;
+      case 422:
+        final errors = jsonDecode(response.body)['errors'];
+        apiResponse.error = errors[errors.keys.elementAt(0)][0];
+        break;
+      case 403:
+        apiResponse.error = jsonDecode(response.body)['message'];
+        break;
+      default:
+        apiResponse.error = somethingWentWrong;
+        break;
+    }
+  } catch (e) {
+    print(e);
+    apiResponse.error = serverError;
+  }
+
+  return apiResponse;
+}
+
 //User
 
 Future<ApiResponse> getUserDetail() async {
@@ -95,11 +139,12 @@ Future<ApiResponse> getUserDetail() async {
 
   try {
     String token = await getToken();
+    print("token");
     final response = await http.get(Uri.parse(userURL), headers: {
       'Accept': 'Application/json',
       'Authorization': 'Bearer $token'
     });
-
+    // print(token);
 
     print(jsonDecode(response.body));
 
@@ -130,7 +175,6 @@ Future<ApiResponse> getUserDetail() async {
 Future<String> getToken() async {
   SharedPreferences pref = await SharedPreferences.getInstance();
   return pref.getString('token') ?? '';
-
 }
 
 // get user id
@@ -138,7 +182,6 @@ Future<String> getToken() async {
 Future<int> getUserId() async {
   SharedPreferences pref = await SharedPreferences.getInstance();
   return pref.getInt('id') ?? 0;
-
 }
 
 // logout

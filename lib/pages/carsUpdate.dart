@@ -8,6 +8,7 @@ import 'package:app/services/user_service.dart';
 import 'package:app/services/car_service.dart';
 import 'package:app/utils/ListCars.dart';
 import 'package:app/widgets/selectInt.dart';
+import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/formLabel.dart';
 import 'package:app/widgets/Select.dart';
@@ -44,8 +45,6 @@ class _carsUpdateState extends State<carsUpdate> {
       txtNumberKm = TextEditingController(),
       txtSellerie = TextEditingController(),
       txtCouleur = TextEditingController(),
-      txtVille = TextEditingController(),
-      txtPays = TextEditingController(),
       txtNumberCylindrees = TextEditingController();
 
   List<String> listMarque = [
@@ -73,6 +72,8 @@ class _carsUpdateState extends State<carsUpdate> {
   String? _places;
   String? _year;
   String? _type;
+  String? _txtVille = '';
+  String? _txtPays = '';
   String? _boite;
   int? category;
   bool loading = false;
@@ -90,25 +91,25 @@ class _carsUpdateState extends State<carsUpdate> {
 
   @override
   void initState() {
-      txtNom.text = widget.property.nom ?? '';
-      txtDesc.text = widget.property.desc ?? '';
-      category = widget.property!.categoryId ?? null;
-      _boite = widget.property.boite ?? '';
-      _year = widget.property.annee ?? '';
-      _type = widget.property.type ?? '';
-      _portes = widget.property.portiere ?? '';
-      _places = widget.property.place ?? '';
-      _marque = widget.property.marque ?? '';
-      txtNumberFisc.text = widget.property.pfisc.toString();
-      txtNumberDin.text = widget.property.pdin.toString();
-      txtNumberPrix.text = widget.property.prix.toString();
-      txtNumberCyl.text = widget.property.cyl.toString();
-      txtNumberKm.text = widget.property.km.toString();
-      txtNumberCylindrees.text = widget.property.cylindrees.toString();
-      txtSellerie.text = widget.property.sellerie.toString();
-      txtCouleur.text = widget.property.couleur.toString();
-      txtVille.text = widget.property.ville.toString();
-      txtPays.text = widget.property.pays.toString();
+    txtNom.text = widget.property.nom ?? '';
+    txtDesc.text = widget.property.desc ?? '';
+    category = widget.property!.categoryId ?? null;
+    _boite = widget.property.boite ?? '';
+    _year = widget.property.annee ?? '';
+    _type = widget.property.type ?? '';
+    _portes = widget.property.portiere ?? '';
+    _places = widget.property.place ?? '';
+    _marque = widget.property.marque ?? '';
+    _txtVille = widget.property.ville ?? '';
+    _txtPays = widget.property.pays ?? '';
+    txtNumberFisc.text = widget.property.pfisc.toString();
+    txtNumberDin.text = widget.property.pdin.toString();
+    txtNumberPrix.text = widget.property.prix.toString();
+    txtNumberCyl.text = widget.property.cyl.toString();
+    txtNumberKm.text = widget.property.km.toString();
+    txtNumberCylindrees.text = widget.property.cylindrees.toString();
+    txtSellerie.text = widget.property.sellerie.toString();
+    txtCouleur.text = widget.property.couleur.toString();
 
     super.initState();
 
@@ -135,6 +136,24 @@ class _carsUpdateState extends State<carsUpdate> {
     // _year = listYear[0];
     // _type = listType[0];
     images = [fileToDisplay_image1, fileToDisplay_image2, fileToDisplay_image3];
+  }
+
+  //display alert Modal
+  Future<bool?> _onBackButtonPressed(BuildContext context) async {
+    bool? exitApp = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: const Text("Cars"),
+              content: const Text('Voiture modifiée avec succès!!!'),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                    child: const Text('ok'))
+              ]);
+        });
   }
 
   void pickFile_image1() async {
@@ -213,8 +232,7 @@ class _carsUpdateState extends State<carsUpdate> {
     for (var i = 0; i < images.length; i++) {
       // _images[i] = images[i] == null ? null : getStringImage(images[i]);
       _images[i] = getStringImage(images[i]);
-      if( _images[i] == null)
-      {
+      if (_images[i] == null) {
         _images[i] = widget.property.images![i].replaceAll('\\', '');
       }
     }
@@ -250,13 +268,13 @@ class _carsUpdateState extends State<carsUpdate> {
         txtNumberCylindrees.text != ''
             ? int.parse(txtNumberCylindrees.text)
             : null,
-        txtVille.text,
-        txtPays.text);
-
+        _txtVille,
+        _txtPays);
 
     print(response);
 
     if (response.error == null) {
+      _onBackButtonPressed(context);
       // Navigator.of(context).pushAndRemoveUntil(
       //     MaterialPageRoute(builder: (context) => carsForm(user: widget.user)),
       //     (route) => false);
@@ -885,19 +903,46 @@ class _carsUpdateState extends State<carsUpdate> {
                     SizedBox(
                       height: 20,
                     ),
-                    formLabel(text: 'Ville', size: 12),
+                    CSCPicker(
+                      currentCountry: _txtPays,
+                      currentCity: _txtVille,
+                      onCountryChanged: (country) {
+                        List<String> pays = country.split("    ");
+                        print(pays.length);
+                        print(pays[0]);
+                        // print(pays[1]);
+
+                        if (country != null) {
+                          setState(() {
+                            _txtPays = pays[1];
+                          });
+                        }
+
+                        print(_txtPays);
+
+                        // setState(() {
+                        //   _txtPays = pays[1];
+                        // });
+                      },
+                      onStateChanged: (state) {
+                        print(state);
+                      },
+                      onCityChanged: (city) {
+                        if (city != null) {
+                          setState(() {
+                            _txtVille = city;
+                          });
+                        }
+
+                        print(_txtVille);
+                      },
+                      countryDropdownLabel: "*Pays",
+                      stateDropdownLabel: "*Etat",
+                      cityDropdownLabel: "*Ville",
+                    ),
                     SizedBox(
                       height: 15,
                     ),
-                    formInputName(txtName: txtVille),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    formLabel(text: 'Pays', size: 12),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    formInputName(txtName: txtPays),
                     TextArea(txtDesc: txtDesc),
                     SizedBox(
                       height: 40,
@@ -942,8 +987,6 @@ class _carsUpdateState extends State<carsUpdate> {
                                             // );
                                           }
                                           _editCar();
-
-                                          _onBackButtonPressed(context);
                                         },
                                         child: Text("Enregistrer",
                                             style: TextStyle(
@@ -1019,22 +1062,5 @@ class _carsUpdateState extends State<carsUpdate> {
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w500),
         ));
-  }
-
-  Future<bool?> _onBackButtonPressed(BuildContext context) async {
-    bool? exitApp = await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              title: const Text("Cars"),
-              content: const Text('Voiture modifiée avec succès!!!'),
-              actions: <Widget>[
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                    },
-                    child: const Text('ok'))
-              ]);
-        });
   }
 }
