@@ -114,7 +114,10 @@ class _carDescriptionPage extends State<carDescriptionPage>
                                 BlendMode.hardLight),
                             image: NetworkImage(widget.property.images![0]
                                 .replaceAll('"', '')
-                                .replaceAll('\\', '')))),
+                                .replaceAll('images:', '')
+                                .replaceAll('\\', '')
+                                .replaceAll('{', '')
+                                .replaceAll('}', '')))),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -574,7 +577,11 @@ Widget carouselCard(String data) {
       image: DecorationImage(
           fit: BoxFit.cover,
           image: NetworkImage(
-            data.replaceAll('"', '').replaceAll('\\', ''),
+            data.replaceAll('"', '')
+                .replaceAll('images:', '')
+                .replaceAll('\\', '')
+                .replaceAll('{', '')
+                .replaceAll('}', ''),
           )),
     ),
   );

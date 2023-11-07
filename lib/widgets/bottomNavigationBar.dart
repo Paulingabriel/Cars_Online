@@ -1,3 +1,7 @@
+import 'package:app/constant.dart';
+import 'package:app/models/api_response.dart';
+import 'package:app/pages/loginPage.dart';
+import 'package:app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:app/pages/MainPage.dart';
 import 'package:app/pages/Dashboard.dart';
@@ -6,8 +10,7 @@ import 'package:app/pages/carsListPage.dart';
 import '../models/user.dart';
 
 class bottomNavigationBar extends StatefulWidget {
-
-  final  User user;
+  final User user;
   const bottomNavigationBar({super.key, required this.user});
 
   @override
@@ -15,6 +18,34 @@ class bottomNavigationBar extends StatefulWidget {
 }
 
 class _bottomNavigationBarState extends State<bottomNavigationBar> {
+  void _loadUserInfo() async {
+    String? token = await getToken();
+    if (token == null) {
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => loginPage()),
+          (route) => false);
+    } else {
+      print(token);
+      ApiResponse response = await getUserDetail();
+      final user = response.data;
+      print(response);
+      if (response.error == null) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) => Dashboard(user: user as User)),
+            (route) => false);
+      } else if (response.error == unauthorized) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => Main(user: user as User)),
+            (route) => false);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('${response.error}'),
+        ));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,11 +115,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                   children: [
                     MaterialButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Dashboard(user: widget.user),
-                            ));
+                        _loadUserInfo();
 
                         setState(() {
                           _currentTab = 2;

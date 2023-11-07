@@ -24,38 +24,39 @@ class CarUpdate {
   String? ville;
   String? pays;
 
-  CarUpdate(
-      {this.carId,
-      this.nom,
-      // this.images,
-      this.categoryId,
-      // this.user,
-      this.type,
-      this.annee,
-      this.marque,
-      this.pfisc,
-      this.pdin,
-      this.desc,
-      this.cyl,
-      this.prix,
-      this.portiere,
-      this.place,
-      this.boite,
-      this.km,
-      this.sellerie,
-      this.couleur,
-      this.cylindrees,
-      this.ville,
-      this.pays,
-      });
+  CarUpdate({
+    this.carId,
+    this.nom,
+    // this.images,
+    this.categoryId,
+    // this.user,
+    this.type,
+    this.annee,
+    this.marque,
+    this.pfisc,
+    this.pdin,
+    this.desc,
+    this.cyl,
+    this.prix,
+    this.portiere,
+    this.place,
+    this.boite,
+    this.km,
+    this.sellerie,
+    this.couleur,
+    this.cylindrees,
+    this.ville,
+    this.pays,
+  });
 
   //map json to Car model
 
   factory CarUpdate.fromJson(Map<String, dynamic> json) {
+ 
     return CarUpdate(
         carId: json['cars']['id'],
         nom: json['cars']['nom'],
-        // images: 
+        // images:
         // json['cars']['images'].split(',') == [null, null , null] ? [] :
         // json['cars']['images'].split(','),
 
@@ -82,9 +83,8 @@ class CarUpdate {
         km: int.parse(json['cars']['km']),
         sellerie: json['cars']['sellerie'],
         couleur: json['cars']['couleur'],
-        cylindrees:json['cars']['cylindrees'],
+        cylindrees: json['cars']['cylindrees'],
         ville: json['cars']['ville'],
-        pays: json['cars']['pays']
-        );
+        pays: json['cars']['pays']);
   }
 }

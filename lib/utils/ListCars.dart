@@ -54,11 +54,11 @@ class ListCars {
   //map json to Car model
 
   factory ListCars.fromJson(Map<String, dynamic> json) {
-   
+
     var replace = json['images'].replaceAll('[', '');
     var replace2 = replace.replaceAll(']', '');
     var array = replace2.split(',');
-    // print(array.length);
+    print(array[2].replaceAll('"', '').replaceAll('\\', ''));
     return ListCars(
         carId: json['id'],
         nom: json['nom'],

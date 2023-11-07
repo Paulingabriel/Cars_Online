@@ -1,5 +1,5 @@
+import 'dart:convert';
 import 'dart:io';
-
 import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
 import 'package:app/pages/carsListPage.dart';
@@ -17,11 +17,12 @@ import 'package:app/widgets/InputGroup.dart';
 import 'package:app/widgets/TextArea.dart';
 import 'package:app/widgets/bottomNavigationBar.dart';
 import 'package:file_picker/file_picker.dart';
+// import 'package:geocoding/geocoding.dart';
+// import 'package:uuid/uuid.dart';
 import '../models/user.dart';
-import 'package:app/widgets/post_frame_callback.dart';
+// import 'package:app/widgets/post_frame_callback.dart';
+import 'package:http/http.dart' as http;
 // import 'package:app/widgets/post_frame_callback_stateless.dart';
-
-import '../models/user.dart';
 
 class carsForm extends StatefulWidget {
   final User user;
@@ -32,9 +33,13 @@ class carsForm extends StatefulWidget {
 }
 
 class _carsFormState extends State<carsForm> {
+  // var uuid = Uuid();
+  // List<dynamic> _placesList = [];
+  // String _sessionToken = '122344';
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
-  bool _autovalidate = false;
+  // bool _autovalidate = false;
   TextEditingController txtNom = TextEditingController(),
+      _controller = TextEditingController(),
       txtDesc = TextEditingController(),
       txtNumberFisc = TextEditingController(),
       txtNumberDin = TextEditingController(),
@@ -66,11 +71,7 @@ class _carsFormState extends State<carsForm> {
     'MANUELLE 4 VITESSES',
     'MANUELLE 3 VITESSES'
   ];
-  List<String> listType = [
-    'Essence',
-    'Gasoil',
-    'Kerozen'
-  ];
+  List<String> listType = ['Essence', 'Gasoil', 'Kerozen'];
   String? _marque;
   String? _portes;
   String? _places;
@@ -93,7 +94,12 @@ class _carsFormState extends State<carsForm> {
 
   @override
   void initState() {
+    //TODO: implement initState;
     super.initState();
+
+    // _controller.addListener(() {
+    //   onChange();
+    // });
 
     Future<void> _showDialog(BuildContext context) async {
       WidgetsBinding.instance?.addPostFrameCallback((_) {
@@ -119,6 +125,39 @@ class _carsFormState extends State<carsForm> {
     // _type = listType[0];
     images = [fileToDisplay_image1, fileToDisplay_image2, fileToDisplay_image3];
   }
+
+  // void onChange() {
+  //   if (_sessionToken == null) {
+  //     setState(() {
+  //       _sessionToken = uuid.v4();
+  //     });
+  //   }
+
+  //   getSuggestion(_controller.text);
+  // }
+
+  // void getSuggestion(String input) async {
+  //   String kPLACES_API_KEY = "AIzaSyCjsqqh0RZ_88CB5xWwfbvv5Ky53xhP4uI";
+  //   String baseURL =
+  //       'https://maps.googleapis.com/maps/api/place/autocomplete/json';
+  //   String request =
+  //       '$baseURL?input=$input&key=$kPLACES_API_KEY&sessiontoken=$_sessionToken';
+
+  //   var response = await http.get(Uri.parse(request));
+
+  //   var data = response.body.toString();
+
+  //   print('data');
+  //   print(data);
+
+  //   if (response.statusCode == 200) {
+  //     setState(() {
+  //       _placesList = jsonDecode(response.body.toString())['predictions'];
+  //     });
+  //   } else {
+  //     throw Exception('Failed to load data');
+  //   }
+  // }
 
   void pickFile_image1() async {
     try {
@@ -224,10 +263,11 @@ class _carsFormState extends State<carsForm> {
         txtNumberKm.text != '' ? int.parse(txtNumberKm.text) : null,
         txtSellerie.text,
         txtCouleur.text,
-        txtNumberCylindrees.text != '' ? int.parse(txtNumberCylindrees.text) : null,
+        txtNumberCylindrees.text != ''
+            ? int.parse(txtNumberCylindrees.text)
+            : null,
         txtVille.text,
-        txtPays.text
-        );
+        txtPays.text);
     print(response);
 
     if (response.error == null) {
@@ -369,7 +409,6 @@ class _carsFormState extends State<carsForm> {
                                             Icon(
                                               Icons.photo_outlined,
                                               size: 60,
-
                                             ),
                                         ]),
                                   ),
@@ -464,6 +503,36 @@ class _carsFormState extends State<carsForm> {
                           ),
                         ],
                       ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    // TextFormField(
+                    //   controller: _controller,
+                    //   decoration:
+                    //       InputDecoration(hintText: 'Search places with name'),
+                    // ),
+                    // Container(
+                    //   child: ListView.builder(
+                    //     shrinkWrap: true,
+                    //       itemCount: _placesList.length,
+                    //       itemBuilder: (context, index) {
+                    //         return ListTile(
+                    //             onTap: () async {
+                    //               List<Location> locations =
+                    //                   await locationFromAddress(
+                    //                       _placesList[index]['description']);
+
+                    //               print(locations.last.longitude);
+                    //               print(locations.last.latitude);
+                    //               print( _placesList[index]['structured_formatting']['secondary_text']);
+                    //             },
+                    //             title: Text(_placesList[index]['description'])
+                    //             );
+                    //       }),
+                    // ),
+                    SizedBox(
+                      height: 15,
                     ),
                     SizedBox(
                       height: 20,
@@ -827,7 +896,7 @@ class _carsFormState extends State<carsForm> {
                     SizedBox(
                       height: 15,
                     ),
-                     formInputName(txtName: txtVille),
+                    formInputName(txtName: txtVille),
                     SizedBox(
                       height: 20,
                     ),

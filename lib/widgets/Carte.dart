@@ -8,7 +8,6 @@ import '../models/user.dart';
 import '../models/user.dart';
 
 class Carte extends StatelessWidget {
-
   final User user;
   final ListCars property;
   const Carte({super.key, required this.property, required this.user});
@@ -57,7 +56,12 @@ class Carte extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(5),
                       child: Image.network(
-                        property.images![0].replaceAll('"', '').replaceAll('\\', ''),
+                        property.images![0]
+                            .replaceAll('"', '')
+                            .replaceAll('images:', '')
+                            .replaceAll('\\', '')
+                            .replaceAll('{', '')
+                            .replaceAll('}', ''),
                         height: 60,
                         width: 60,
                         fit: BoxFit.cover,
@@ -89,7 +93,11 @@ class Carte extends StatelessWidget {
                                           fontWeight: FontWeight.w500,
                                           fontFamily: 'Poppins',
                                           color: Colors.black)),
-                                  Text(property.nom! + ' | ' + 'Année ' + property.annee!,
+                                  Text(
+                                      property.nom! +
+                                          ' | ' +
+                                          'Année ' +
+                                          property.annee!,
                                       style: TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w500,

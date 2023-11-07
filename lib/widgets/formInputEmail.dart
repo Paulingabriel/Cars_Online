@@ -41,7 +41,7 @@ class _formInputEmailState extends State<formInputEmail> {
               if (val!.length < 3) {
                 return 'Au moins 3 charactères requis.';
               } else if (val.isEmpty) {
-                return 'Mot de passe requis.';
+                return 'Le champ email requis.';
               } else {
                 return null;
               }

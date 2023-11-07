@@ -41,7 +41,7 @@ class _formInputNameState extends State<formInputName> {
               if (val!.length < 3 && val.isNotEmpty) {
                 return 'Au moins 3 charactères requis.';
               } else if (val.isEmpty) {
-                return 'champ requis.';
+                return 'Le champ nom est requis.';
               } else {
                 return null;
               }

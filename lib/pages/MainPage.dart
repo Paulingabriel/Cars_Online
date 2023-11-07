@@ -65,6 +65,36 @@ class _Main extends State<Main> {
     super.initState();
   }
 
+  void _loadUserInfo() async {
+    String token = await getToken();
+    if (token == '') {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => loginPage()),
+          (route) => false);
+    } else {
+      print(token);
+      ApiResponse response = await getUserDetail();
+      final user = response.data;
+      print(response);
+      if (response.error == null) {
+        Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) => Dashboard(user: user as User)),
+            (route) => false);
+
+        // Navigator.of(context).pop(); rediriger sur place
+      } else if (response.error == unauthorized) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => Main(user: user as User)),
+            (route) => false);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('${response.error}'),
+        ));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -299,11 +329,10 @@ class _Main extends State<Main> {
               ),
               SizedBox(height: 10),
               _loading
-                  ?
-                  Container(
-                    height: 210,
+                  ? Container(
+                      height: 210,
                       child: Center(
-                        child:  CircularProgressIndicator(),
+                        child: CircularProgressIndicator(),
                       ),
                     )
                   : GridView.builder(
@@ -390,12 +419,7 @@ class _Main extends State<Main> {
                     children: [
                       MaterialButton(
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    Dashboard(user: widget.user),
-                              ));
+                          _loadUserInfo();
 
                           setState(() {
                             _currentTab = 2;
@@ -508,7 +532,10 @@ class _Main extends State<Main> {
                       fit: BoxFit.cover,
                       image: NetworkImage(data.images![0]
                           .replaceAll('"', '')
-                          .replaceAll('\\', ''))),
+                          .replaceAll('images:', '')
+                          .replaceAll('\\', '')
+                          .replaceAll('{', '')
+                          .replaceAll('}', ''))),
                 ),
               ),
               Container(

@@ -95,7 +95,10 @@ class _CarteOptionsState extends State<CarteOptions> {
                       child: Image.network(
                         widget.property.images![0]
                             .replaceAll('"', '')
-                            .replaceAll('\\', ''),
+                            .replaceAll('images:', '')
+                            .replaceAll('\\', '')
+                            .replaceAll('{', '')
+                            .replaceAll('}', ''),
                         height: 60,
                         width: 60,
                         fit: BoxFit.cover,

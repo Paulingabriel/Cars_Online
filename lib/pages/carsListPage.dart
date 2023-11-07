@@ -59,6 +59,33 @@ class _carsList extends State<carsList> {
     super.initState();
   }
 
+  void _loadUserInfo() async {
+    String token = await getToken();
+    if (token == '') {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => loginPage()),
+          (route) => false);
+    } else {
+      print(token);
+      ApiResponse response = await getUserDetail();
+      final user = response.data;
+      print(response);
+      if (response.error == null) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) => Dashboard(user: user as User)),
+            (route) => false);
+      } else if (response.error == unauthorized) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => Main(user: user as User)),
+            (route) => false);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('${response.error}'),
+        ));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,8 +133,7 @@ class _carsList extends State<carsList> {
                   ]),
             ),
             _loading
-                ?
-                Container(
+                ? Container(
                     height: 210,
                     child: Center(
                       child: CircularProgressIndicator(),
@@ -192,12 +218,7 @@ class _carsList extends State<carsList> {
                     children: [
                       MaterialButton(
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    Dashboard(user: widget.user),
-                              ));
+                          _loadUserInfo();
 
                           setState(() {
                             _currentTab = 2;

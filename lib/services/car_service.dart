@@ -198,6 +198,7 @@ Future<ApiResponse> editCar(
               });
 
     // print(jsonDecode(response.body));
+    print(response.body);
     print(response.statusCode);
 
     switch (response.statusCode) {
@@ -277,11 +278,13 @@ Future<ApiResponse> getCars() async {
     switch (response.statusCode) {
       case 200:
         // var replace =
-        //     jsonDecode(response.body)['cars'][0]['images'].replaceAll('[', '');
+        // jsonDecode(response.body)['cars'][0]['images'].replaceAll('[', '');
+
+        // images![0].replaceAll('"', '').replaceAll('\\', '')
         // var replace2 = replace.replaceAll(']', '');
         // var array = replace2.split(',');
         // jsonDecode(response.body)['cars'][0]['images'].replaceAll(']', '');
-        // print(array);
+        // print( jsonDecode(response.body)['cars'][0]['images'].replaceAll('"', '').replaceAll('\\', ''));
         apiResponse.data = jsonDecode(response.body)['cars']
             .map((p) => ListCars.fromJson(p))
             .toList();

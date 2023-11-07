@@ -90,28 +90,25 @@ class _carsUpdateState extends State<carsUpdate> {
 
   @override
   void initState() {
-    if (widget.property != null) {
-      txtNom.text = widget.property!.nom ?? '';
-      txtDesc.text = widget.property!.desc ?? '';
+      txtNom.text = widget.property.nom ?? '';
+      txtDesc.text = widget.property.desc ?? '';
       category = widget.property!.categoryId ?? null;
-      _boite = widget.property!.boite ?? '';
-      _year = widget.property!.annee ?? '';
-      _type = widget.property!.type ?? '';
-      _portes = widget.property!.portiere ?? '';
-      _places = widget.property!.place ?? '';
-      _marque = widget.property!.marque ?? '';
-      txtNumberFisc.text = widget.property.pfisc.toString()?? '';
-      txtNumberDin.text = widget.property.pdin.toString()?? '';
-      txtNumberPrix.text = widget.property.prix.toString()?? '';
-      txtNumberCyl.text = widget.property.cyl.toString()?? '';
-      txtNumberKm.text = widget.property.km.toString()?? '';
-      txtNumberCylindrees.text = widget.property.cylindrees.toString()?? '';
-      txtSellerie.text = widget.property.sellerie.toString()?? '';
-      txtCouleur.text = widget.property.couleur.toString()?? '';
-      txtVille.text = widget.property.ville.toString()?? '';
-      txtPays.text = widget.property.pays.toString()?? '';
-
-    }
+      _boite = widget.property.boite ?? '';
+      _year = widget.property.annee ?? '';
+      _type = widget.property.type ?? '';
+      _portes = widget.property.portiere ?? '';
+      _places = widget.property.place ?? '';
+      _marque = widget.property.marque ?? '';
+      txtNumberFisc.text = widget.property.pfisc.toString();
+      txtNumberDin.text = widget.property.pdin.toString();
+      txtNumberPrix.text = widget.property.prix.toString();
+      txtNumberCyl.text = widget.property.cyl.toString();
+      txtNumberKm.text = widget.property.km.toString();
+      txtNumberCylindrees.text = widget.property.cylindrees.toString();
+      txtSellerie.text = widget.property.sellerie.toString();
+      txtCouleur.text = widget.property.couleur.toString();
+      txtVille.text = widget.property.ville.toString();
+      txtPays.text = widget.property.pays.toString();
 
     super.initState();
 
@@ -213,17 +210,22 @@ class _carsUpdateState extends State<carsUpdate> {
   }
 
   void _editCar() async {
-    print(images);
     for (var i = 0; i < images.length; i++) {
       // _images[i] = images[i] == null ? null : getStringImage(images[i]);
       _images[i] = getStringImage(images[i]);
+      if( _images[i] == null)
+      {
+        _images[i] = widget.property.images![i].replaceAll('\\', '');
+      }
     }
-    print(_images[0]);
+    print(_images);
+    // print(_images[0]);
     print(_type);
     print(_year);
     print(_marque);
     print(_portes);
     print(_places);
+    print(widget.property.carId);
 
     ApiResponse response = await editCar(
         widget.property.carId as int,
@@ -250,6 +252,8 @@ class _carsUpdateState extends State<carsUpdate> {
             : null,
         txtVille.text,
         txtPays.text);
+
+
     print(response);
 
     if (response.error == null) {
@@ -394,7 +398,10 @@ class _carsUpdateState extends State<carsUpdate> {
                                               child: Image.network(
                                                 widget.property.images![0]
                                                     .replaceAll('"', '')
-                                                    .replaceAll('\\', ''),
+                                                    .replaceAll('images:', '')
+                                                    .replaceAll('\\', '')
+                                                    .replaceAll('{', '')
+                                                    .replaceAll('}', ''),
                                                 height: 60,
                                                 width: 60,
                                                 fit: BoxFit.cover,
@@ -450,7 +457,10 @@ class _carsUpdateState extends State<carsUpdate> {
                                               child: Image.network(
                                                 widget.property.images![1]
                                                     .replaceAll('"', '')
-                                                    .replaceAll('\\', ''),
+                                                    .replaceAll('images:', '')
+                                                    .replaceAll('\\', '')
+                                                    .replaceAll('{', '')
+                                                    .replaceAll('}', ''),
                                                 height: 60,
                                                 width: 60,
                                                 fit: BoxFit.cover,
@@ -502,7 +512,10 @@ class _carsUpdateState extends State<carsUpdate> {
                                               child: Image.network(
                                                 widget.property.images![2]
                                                     .replaceAll('"', '')
-                                                    .replaceAll('\\', ''),
+                                                    .replaceAll('images:', '')
+                                                    .replaceAll('\\', '')
+                                                    .replaceAll('{', '')
+                                                    .replaceAll('}', ''),
                                                 height: 60,
                                                 width: 60,
                                                 fit: BoxFit.cover,

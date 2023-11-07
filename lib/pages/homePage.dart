@@ -16,6 +16,35 @@ class homePage extends StatefulWidget {
 }
 
 class _homePageState extends State<homePage> {
+  void _loadUserInfo() async {
+    String token = await getToken();
+    if (token == '') {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => loginPage()),
+          (route) => false);
+    } else {
+      print(token);
+      ApiResponse response = await getUserDetail();
+      final user = response.data;
+      print(response);
+      if (response.error == null) {
+        Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => Main(user: user as User)),
+            (route) => false);
+
+        // Navigator.of(context).pop(); rediriger sur place
+      } else if (response.error == unauthorized) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => Main(user: user as User)),
+            (route) => false);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('${response.error}'),
+        ));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -140,11 +169,7 @@ class _homePageState extends State<homePage> {
                               color: Color.fromARGB(255, 141, 203, 253)),
                         ),
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Main(user: User()),
-                              ));
+                          _loadUserInfo();
                         },
                         icon: Text('Continuer',
                             style: TextStyle(

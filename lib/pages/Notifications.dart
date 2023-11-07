@@ -21,9 +21,6 @@ class Notifications extends StatefulWidget {
   State<Notifications> createState() => _NotificationsState();
 }
 
-class fianal {
-}
-
 class _NotificationsState extends State<Notifications> {
 
 

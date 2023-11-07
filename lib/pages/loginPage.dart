@@ -52,7 +52,7 @@ class _loginPageState extends State<loginPage> {
     await pref.setString('pseudo', user.pseudo ?? '');
     await pref.setString('email', user.email ?? '');
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => PackPage(user: user)), (route) => false);
+        MaterialPageRoute(builder: (context) => Main(user: user as User)), (route) => false);
   }
 
   @override
