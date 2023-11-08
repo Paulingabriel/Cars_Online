@@ -38,10 +38,11 @@ class _formInputNameState extends State<formInputName> {
         controller: widget.txtName,
         keyboardType: TextInputType.name,
         validator: (val) {
-              if (val!.length < 3 && val.isNotEmpty) {
-                return 'Au moins 3 charactères requis.';
-              } else if (val.isEmpty) {
+              if (val!.isEmpty) {
                 return 'Le champ nom est requis.';
+              }
+              else if (val!.length < 3 && val.isNotEmpty) {
+                return 'Au moins 3 charactères requis.';
               } else {
                 return null;
               }
@@ -63,7 +64,8 @@ class _formInputNameState extends State<formInputName> {
                 borderSide: BorderSide(
                   color: Colors.white,
                   width: 1.0,
-                ))),
+                )
+                )),
       ),
         ),
       ],

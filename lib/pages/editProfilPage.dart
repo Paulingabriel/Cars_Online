@@ -229,11 +229,11 @@ class _editProfilPageState extends State<editProfilPage> {
                                     )),
                           ),
                           Transform.translate(
-                            offset: Offset(90, 110),
+                            offset: const Offset(90, 110),
                             child: Container(
                               height: 30,
                               width: 30,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: Color(0xFF025CCB)),
                               child: Row(
@@ -244,7 +244,7 @@ class _editProfilPageState extends State<editProfilPage> {
                                       onTap: () {
                                         pickFile();
                                       },
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.edit_square,
                                         color: Colors.white,
                                         size: 15,
@@ -254,14 +254,15 @@ class _editProfilPageState extends State<editProfilPage> {
                             ),
                           )
                         ],
-                      )),
-                      SizedBox(
+                      )
+                      ),
+                      const SizedBox(
                         height: 20,
                       ),
                       TextFormField(
                         controller: txtName,
                         keyboardType: TextInputType.name,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             labelText: 'Nom',
                             hintStyle: TextStyle(fontFamily: 'Poppins')),
                         // onSaved: (value) {
@@ -277,13 +278,13 @@ class _editProfilPageState extends State<editProfilPage> {
                         //   }
                         // },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       TextFormField(
                         controller: txtPseudo,
                         keyboardType: TextInputType.name,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             labelText: 'Prenom',
                             hintStyle: TextStyle(fontFamily: 'Poppins')),
                         onSaved: (value) {
@@ -299,7 +300,7 @@ class _editProfilPageState extends State<editProfilPage> {
                           }
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       TextFormField(
@@ -314,18 +315,18 @@ class _editProfilPageState extends State<editProfilPage> {
                             return null;
                           }
                         },
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             labelText: 'Email',
                             hintStyle: TextStyle(fontFamily: 'Poppins')),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       IntlPhoneField(
                         keyboardType: TextInputType.phone,
                         controller: txtTel,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             labelText: 'Numero',
                             hintStyle: TextStyle(fontFamily: 'Poppins')),
                         initialCountryCode: 'DE',

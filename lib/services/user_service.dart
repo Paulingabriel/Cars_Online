@@ -131,6 +131,49 @@ Future<ApiResponse> editProfil(
 
   return apiResponse;
 }
+//edit password of user
+
+Future<ApiResponse> editPass(
+    String? image, String txtLastPass, String txtNewPass) async {
+  ApiResponse apiResponse = ApiResponse();
+
+  try {
+    String token = await getToken();
+    final response = await http.patch(Uri.parse(editPasswordURL), headers: {
+      'Accept': 'Application/json',
+      'Authorization': 'Bearer $token'
+    }, body: {
+      'image': image,
+      'lastpass': txtLastPass,
+      'newpass': txtNewPass
+    });
+
+    // print(jsonDecode(response.body));
+    // print(response.statusCode);
+
+    switch (response.statusCode) {
+      case 200:
+        apiResponse.message = jsonDecode(response.body)["message"];
+        apiResponse.data = User.fromJson(jsonDecode(response.body));
+        break;
+      case 422:
+        final errors = jsonDecode(response.body)['errors'];
+        apiResponse.error = errors[errors.keys.elementAt(0)][0];
+        break;
+      case 403:
+        apiResponse.error = jsonDecode(response.body)['message'];
+        break;
+      default:
+        apiResponse.error = somethingWentWrong;
+        break;
+    }
+  } catch (e) {
+    print(e);
+    apiResponse.error = serverError;
+  }
+  // print(apiResponse.error);
+  return apiResponse;
+}
 
 //User
 
@@ -140,16 +183,18 @@ Future<ApiResponse> getUserDetail() async {
   try {
     String token = await getToken();
     print("token");
+    // print(token);
     final response = await http.get(Uri.parse(userURL), headers: {
       'Accept': 'Application/json',
       'Authorization': 'Bearer $token'
     });
-    // print(token);
+    print(response);
 
     print(jsonDecode(response.body));
 
     switch (response.statusCode) {
       case 200:
+        print("token");
         apiResponse.data = User.fromJson(jsonDecode(response.body));
         break;
       case 422:

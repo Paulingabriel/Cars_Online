@@ -38,11 +38,13 @@ class _formInputEmailState extends State<formInputEmail> {
             keyboardType: TextInputType.emailAddress,
             controller: widget.txtEmail,
              validator: (val) {
-              if (val!.length < 3) {
+              if (val!.isEmpty) {
+                return 'Le champ nom est requis.';
+              }
+              else if (val!.length < 3) {
                 return 'Au moins 3 charactères requis.';
-              } else if (val.isEmpty) {
-                return 'Le champ email requis.';
-              } else {
+              }
+              else {
                 return null;
               }
             },

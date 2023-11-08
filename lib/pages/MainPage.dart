@@ -167,9 +167,22 @@ class _Main extends State<Main> {
                         Container(
                           height: 40,
                           width: 250,
+                          padding: EdgeInsets.only(left: 15),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(20)),
+                              child: TextFormField(
+                              decoration: InputDecoration(
+                                // labelText: 'Search',
+                                contentPadding: EdgeInsets.only(top: 6, bottom: 4),
+                                suffixIcon: Icon(Icons.search, color: Color(0xFF025CCB).withOpacity(1.0)),
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none
+                            ),
+                            )
                         ),
                         Container(
                           height: 40,

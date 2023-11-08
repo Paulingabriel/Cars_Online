@@ -55,8 +55,13 @@ class Mail extends StatelessWidget {
                     tag: "Modèle " + property.carId.toString(),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(5),
-                      child: Image.asset(
-                        property.images![0],
+                      child: Image.network(
+                        property.images![0]
+                        .replaceAll('"', '')
+                        .replaceAll('images:', '')
+                        .replaceAll('\\', '')
+                        .replaceAll('{', '')
+                        .replaceAll('}', ''),
                         height: 60,
                         width: 60,
                         fit: BoxFit.cover,

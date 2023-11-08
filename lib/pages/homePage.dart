@@ -25,7 +25,7 @@ class _homePageState extends State<homePage> {
             (route) => false);
     }
     else {
-       print(token);
+      //  print(token);
         ApiResponse response = await getUserDetail();
         final user = response.data;
         print(response);

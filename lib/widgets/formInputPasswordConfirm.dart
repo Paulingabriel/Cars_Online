@@ -6,7 +6,6 @@ class formInputPasswordConfirm extends StatefulWidget {
   TextEditingController txtPassword;
   TextEditingController txtPasswordConfirm;
 
-
   formInputPasswordConfirm(
       {super.key,
       required this.icon,
@@ -19,6 +18,8 @@ class formInputPasswordConfirm extends StatefulWidget {
 }
 
 class _formInputPasswordConfirmState extends State<formInputPasswordConfirm> {
+  var _isObscured = true;
+
   @override
   Widget build(BuildContext context) {
     return Indexer(
@@ -38,17 +39,16 @@ class _formInputPasswordConfirmState extends State<formInputPasswordConfirm> {
                 borderRadius: BorderRadius.circular(30),
               ),
             )),
-
         Indexed(
           index: 3,
           child: TextFormField(
             controller: widget.txtPasswordConfirm,
-            obscureText: true,
+            obscureText: _isObscured,
             validator: (val) {
-              if (val != widget.txtPassword.text) {
-                return 'Confirmation incorrecte.';
-              } else if (val!.isEmpty) {
-                return 'Mot de passe requis.';
+              if (val!.isEmpty) {
+                return 'Le champ mot de passe est requis.';
+              } else if (val != widget.txtPassword.text) {
+                return 'Mot de passe de Confirmation incorrecte.';
               } else {
                 return null;
               }
@@ -59,7 +59,16 @@ class _formInputPasswordConfirmState extends State<formInputPasswordConfirm> {
 
             decoration: InputDecoration(
                 contentPadding: EdgeInsets.only(left: 20),
-                suffixIcon: Icon(widget.icon, color: Colors.black),
+                suffixIcon: IconButton(
+                  icon: _isObscured
+                      ? Icon(Icons.visibility_off, color: Colors.grey)
+                      : Icon(Icons.visibility, color: Colors.black),
+                  onPressed: () {
+                    setState(() {
+                      _isObscured = !_isObscured;
+                    });
+                  },
+                ),
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30),
                     borderSide: BorderSide(

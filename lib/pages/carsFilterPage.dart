@@ -113,11 +113,24 @@ class _carsFilterState extends State<carsFilter> {
                         children: [
                           Container(
                             margin: EdgeInsets.only(left: 15, right: 15),
+                            padding: EdgeInsets.symmetric(horizontal: 10),
                             height: 40,
                             width: 330,
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(17.5)),
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                // labelText: 'Search',
+                                contentPadding: EdgeInsets.only(top: 6, bottom: 4, left: 5),
+                                suffixIcon: Icon(Icons.search, color: Color(0xFF025CCB).withOpacity(1.0)),
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none
+                            ),
+                            )
                           )
                         ],
                       )

@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:indexed/indexed.dart';
 
-
 class formInputPassword extends StatefulWidget {
   final IconData icon;
   TextEditingController txtPassword;
 
   formInputPassword({super.key, required this.icon, required this.txtPassword});
 
-
   @override
   State<formInputPassword> createState() => _formInputPasswordState();
 }
 
 class _formInputPasswordState extends State<formInputPassword> {
+  var _isObscured = true;
 
   @override
   Widget build(BuildContext context) {
@@ -34,17 +33,17 @@ class _formInputPasswordState extends State<formInputPassword> {
                 borderRadius: BorderRadius.circular(30),
               ),
             )),
-
         Indexed(
           index: 3,
           child: TextFormField(
             controller: widget.txtPassword,
-            obscureText: true,
+            obscureText: _isObscured,
             validator: (val) {
+              if (val!.isEmpty) {
+                return 'Le champ mot de passe est requis.';
+              }
               if (val!.length < 6) {
                 return 'Au moins 6 charactères';
-              } else if (val.isEmpty) {
-                return 'Mot de passe requis.';
               } else {
                 return null;
               }
@@ -55,7 +54,16 @@ class _formInputPasswordState extends State<formInputPassword> {
 
             decoration: InputDecoration(
                 contentPadding: EdgeInsets.only(left: 20),
-                suffixIcon: Icon(widget.icon, color: Colors.black),
+                suffixIcon: IconButton(
+                  icon: _isObscured
+                      ? Icon(Icons.visibility_off, color: Colors.grey)
+                      : Icon(Icons.visibility, color: Colors.black),
+                  onPressed: () {
+                    setState(() {
+                      _isObscured = !_isObscured;
+                    });
+                  },
+                ),
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30),
                     borderSide: BorderSide(

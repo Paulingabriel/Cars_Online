@@ -3,6 +3,7 @@ import 'package:app/models/api_response.dart';
 import 'package:app/pages/loginPage.dart';
 import 'package:app/services/car_service.dart';
 import 'package:app/services/user_service.dart';
+import 'package:app/utils/ListCars.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/bottomNavigationBar.dart';
 import 'package:app/widgets/Mail.dart';
@@ -22,12 +23,9 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> {
-
-
-  List<dynamic?> _carsList = [];
+  List<dynamic> _carsList = [];
 
   int userId = 0;
-
 
   Future<void> retrieveCars() async {
     print('bonjour');
@@ -57,7 +55,6 @@ class _NotificationsState extends State<Notifications> {
     retrieveCars();
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +100,7 @@ class _NotificationsState extends State<Notifications> {
                   itemBuilder: (context, index) {
                     final prop = _carsList[index];
                     return Dismissible(
-                        key: Key(prop.id),
+                        key: Key(prop.carId.toString()),
                         onDismissed: (direction) {
                           setState(() {
                             _carsList.removeAt(index);

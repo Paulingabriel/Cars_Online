@@ -74,6 +74,32 @@ class _Navbar extends State<Navbar> {
     }
   }
 
+  void _load() async {
+    String token = await getToken();
+    if (token == '') {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => loginPage()),
+          (route) => false);
+    } else {
+      print(token);
+      ApiResponse response = await getUserDetail();
+      final user = response.data;
+      print(response);
+      if (response.error == null) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) => editPassword(user: user as User)),
+            (route) => false);
+      } else if (response.error == unauthorized) {
+        Navigator.of(context).pop();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('${response.error}'),
+        ));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -234,11 +260,7 @@ class _Navbar extends State<Navbar> {
                           fontFamily: 'Poppins')),
                 ),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => editPassword(user: widget.user!),
-                      ));
+                  _load();
                 },
               ),
               Container(

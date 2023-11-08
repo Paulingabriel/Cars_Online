@@ -114,12 +114,32 @@ class _carsList extends State<carsList> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
-                      height: 50,
-                      width: 265,
-                      child: Card(
-                        elevation: 3,
-                      ),
-                    ),
+                        height: 40,
+                        width: 265,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                blurRadius: 3.0,
+                                offset: Offset(0, 2.5)),
+                          ],
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.white,
+                          // border: Border.all(width: 1.0),
+                        ),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                              // labelText: 'Search',
+                              contentPadding:
+                                  EdgeInsets.only(top: 6, bottom: 4, left: 10),
+                              suffixIcon: Icon(Icons.search,
+                                  color: Color(0xFF025CCB).withOpacity(1.0)),
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none),
+                        )),
                     Container(
                       height: 50,
                       width: 70,
