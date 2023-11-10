@@ -28,32 +28,32 @@ class _carListPropertyPageState extends State<carListPropertyPage> {
   int userId = 0;
 
 
-  Future<void> retrieveCars() async {
-    print('bonjour');
-    userId = await getUserId();
-    ApiResponse response = await getCars();
-    print(response.error);
+  // Future<void> retrieveCars() async {
+  //   print('bonjour');
+  //   userId = await getUserId();
+  //   ApiResponse response = await getCars();
+  //   print(response.error);
 
-    if (response.error == null) {
-      setState(() {
-        _carsList = response.data as List<dynamic>;
-      });
-    } else if (response.error == unauthorized) {
-      logout().then((value) => {
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => loginPage()),
-                (route) => false)
-          });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('${response.error}'),
-      ));
-    }
-  }
+  //   if (response.error == null) {
+  //     setState(() {
+  //       _carsList = response.data as List<dynamic>;
+  //     });
+  //   } else if (response.error == unauthorized) {
+  //     logout().then((value) => {
+  //           Navigator.of(context).pushAndRemoveUntil(
+  //               MaterialPageRoute(builder: (context) => loginPage()),
+  //               (route) => false)
+  //         });
+  //   } else {
+  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //       content: Text('${response.error}'),
+  //     ));
+  //   }
+  // }
 
   @override
   void initState() {
-    retrieveCars();
+    // retrieveCars();
     super.initState();
   }
 

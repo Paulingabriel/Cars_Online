@@ -1,4 +1,3 @@
-
 import 'package:app/models/user.dart';
 
 class ListCars {
@@ -25,6 +24,7 @@ class ListCars {
   int? cylindrees;
   String? ville;
   String? pays;
+  String? date;
 
   ListCars(
       {this.carId,
@@ -49,12 +49,13 @@ class ListCars {
       this.couleur,
       this.cylindrees,
       this.ville,
-      this.pays});
+      this.pays,
+      this.date
+      });
 
   //map json to Car model
 
   factory ListCars.fromJson(Map<String, dynamic> json) {
-
     var replace = json['images'].replaceAll('[', '');
     var replace2 = replace.replaceAll(']', '');
     var array = replace2.split(',');
@@ -89,7 +90,8 @@ class ListCars {
         couleur: json['couleur'],
         cylindrees: json['cylindrees'],
         ville: json['ville'].toString(),
-        pays: json['pays'].toString()
+        pays: json['pays'],
+        date: json['date']
         );
   }
 }

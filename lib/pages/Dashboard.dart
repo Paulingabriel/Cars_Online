@@ -3,6 +3,7 @@ import 'package:app/models/api_response.dart';
 import 'package:app/pages/loginPage.dart';
 import 'package:app/services/car_service.dart';
 import 'package:app/services/user_service.dart';
+import 'package:app/widgets/paginator.dart';
 import 'package:flutter/material.dart';
 import 'package:indexed/indexed.dart';
 import 'package:app/widgets/Sidebar.dart';
@@ -11,11 +12,11 @@ import 'package:app/pages/carsListPage.dart';
 // import 'package:app/utils/Property.dart';
 import 'package:app/widgets/Carte.dart';
 import 'package:app/pages/Notifications.dart';
+import 'package:number_paginator/number_paginator.dart';
 
 import '../models/user.dart';
 
 class Dashboard extends StatefulWidget {
-
   final User user;
   const Dashboard({super.key, required this.user});
 
@@ -26,20 +27,25 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   int _currentTab = 2;
 
-   List<dynamic?> _carsList = [];
+  List<dynamic?> _carsList = [];
+  bool _loading = true;
+  int _currentPage = 1;
+  var _total;
 
   int userId = 0;
 
-
-  Future<void> retrieveCars() async {
+  Future<void> retrieveCars(_currentPage) async {
     print('bonjour');
+    int page = _currentPage;
     userId = await getUserId();
-    ApiResponse response = await getCars();
+    ApiResponse response = await getCars(page);
     print(response.error);
 
     if (response.error == null) {
       setState(() {
         _carsList = response.data as List<dynamic>;
+        _loading = _loading ? !_loading : _loading;
+         _total = response.totalPages;
       });
     } else if (response.error == unauthorized) {
       logout().then((value) => {
@@ -56,14 +62,14 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   void initState() {
-    retrieveCars();
+    retrieveCars(1);
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 233, 237, 238),
       drawer: Sidebar(user: widget.user),
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(220),
@@ -80,7 +86,8 @@ class _DashboardState extends State<Dashboard> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Notifications(user: widget.user),
+                            builder: (context) =>
+                                Notifications(user: widget.user),
                           ));
                     },
                   ),
@@ -145,31 +152,40 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           child: Column(
                             children: [
-                              widget.user.image == null ?
-                              Container(
-                                  height: 80,
-                                  width: 80,
-                                  decoration:
-                                      BoxDecoration(shape: BoxShape.circle),
-                                  child: CircleAvatar(
-                                    radius: 64,
-                                    backgroundImage:
-                                        AssetImage('images/profil.png'),
-                                  ))
-                                :
-                                Container(
-                                  height: 80,
-                                  width: 80,
-                                  decoration:
-                                      BoxDecoration(shape: BoxShape.circle),
-                                  child: CircleAvatar(
-                                    radius: 64,
-                                    backgroundImage:
-                                        NetworkImage(widget.user.image as String),
-                                  ))
-                                ,
+                              widget.user.image == null
+                                  ? Container(
+                                      height: 80,
+                                      width: 80,
+                                      decoration:
+                                          BoxDecoration(shape: BoxShape.circle),
+                                      child: CircleAvatar(
+                                        radius: 64,
+                                        backgroundImage:
+                                            AssetImage('images/profil.png'),
+                                      ))
+                                  : Container(
+                                      height: 80,
+                                      width: 80,
+                                      decoration:
+                                          BoxDecoration(shape: BoxShape.circle),
+                                      child:
+                                      widget.user.image!.isEmpty ?
+                                      Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                      :
+                                      CircleAvatar(
+                                        radius: 64,
+                                        backgroundImage: NetworkImage(
+                                            widget.user.image as String),
+                                      )
+                                      ),
                               SizedBox(height: 15),
-                              Text("Hello, " + widget.user.pseudo.toString() + ' ' + widget.user.name.toString(),
+                              Text(
+                                  "Hello, " +
+                                      widget.user.pseudo.toString() +
+                                      ' ' +
+                                      widget.user.name.toString(),
                                   style: TextStyle(
                                       fontSize: 14,
                                       color: const Color(0xFF025CCB),
@@ -187,7 +203,13 @@ class _DashboardState extends State<Dashboard> {
                       ]),
                 )),
           ])),
-      body: SingleChildScrollView(
+      body:
+       _loading
+            ? Center(
+                  child: CircularProgressIndicator(),
+              )
+        :
+      SingleChildScrollView(
           child: Column(
         children: [
           Row(
@@ -459,6 +481,35 @@ class _DashboardState extends State<Dashboard> {
                   return Carte(property: _carsList[index], user: widget.user);
                 }),
           ),
+          //Paginator
+            Container(
+              padding: EdgeInsets.only(top: 20, bottom:20, left: 16, right: 16),
+              child: NumberPaginator(
+                    // by default, the paginator shows numbers as center content
+                    numberPages: _total,
+                    onPageChange: (int index) {
+                      setState(() {
+                        _currentPage = index + 1;
+                        retrieveCars(_currentPage);
+                        // _currentPage =
+                        // index; // _currentPage is a variable within State of StatefulWidget
+                      });
+                    },
+                    // initially selected index
+                    initialPage: 0,
+                    config: NumberPaginatorUIConfig(
+                      // default height is 48
+                      // height: 64,
+                      buttonShape: BeveledRectangleBorder(
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                      buttonSelectedForegroundColor: Colors.white,
+                      buttonUnselectedForegroundColor: Color(0xFF025CCB),
+                      buttonUnselectedBackgroundColor: Colors.white,
+                      buttonSelectedBackgroundColor: Color(0xFF025CCB),
+                    ),
+                  ),
+            ),
         ],
       )),
       bottomNavigationBar: BottomAppBar(
@@ -529,7 +580,8 @@ class _DashboardState extends State<Dashboard> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Dashboard(user: widget.user),
+                                builder: (context) =>
+                                    Dashboard(user: widget.user),
                               ));
 
                           setState(() {

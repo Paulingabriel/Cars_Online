@@ -1,6 +1,7 @@
 import 'package:app/pages/carDescriptionPage.dart';
 import 'package:app/utils/ListCars.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 // import 'package:app/utils/Property.dart';
 
 import '../models/user.dart';
@@ -14,6 +15,17 @@ class Mail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+    DateTime a =
+        dateFormat.parse(property.date!); //Converting String to DateTime object
+    DateTime b = DateTime.now();
+    Duration difference = b.difference(a);
+    int days = difference.inDays;
+    int hours = difference.inHours % 24;
+    int minutes = difference.inMinutes % 60;
+    int seconds = difference.inSeconds % 60;
+
+    int time = (days * 24 + (hours-1) + minutes / 60 + seconds / 3600).round();
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -57,11 +69,11 @@ class Mail extends StatelessWidget {
                       borderRadius: BorderRadius.circular(5),
                       child: Image.network(
                         property.images![0]
-                        .replaceAll('"', '')
-                        .replaceAll('images:', '')
-                        .replaceAll('\\', '')
-                        .replaceAll('{', '')
-                        .replaceAll('}', ''),
+                            .replaceAll('"', '')
+                            .replaceAll('images:', '')
+                            .replaceAll('\\', '')
+                            .replaceAll('{', '')
+                            .replaceAll('}', ''),
                         height: 60,
                         width: 60,
                         fit: BoxFit.cover,
@@ -87,7 +99,7 @@ class Mail extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  Text('Nouveau post : '+ property.nom!,
+                                  Text('Nouveau post : ' + property.nom!,
                                       style: TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w500,
@@ -123,12 +135,29 @@ class Mail extends StatelessWidget {
                                 ),
                                 Container(
                                   child: Row(children: [
-                                    Text('il y a 1 heure',
-                                        style: TextStyle(
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: 'Poppins',
-                                            color: Color(0xFF025CCB))),
+                                    if (time > 24) ...[
+                                      Text('il y a ' + days.toString() + " j",
+                                          style: TextStyle(
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'Poppins',
+                                              color: Color(0xFF025CCB)))
+                                    ] else if (time > 1 && time < 24) ...[
+                                      Text('il y a ' + time.toString() + " h",
+                                          style: TextStyle(
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'Poppins',
+                                              color: Color(0xFF025CCB)))
+                                    ] else if (time < 1) ...[
+                                      Text(
+                                          'il y a ' + minutes.toString() + " m",
+                                          style: TextStyle(
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'Poppins',
+                                              color: Color(0xFF025CCB)))
+                                    ]
                                   ]),
                                 )
                               ],

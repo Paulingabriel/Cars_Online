@@ -3,6 +3,7 @@ import 'package:app/models/api_response.dart';
 import 'package:app/pages/loginPage.dart';
 import 'package:app/services/car_service.dart';
 import 'package:app/utils/ListCars.dart';
+import 'package:app/widgets/paginator.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/Navbar.dart';
 import 'package:app/pages/carsListPage.dart';
@@ -13,6 +14,7 @@ import 'package:app/models/carsModels.dart';
 import 'package:indexed/indexed.dart';
 import 'package:app/pages/carDescriptionPage.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:number_paginator/number_paginator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user.dart';
@@ -28,23 +30,59 @@ class Main extends StatefulWidget {
 
 class _Main extends State<Main> {
   PageController pageController = PageController(viewportFraction: 0.45);
+  final GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  // bool _autovalidate = false;
+  TextEditingController txtNom = TextEditingController();
   int _currentTab = 0;
+  int _currentPage = 1;
   bool _loading = true;
-
+  String? _nom;
+  var _isNotSearch = true;
+  var _total;
   List<dynamic?> _carsList = [];
 
   int userId = 0;
 
-  Future<void> retrieveCars() async {
+  //search cars
+  Future<void> _search(String val) async {
     print('bonjour');
+    String nom = val;
     userId = await getUserId();
-    ApiResponse response = await getCars();
+    ApiResponse response = await searchCars(nom);
     print(response.error);
 
     if (response.error == null) {
       setState(() {
         _carsList = response.data as List<dynamic>;
         _loading = _loading ? !_loading : _loading;
+        _isNotSearch = _isNotSearch ? !_isNotSearch : _isNotSearch;
+        _total = response.totalPages;
+      });
+    } else if (response.error == unauthorized) {
+      logout().then((value) => {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => loginPage()),
+                (route) => false)
+          });
+    } else {
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //   content: Text('${response.error}'),
+      // ));
+    }
+  }
+
+  Future<void> retrieveCars(_currentPage) async {
+    print('bonjour');
+    int page = _currentPage;
+    userId = await getUserId();
+    ApiResponse response = await getCars(page);
+    print(response.error);
+
+    if (response.error == null) {
+      setState(() {
+        _carsList = response.data as List<dynamic>;
+        _loading = _loading ? !_loading : _loading;
+        _total = response.totalPages;
       });
     } else if (response.error == unauthorized) {
       logout().then((value) => {
@@ -61,7 +99,7 @@ class _Main extends State<Main> {
 
   @override
   void initState() {
-    retrieveCars();
+    retrieveCars(1);
     super.initState();
   }
 
@@ -98,6 +136,7 @@ class _Main extends State<Main> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 233, 237, 238),
       drawer: Navbar(user: widget.user),
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(260),
@@ -165,36 +204,56 @@ class _Main extends State<Main> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          height: 40,
-                          width: 250,
-                          padding: EdgeInsets.only(left: 15),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20)),
+                            height: 40,
+                            width: 250,
+                            padding: EdgeInsets.only(left: 15),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Form(
+                              key: formkey,
                               child: TextFormField(
-                              decoration: InputDecoration(
-                                // labelText: 'Search',
-                                contentPadding: EdgeInsets.only(top: 6, bottom: 4),
-                                suffixIcon: Icon(Icons.search, color: Color(0xFF025CCB).withOpacity(1.0)),
-                                border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none
-                            ),
-                            )
-                        ),
+                                controller: txtNom,
+                                keyboardType: TextInputType.name,
+                                onChanged: (String value) {
+                                  setState(() {
+                                    _nom = value;
+                                  });
+                                  print(value);
+                                  _search(value);
+                                },
+                                decoration: InputDecoration(
+                                    // labelText: 'Search',
+                                    hintText: "Recherche...",
+                                    contentPadding:
+                                        EdgeInsets.only(top: 6, bottom: 4),
+                                    suffixIcon: Icon(Icons.search,
+                                        color:
+                                            Color(0xFF025CCB).withOpacity(1.0)),
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none),
+                              ),
+                            )),
                         Container(
-                          height: 40,
-                          width: 70,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
-                          ),
-                          child: Center(
-                            child: Icon(Icons.tornado),
-                          ),
-                        ),
+                            height: 40,
+                            width: 70,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white,
+                            ),
+                            child: MaterialButton(
+                              onPressed: () {
+                                setState(() {
+                                  _search(_nom as String);
+                                });
+                              },
+                              child: Center(
+                                child: Icon(Icons.tornado),
+                              ),
+                            )),
                       ]),
                 )),
             Indexed(
@@ -362,7 +421,39 @@ class _Main extends State<Main> {
                       ),
                       itemBuilder: (context, index) {
                         return CarView(context, index, widget.user);
-                      })
+                      }),
+              //Paginator
+              Container(
+                padding:
+                    EdgeInsets.only(top: 20, bottom: 20, left: 8, right: 8),
+                child: _isNotSearch
+                    ? NumberPaginator(
+                        // by default, the paginator shows numbers as center content
+                        numberPages: _total != null ? _total : 2,
+                        onPageChange: (int index) {
+                          setState(() {
+                            _currentPage = index + 1;
+                            retrieveCars(_currentPage);
+                            // _currentPage =
+                            // index; // _currentPage is a variable within State of StatefulWidget
+                          });
+                        },
+                        // initially selected index
+                        initialPage: 0,
+                        config: NumberPaginatorUIConfig(
+                          // default height is 48
+                          // height: 64,
+                          buttonShape: BeveledRectangleBorder(
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                          buttonSelectedForegroundColor: Colors.white,
+                          buttonUnselectedForegroundColor: Color(0xFF025CCB),
+                          buttonUnselectedBackgroundColor: Colors.white,
+                          buttonSelectedBackgroundColor: Color(0xFF025CCB),
+                        ),
+                      )
+                    : Text(""),
+              ),
             ],
           ),
         ),
@@ -533,24 +624,37 @@ class _Main extends State<Main> {
           ),
           child: Column(
             children: [
-              Container(
-                width: 160,
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      topRight: Radius.circular(8)),
-                  // border: Border.all(width: 2.0),
-                  image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(data.images![0]
-                          .replaceAll('"', '')
-                          .replaceAll('images:', '')
-                          .replaceAll('\\', '')
-                          .replaceAll('{', '')
-                          .replaceAll('}', ''))),
-                ),
-              ),
+              _loading
+                  ? Container(
+                      width: 160,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8)),
+                        // border: Border.all(width: 2.0),
+                      ),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ))
+                  : Container(
+                      width: 160,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8)),
+                        // border: Border.all(width: 2.0),
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(data.images![0]
+                                .replaceAll('"', '')
+                                .replaceAll('images:', '')
+                                .replaceAll('\\', '')
+                                .replaceAll('{', '')
+                                .replaceAll('}', ''))),
+                      ),
+                    ),
               Container(
                   margin: EdgeInsets.only(left: 7.5, right: 7.5, top: 10),
                   height: 80,

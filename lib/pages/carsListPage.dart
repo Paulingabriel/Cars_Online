@@ -3,12 +3,14 @@ import 'package:app/models/api_response.dart';
 import 'package:app/pages/loginPage.dart';
 import 'package:app/services/car_service.dart';
 import 'package:app/services/user_service.dart';
+import 'package:app/widgets/paginator.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/Carte.dart';
 // import 'package:app/utils/Property.dart';
 import 'package:app/widgets/Navbar.dart';
 import 'package:app/pages/MainPage.dart';
 import 'package:app/pages/Dashboard.dart';
+import 'package:number_paginator/number_paginator.dart';
 
 import '../models/user.dart';
 
@@ -21,24 +23,32 @@ class carsList extends StatefulWidget {
 }
 
 class _carsList extends State<carsList> {
+  final GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  // bool _autovalidate = false;
+  TextEditingController txtNom = TextEditingController();
   int _currentTab = 1;
-
-  bool _loading = false;
+  int _currentPage = 1;
+  bool _loading = true;
+  var _isNotSearch = true;
+  var _total;
 
   List<dynamic?> _carList = [];
 
   int userId = 0;
 
-  Future<void> retrieveCars() async {
+  Future<void> retrieveCars(_currentPage) async {
+    print(_currentPage);
+    int page = _currentPage;
     print('bonjour');
     userId = await getUserId();
-    ApiResponse response = await getCars();
+    ApiResponse response = await getCars(page);
     print(response.error);
 
     if (response.error == null) {
       setState(() {
         _carList = response.data as List<dynamic>;
         _loading = _loading ? !_loading : _loading;
+        _total = response.totalPages;
       });
     } else if (response.error == unauthorized) {
       logout().then((value) => {
@@ -53,9 +63,38 @@ class _carsList extends State<carsList> {
     }
   }
 
+
+  //search by keys words
+  Future<void> _searchKeyWords(String val) async {
+    print('bonjour');
+    String nom = val;
+    userId = await getUserId();
+    ApiResponse response = await searchKey(nom);
+    print(response.error);
+
+    if (response.error == null) {
+      setState(() {
+        _carList = response.data as List<dynamic>;
+        _loading = _loading ? !_loading : _loading;
+        _isNotSearch = _isNotSearch ? !_isNotSearch : _isNotSearch;
+        _total = response.totalPages;
+      });
+    } else if (response.error == unauthorized) {
+      logout().then((value) => {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => loginPage()),
+                (route) => false)
+          });
+    } else {
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //   content: Text('${response.error}'),
+      // ));
+    }
+  }
+
   @override
   void initState() {
-    retrieveCars();
+    retrieveCars(1);
     super.initState();
   }
 
@@ -87,6 +126,8 @@ class _carsList extends State<carsList> {
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,60 +147,85 @@ class _carsList extends State<carsList> {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                        height: 40,
-                        width: 265,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                blurRadius: 3.0,
-                                offset: Offset(0, 2.5)),
-                          ],
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.white,
-                          // border: Border.all(width: 1.0),
-                        ),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                              // labelText: 'Search',
-                              contentPadding:
-                                  EdgeInsets.only(top: 6, bottom: 4, left: 10),
-                              suffixIcon: Icon(Icons.search,
-                                  color: Color(0xFF025CCB).withOpacity(1.0)),
-                              border: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none),
-                        )),
-                    Container(
-                      height: 50,
-                      width: 70,
-                      child: Card(
-                        elevation: 3,
-                        child: Center(
-                          child: Icon(Icons.filter_alt_outlined),
+      body: _loading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                              height: 40,
+                              width: 265,
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      blurRadius: 3.0,
+                                      offset: Offset(0, 2.5)),
+                                ],
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.white,
+                                // border: Border.all(width: 1.0),
+                              ),
+                              child: Form(
+                                key: formkey,
+                                child:  TextFormField(
+                                  controller: txtNom,
+                                  keyboardType: TextInputType.name,
+                                  onChanged: (String value) {
+                                    print(value);
+                                    _searchKeyWords(value);
+                                  },
+                                decoration: InputDecoration(
+                                    // labelText: 'Search',
+                                    hintText: "Filtrez par mots clés",
+                                    contentPadding: EdgeInsets.only(
+                                        top: 6, bottom: 4, left: 10),
+                                    suffixIcon: Icon(Icons.search,
+                                        color:
+                                            Color(0xFF025CCB).withOpacity(1.0)),
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none),
+                                  )
+                                )
+                              ),
+                          Container(
+                            height: 50,
+                            width: 70,
+                            child: Card(
+                              elevation: 3,
+                              child: Center(
+                                child: Icon(Icons.filter_alt_outlined),
+                              ),
+                            ),
+                          ),
+                        ]),
+                  ),
+                  _carList.length == 0 ?
+                    Center(
+                    child:  Container(
+                    height: 450,
+                    decoration: BoxDecoration(
+                      // border: Border.all(width: 2.0),
+                      image: DecorationImage(
+                        // fit: BoxFit.cover,
+                        image: AssetImage(
+                          'images/ico.png',
                         ),
                       ),
                     ),
-                  ]),
-            ),
-            _loading
-                ? Container(
-                    height: 210,
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
+              ),
                   )
-                : Container(
+                  :
+                  Container(
                     padding: EdgeInsets.only(top: 10, left: 8, right: 8),
                     child: ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
@@ -170,9 +236,44 @@ class _carsList extends State<carsList> {
                               property: _carList[index], user: widget.user);
                         }),
                   ),
-          ],
-        ),
-      ),
+                  //paginator
+
+                  Container(
+                    padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                    child:
+                    _isNotSearch
+                    ?
+                    NumberPaginator(
+                      // by default, the paginator shows numbers as center content
+                      numberPages: _total + 1,
+                      onPageChange: (int index) {
+                        setState(() {
+                          _currentPage = index + 1;
+                          retrieveCars(_currentPage);
+                          // _currentPage =
+                          // index; // _currentPage is a variable within State of StatefulWidget
+                        });
+                      },
+                      // initially selected index
+                      initialPage: 0,
+                      config: NumberPaginatorUIConfig(
+                        // default height is 48
+                        // height: 64,
+                        buttonShape: BeveledRectangleBorder(
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                        buttonSelectedForegroundColor: Colors.white,
+                        buttonUnselectedForegroundColor: Color(0xFF025CCB),
+                        buttonUnselectedBackgroundColor: Colors.white,
+                        buttonSelectedBackgroundColor: Color(0xFF025CCB),
+                      ),
+                    )
+                  :
+                  Text("")
+                  ),
+                ],
+              ),
+            ),
       bottomNavigationBar: BottomAppBar(
           notchMargin: 10,
           child: Container(

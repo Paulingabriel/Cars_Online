@@ -5,6 +5,9 @@ const loginURL = '$baseURL/login';
 const logoutURL = '$baseURL/logout';
 const userURL = '$baseURL/user';
 const editPasswordURL = '$baseURL/edit-password';
+const searchCar = '$baseURL/search-cars';
+const searchKeyWords = '$baseURL/search-key-words';
+const filter = '$baseURL/search-form';
 const carURL = '$baseURL/cars';
 
 //------ Errors ------

@@ -7,6 +7,7 @@ import 'package:app/utils/ListCars.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/bottomNavigationBar.dart';
 import 'package:app/widgets/Mail.dart';
+import 'package:number_paginator/number_paginator.dart';
 // import 'package:app/utils/Property.dart';
 
 import '../models/user.dart';
@@ -24,18 +25,24 @@ class Notifications extends StatefulWidget {
 
 class _NotificationsState extends State<Notifications> {
   List<dynamic> _carsList = [];
+   bool _loading = true;
+   int _currentPage = 1;
+    var _total;
 
   int userId = 0;
 
-  Future<void> retrieveCars() async {
+  Future<void> retrieveCars(_currentPage) async {
     print('bonjour');
+    int page = _currentPage;
     userId = await getUserId();
-    ApiResponse response = await getCars();
+    ApiResponse response = await getCars(page);
     print(response.error);
 
     if (response.error == null) {
       setState(() {
         _carsList = response.data as List<dynamic>;
+        _loading = _loading ? !_loading : _loading;
+        _total = response.totalPages;
       });
     } else if (response.error == unauthorized) {
       logout().then((value) => {
@@ -52,7 +59,7 @@ class _NotificationsState extends State<Notifications> {
 
   @override
   void initState() {
-    retrieveCars();
+    retrieveCars(1);
     super.initState();
   }
 
@@ -88,7 +95,13 @@ class _NotificationsState extends State<Notifications> {
                     ])),
           ),
           preferredSize: Size.fromHeight(100)),
-      body: SingleChildScrollView(
+      body:
+       _loading
+            ? Center(
+                  child: CircularProgressIndicator(),
+              )
+        :
+      SingleChildScrollView(
         child: Column(
           children: [
             Container(
@@ -114,6 +127,36 @@ class _NotificationsState extends State<Notifications> {
                         child: Mail(property: prop, user: widget.user));
                   }),
             ),
+             //paginator
+
+                  Container(
+                        padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+                        child:  NumberPaginator(
+                    // by default, the paginator shows numbers as center content
+                    numberPages: _total,
+                    onPageChange: (int index) {
+                      setState(() {
+                        _currentPage = index + 1;
+                        retrieveCars(_currentPage);
+                        // _currentPage =
+                        // index; // _currentPage is a variable within State of StatefulWidget
+                      });
+                    },
+                    // initially selected index
+                    initialPage: 0,
+                    config: NumberPaginatorUIConfig(
+                      // default height is 48
+                      // height: 64,
+                      buttonShape: BeveledRectangleBorder(
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                      buttonSelectedForegroundColor: Colors.white,
+                      buttonUnselectedForegroundColor: Color(0xFF025CCB),
+                      buttonUnselectedBackgroundColor: Colors.white,
+                      buttonSelectedBackgroundColor: Color(0xFF025CCB),
+                    ),
+                  ),
+                  ),
           ],
         ),
       ),

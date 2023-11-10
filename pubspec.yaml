@@ -50,6 +50,8 @@ dependencies:
   flutter_hooks: ^0.20.0
   jwt_decoder: ^2.0.1
   csc_picker: ^0.2.7
+  number_paginator: ^0.4.0
+  intl: ^0.18.1
   # uuid: ^4.1.0
   # google_maps_flutter: ^2.5.0
   # geolocator: ^10.0.1
@@ -94,6 +96,7 @@ flutter:
     - images/logoblanc.png
     - images/profil.png
     - images/banner.png
+    - images/ico.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

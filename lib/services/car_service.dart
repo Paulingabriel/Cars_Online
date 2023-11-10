@@ -270,14 +270,157 @@ Future<ApiResponse> deleteCar(int carId) async {
 
 //get all cars
 
-Future<ApiResponse> getCars() async {
+Future<ApiResponse> getCars(page) async {
   ApiResponse apiResponse = ApiResponse();
   print('salut');
   try {
     String token = await getToken();
-    final response = await http.get(Uri.parse(carURL), headers: {
+    final response = await http.get(Uri.parse("$carURL?page=$page"), headers: {
       'Accept': 'Application/json',
       'Authorization': 'Bearer $token'
+    });
+    print(response.body);
+
+    switch (response.statusCode) {
+      case 200:
+        print(jsonDecode(response.body)['total']);
+        // var replace =
+        // jsonDecode(response.body)['cars'][0]['images'].replaceAll('[', '');
+
+        // images![0].replaceAll('"', '').replaceAll('\\', '')
+        // var replace2 = replace.replaceAll(']', '');
+        // var array = replace2.split(',');
+        // jsonDecode(response.body)['cars'][0]['images'].replaceAll(']', '');
+        // print( jsonDecode(response.body)['cars'][0]['images'].replaceAll('"', '').replaceAll('\\', ''));
+        apiResponse.data = jsonDecode(response.body)['cars']['data']
+            .map((p) => ListCars.fromJson(p))
+            .toList();
+        apiResponse.data as List<dynamic>;
+        apiResponse.totalPages = jsonDecode(response.body)['total'];
+        break;
+      case 401:
+        apiResponse.error = unauthorized;
+        break;
+      default:
+        apiResponse.error = somethingWentWrong;
+        break;
+    }
+  } catch (e) {
+    print(e);
+    apiResponse.error = serverError;
+  }
+
+  return apiResponse;
+}
+
+//search cars
+
+Future<ApiResponse> searchCars(nom) async {
+  ApiResponse apiResponse = ApiResponse();
+  print('salut');
+  try {
+    String token = await getToken();
+    final response = await http.post(Uri.parse('$searchCar'), headers: {
+      'Accept': 'Application/json',
+      'Authorization': 'Bearer $token'
+    }, body: {
+      "nom": nom
+    });
+    print(response.body);
+
+    switch (response.statusCode) {
+      case 200:
+        // var replace =
+        // jsonDecode(response.body)['cars'][0]['images'].replaceAll('[', '');
+
+        // images![0].replaceAll('"', '').replaceAll('\\', '')
+        // var replace2 = replace.replaceAll(']', '');
+        // var array = replace2.split(',');
+        // jsonDecode(response.body)['cars'][0]['images'].replaceAll(']', '');
+        // print( jsonDecode(response.body)['cars'][0]['images'].replaceAll('"', '').replaceAll('\\', ''));
+        apiResponse.data = jsonDecode(response.body)['cars']
+            .map((p) => ListCars.fromJson(p))
+            .toList();
+        apiResponse.data as List<dynamic>;
+        break;
+      case 401:
+        apiResponse.error = unauthorized;
+        break;
+      default:
+        apiResponse.error = somethingWentWrong;
+        break;
+    }
+  } catch (e) {
+    print(e);
+    apiResponse.error = serverError;
+  }
+
+  return apiResponse;
+}
+
+//filter
+
+Future<ApiResponse> filterCars(
+    String? type, String? pays, String? ville, double? prix) async {
+  ApiResponse apiResponse = ApiResponse();
+  print([type,pays,ville,prix]);
+  try {
+    String token = await getToken();
+    final response = await http.post(Uri.parse('$filter'), headers: {
+      'Accept': 'Application/json',
+      'Authorization': 'Bearer $token'
+    }, body: {
+      "type": type,
+      "pays": pays,
+      "ville": ville,
+      "prix": prix.toString(),
+    });
+    print(response);
+    print(response.statusCode);
+    switch (response.statusCode) {
+      case 200:
+        // var replace =
+        // jsonDecode(response.body)['cars'][0]['images'].replaceAll('[', '');
+
+        // images![0].replaceAll('"', '').replaceAll('\\', '')
+        // var replace2 = replace.replaceAll(']', '');
+        // var array = replace2.split(',');
+        // jsonDecode(response.body)['cars'][0]['images'].replaceAll(']', '');
+        // print( jsonDecode(response.body)['cars'][0]['images'].replaceAll('"', '').replaceAll('\\', ''));
+        print(jsonDecode(response.body)['cars']);
+        apiResponse.data = jsonDecode(response.body)['cars']
+            .map((p) => ListCars.fromJson(p))
+            .toList();
+        apiResponse.data as List<dynamic>;
+        break;
+      case 401:
+        apiResponse.error = unauthorized;
+        break;
+      default:
+        apiResponse.error = somethingWentWrong;
+        break;
+    }
+  } catch (e) {
+    print(e);
+    apiResponse.error = serverError;
+  }
+
+  return apiResponse;
+}
+
+
+//search cars
+
+Future<ApiResponse> searchKey(nom) async {
+  ApiResponse apiResponse = ApiResponse();
+  print('salut');
+  try {
+    String token = await getToken();
+    final response = await http.post(Uri.parse('$searchKeyWords'), headers: {
+      'Accept': 'Application/json',
+      'Authorization': 'Bearer $token'
+    }, body: {
+      "nom": nom
     });
     print(response.body);
 
